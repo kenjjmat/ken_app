@@ -11,7 +11,7 @@
 // ken_app_gui login
 class ken_app_login : public gui {
 
-	state& app_state;
+	state& app_state_;
 	const std::string home_page_name;
 
 	// overriding all the virtual functions

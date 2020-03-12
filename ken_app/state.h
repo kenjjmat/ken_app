@@ -13,15 +13,19 @@ using namespace liblec::lecui_discard;
 
 class state{
 
+	bool logged_in = false;
+
+
 public :
-	int loggedin;
-	// lambda function for showing the error
-	auto on_error(gui& ui, const std::string& error) {
-		gui::prompt_params params;
-		params.type = gui::prompt_type::ok;
-		params.png_icon_resource = dispaly_error;
-		ui.prompt(params, "Error", error);
-	};
+	
+	// function for log on
+	bool loggedin() {
+		return logged_in;
+	}
+	
+	void log() {
+		logged_in = true;
+	}
 
 
 	

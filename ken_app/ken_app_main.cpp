@@ -12,9 +12,9 @@ void ken_app_main::on_shutdown()
 {
 }
 
-ken_app_main::ken_app_main(const std::string& guid, state& main_state) : 
+ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("Main_form"),
-	main_state(main_state), 
+	app_state_(app_state),
 	gui::gui(guid){
 }
 

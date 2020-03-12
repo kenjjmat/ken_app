@@ -7,6 +7,13 @@
 
 int main() {
 
+	// lambda function for showing the error
+	auto on_error = [&](gui& ui, const std::string& error) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		params.png_icon_resource = dispaly_error;
+		ui.prompt(params, "Error", error);
+	};
 	
 	// constants used by the app to only allow one instance
 	 const std::string guid_login =  "{F7AA7B63 - 6AAC - 4B7D - 84DC - 107F352217A1}";
@@ -20,14 +27,15 @@ int main() {
 	ken_app_login login(guid_login, state_data);
 	std::string error;
 	if (!login.run(guid_login, error)) {
-		state_data.on_error(login, error);
+		on_error(login, error);
 	}
 
-	// run main form
-	ken_app_main main_form(guid_main, state_data);
-	if (state_data.loggedin == 1) {
+	if (state_data.loggedin()) {
+		// run main form
+		ken_app_main main_form(guid_main, state_data);
+
 		if (!main_form.run(guid_main, error)) {
-			state_data.on_error(main_form, error);
+			on_error(main_form, error);
 		}
 	}
 	

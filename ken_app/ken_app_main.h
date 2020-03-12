@@ -7,7 +7,7 @@
 // gui main class 
 
 class ken_app_main : public gui {
-	state& main_state;
+	state& app_state_;
 	const std::string home_page_name;
 
 	void on_caption() override;
@@ -15,7 +15,7 @@ class ken_app_main : public gui {
 	void on_shutdown() override;
 
 public :
-	ken_app_main(const std::string& guid, state& main_state);
+	ken_app_main(const std::string& guid, state& app_state);
 	~ken_app_main();
 
 	bool layout(gui::page& persistent_page,

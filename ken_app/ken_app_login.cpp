@@ -3,9 +3,6 @@
 #include "ken_app_db.h"
 #include <map>
 
-// creating object
-state state_app;
-
 void ken_app_login::on_caption(){
 }
 
@@ -29,37 +26,35 @@ void ken_app_login::on_login(){
 		get_editbox_text(home_page_name + "/password", password, error)) {
 
 		std::map<std::string, std::string> users;
-		users["username"] = "kennedy";
-		users["password"] = "kenny2811";
+		users["kennedy"] = "kenny2811";
 
-
-
+		bool found = false;
 		for (auto& it : users) {
-			if (it.second == username || it.second == password) {
-				int dummy = 0;
-				dummy++;
-				state_app.loggedin = 1;
-			}
-			else
-			{
-				gui::prompt_params params_;
-				params_.type = gui::prompt_type::ok;
-				params_.png_icon_resource = dispaly_error;
-				prompt(params_, "Error", error);
-				return;
+			if (it.first == username && it.second == password) {
+				found = true;
+				app_state_.log();
 			}
 		}
-
-		stop();
+		
+		if (!found)
+		{
+			gui::prompt_params params_;
+			params_.type = gui::prompt_type::ok;
+			params_.png_icon_resource = dispaly_error;
+			prompt(params_, "Error", error);
+			return;
+		}
 	}
 	else
 
 		return;
+
+	stop();
 }
 
 ken_app_login::ken_app_login(const std::string& guid, state& app_state):
 	gui::gui(guid),
-	app_state(app_state),
+	app_state_(app_state),
 	home_page_name("ken_app"){
 
 }
