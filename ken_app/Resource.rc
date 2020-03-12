@@ -1,0 +1,5 @@
+#include "resource.h"
+
+login PNG			"login.png"
+LOGIN JPG			"LOGIN.jpg"
+display_error PNG "error.png"
