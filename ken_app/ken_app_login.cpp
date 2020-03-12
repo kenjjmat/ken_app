@@ -25,25 +25,36 @@ void ken_app_login::on_login(){
 	std::string password;
 	std::string error;
 
-	get_editbox_text(home_page_name + "/username", username, error);
-	get_editbox_text(home_page_name + "/password", password, error);
+	if (get_editbox_text(home_page_name + "/username", username, error) &&
+		get_editbox_text(home_page_name + "/password", password, error)) {
 
-	std::map<std::string, std::string> users;
-	users["username"] = "kennedy";
-	users["password"] = "kenny2811";
+		std::map<std::string, std::string> users;
+		users["username"] = "kennedy";
+		users["password"] = "kenny2811";
 
-	
 
-	for (auto& it : users) {
-		if (it.second == username || it.second == password) {
-			int dummy = 0;
-			dummy++;
-			state_app.loggedin = 1;
+
+		for (auto& it : users) {
+			if (it.second == username || it.second == password) {
+				int dummy = 0;
+				dummy++;
+				state_app.loggedin = 1;
+			}
+			else
+			{
+				gui::prompt_params params_;
+				params_.type = gui::prompt_type::ok;
+				params_.png_icon_resource = dispaly_error;
+				prompt(params_, "Error", error);
+				return;
+			}
 		}
+
+		stop();
 	}
+	else
 
-	stop();
-
+		return;
 }
 
 ken_app_login::ken_app_login(const std::string& guid, state& app_state):
