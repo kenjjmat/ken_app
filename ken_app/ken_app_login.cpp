@@ -38,7 +38,7 @@ void ken_app_login::on_login(){
 		if (it.second == username || it.second == password) {
 			int dummy = 0;
 			dummy++;
-			state_app.loggedin= true;
+			state_app.loggedin = 1;
 		}
 	}
 
