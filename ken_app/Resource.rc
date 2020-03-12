@@ -2,4 +2,5 @@
 
 login PNG			"login.png"
 LOGIN JPG			"LOGIN.jpg"
-display_error PNG "error.png"
+display_error PNG   "error.png"
+png_stock	PNG		"stock.png"

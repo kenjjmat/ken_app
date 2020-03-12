@@ -22,10 +22,9 @@ int main() {
 	// appication state object
 	state state_data;
 	
-
+	std::string error;
 	// run login form
 	ken_app_login login(guid_login, state_data);
-	std::string error;
 	if (!login.run(guid_login, error)) {
 		on_error(login, error);
 	}
