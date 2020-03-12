@@ -41,7 +41,9 @@ void ken_app_login::on_login(){
 			gui::prompt_params params_;
 			params_.type = gui::prompt_type::ok;
 			params_.png_icon_resource = dispaly_error;
-			prompt(params_, "Error", error);
+			prompt(params_, "Error, Wrong Username and Password", error);
+			set_editbox_text(home_page_name + "/username", "", error);
+			set_editbox_text(home_page_name + "/password", "", error);
 			return;
 		}
 	}
@@ -90,6 +92,8 @@ bool ken_app_login::layout(gui::page& persistent_page,
 
 	//add caption
 	widgets::text caption_login;
+
+    
 	caption_login.rect = { 50 , (long)width() - 50  , 205 , 225 };
 	caption_login.text_value = "Enter Credentials";
 	caption_login.alignment = widgets::text_alignment::center;

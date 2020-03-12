@@ -30,5 +30,11 @@ bool ken_app_main::layout(gui::page& persistent_page, gui::page& home_page, std:
 	//allow the app to exit
 	allow_quit();
 
+	// add image for stock
+	widgets::image image_stock;
+	image_stock.text = "Stock \n \n All the inventory";
+	image_stock.rect = { 10 , (long)(width()) - 400 ,300 , 300 };
+	image_stock
+
 	return true;
 }
