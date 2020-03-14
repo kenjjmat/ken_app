@@ -47,8 +47,11 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_stock.filename = "stock.png";
 	icon_stock.alias = "icon_stock";
 	icon_stock.size = { 100 , 90 };
-	// to do::
-	//add on_resize
+	icon_stock.on_resize.perc_height = 5;
+	icon_stock.on_resize.perc_width = 5;
+	icon_stock.on_resize.perc_h = 20;
+	icon_stock.on_resize.perc_v = 20;
+
 
 
 	home_page.add_icon(icon_stock);
@@ -66,8 +69,10 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_reports.filename = "report.png";
 	icon_reports.alias = "icon_settings";
 	icon_reports.size = { 48, 48 };
-	// to do::
-	//add on_resize
+	icon_reports.on_resize.perc_height = 5;
+	icon_reports.on_resize.perc_width = 5;
+	icon_reports.on_resize.perc_h = 0;
+	icon_reports.on_resize.perc_v = 100;
 
 	persistent_page.add_icon(icon_reports);
 
@@ -83,8 +88,11 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_sales.filename = "sales.png";
 	icon_sales.alias = "icon_sales";
 	icon_sales.size = { 100 , 90 };
-	// to do::
-	//add on_resize
+	icon_sales.on_resize.perc_height = 5;
+	icon_sales.on_resize.perc_width = 5;
+	icon_sales.on_resize.perc_h = 50;
+	icon_sales.on_resize.perc_v = 20;
+
 
 	home_page.add_icon(icon_sales);
 
@@ -100,8 +108,11 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_credentials.filename = "users.png";
 	icon_credentials.alias = "icon_credentials";
 	icon_credentials.size = { 100 , 90 };
-	// to do::
-	//add on_resize
+	icon_credentials.on_resize.perc_height = 5;
+	icon_credentials.on_resize.perc_width = 5;
+	icon_credentials.on_resize.perc_h = 20;
+	icon_credentials.on_resize.perc_v = 80;
+
 	home_page.add_icon(icon_credentials);
 
 	//add appointments
@@ -116,8 +127,11 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_appointment.filename = "appointment.jpg";
 	icon_appointment.alias = "icon_appointment";
 	icon_appointment.size = { 100 , 90 };
-	// to do::
-	//add on_resize
+	icon_appointment.on_resize.perc_height = 5;
+	icon_appointment.on_resize.perc_width = 5;
+	icon_appointment.on_resize.perc_h = 50;
+	icon_appointment.on_resize.perc_v = 80;
+
 
 	home_page.add_icon(icon_appointment);
 
@@ -133,8 +147,11 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_settings.filename = "settings.png";
 	icon_settings.alias = "icon_settings";
 	icon_settings.size = { 48, 48 };
-	// to do::
-	//add on_resize
+	icon_settings.on_resize.perc_height = 5;
+	icon_settings.on_resize.perc_width = 5;
+	icon_settings.on_resize.perc_h = 0;
+	icon_settings.on_resize.perc_v =100;
+
 	persistent_page.add_icon(icon_settings);
 	
 	//add a list view for the appointments
@@ -151,6 +168,11 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	{"", 80 , widgets::listview_column_type::string_}
 	};
 
+	list_appointments.on_resize.perc_height = 80;
+	list_appointments.on_resize.perc_width = 25;
+	list_appointments.on_resize.perc_h = 60;
+	list_appointments.on_resize.perc_v = 10;
+
 	home_page.add_listview(list_appointments);
 
 	// add caption 
@@ -163,8 +185,12 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	caption_appointments.text_value = "Appointments View";
 	caption_appointments.alignment = widgets::text_alignment::middle;
 	caption_appointments.color = color{ 180 , 180 , 180 };
-	// to do::
-	//add on_resize
+	
+	caption_appointments.on_resize.perc_height = 5;
+	caption_appointments.on_resize.perc_width = 5;
+	caption_appointments.on_resize.perc_h = 60;
+	caption_appointments.on_resize.perc_v = 10;
+
 
 	home_page.add_text(caption_appointments);
 	return true;
