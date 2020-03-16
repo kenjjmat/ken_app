@@ -41,7 +41,7 @@ void ken_app_login::on_login(){
 			gui::prompt_params params_;
 			params_.type = gui::prompt_type::ok;
 			params_.png_icon_resource = dispaly_error;
-			prompt(params_, "Error, Wrong Username and Password", error);
+			prompt(params_, "Error, Wrong Credentials", error);
 			set_editbox_text(home_page_name + "/username", "", error);
 			set_editbox_text(home_page_name + "/password", "", error);
 			return;

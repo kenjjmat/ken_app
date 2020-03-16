@@ -162,7 +162,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.rect.set_height(350);
 	list_appointments.alias = "list_appointments";
 	list_appointments.border = true;
-	list_appointments.gridlines = true;
+	list_appointments.gridlines= true;
 
 	list_appointments.columns = {
 	{"", 80 , widgets::listview_column_type::string_}
@@ -193,5 +193,8 @@ bool ken_app_main::layout(gui::page& persistent_page,
 
 
 	home_page.add_text(caption_appointments);
+	//add icon for the search bar
+	
 	return true;
 }
+
