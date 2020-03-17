@@ -3,6 +3,7 @@
 #include "ken_app_db.h"
 #include <map>
 
+
 void ken_app_login::on_caption(){
 }
 
@@ -22,54 +23,45 @@ void ken_app_login::on_login(){
 	std::string password;
 	std::string error;
 
-	LOOP: if (get_editbox_text(home_page_name + "/username", username, error) &&
-		get_editbox_text(home_page_name + "/password", password, error)) {
+if (get_editbox_text(home_page_name + "/username", username, error) &&
+	get_editbox_text(home_page_name + "/password", password, error)) {
 
-		if (username.empty() || password.empty()) {
-			set_focus(home_page_name + "/username");
-			set_focus(home_page_name + "/password");
-			return;
+	if (username.empty() || password.empty()) {
+		set_focus(home_page_name + "/username");
+		set_focus(home_page_name + "/password");
+		return;
+	}
+
+	std::map<std::string, std::string> users;
+	users["kennedy"] = "kenny2811";
+
+	bool found = false;
+	for (auto& it : users) {
+		if (it.first == username && it.second == password) {
+			found = true;
+			app_state_.log();
 		}
+	}
 
-		std::map<std::string, std::string> users;
-		users["kennedy"] = "kenny2811";
-
-		bool found = false;
-		for (auto& it : users) {
-			if (it.first == username && it.second == password) {
-				found = true;
-				app_state_.log();
-			}
-		}
-		
-		if (!found)
-		{
-			int count = 3;
-			for (int i = 0; i < count; i++) {
-				gui::prompt_params params_;
-				params_.type = gui::prompt_type::ok;
-				params_.png_icon_resource = dispaly_error;
-				prompt(params_, "Error, Wrong Credentials", error);
-				set_editbox_text(home_page_name + "/username", "", error);
-				set_focus(home_page_name + "/username");
-				set_editbox_text(home_page_name + "/password", "", error);
-				set_focus(home_page_name + "/password");
-
-				goto LOOP;
-			}
-			// showing the create new user form
-
-			gui::prompt_params params_;
-			params_.type = gui::prompt_type::ok;
-			params_.png_icon_resource = dispaly_error;
-			prompt(params_, "Please Create a Account", error);
-			app_state_.new_user_();
-		}
+	if (!found)
+	{
+		gui::prompt_params params_;
+		params_.type = gui::prompt_type::ok;
+		params_.png_icon_resource = dispaly_error;
+		prompt(params_, "Error, Wrong Credentials", error);
+		set_editbox_text(home_page_name + "/username", "", error);
+		set_focus(home_page_name + "/username");
+		set_editbox_text(home_page_name + "/password", "", error);
+		set_focus(home_page_name + "/password");
+		return;
+	}
 	}
 	else
 
 		return;
 
+
+	
 	stop();
 }
 

@@ -7,9 +7,9 @@
 
 
 // including the liblec library
-#include <liblec/lecui/gui.h>
+#include <liblec/cui/gui.h>
 
-using namespace liblec::lecui_discard;
+using namespace liblec::cui;
 
 class state{
 
