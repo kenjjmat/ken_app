@@ -14,6 +14,7 @@ using namespace liblec::lecui_discard;
 class state{
 
 	bool logged_in = false;
+	bool create_user = false;
 
 
 public :
@@ -25,6 +26,15 @@ public :
 	
 	void log() {
 		logged_in = true;
+	}
+
+	// function for creating new user
+	bool new_user() {
+		return create_user;
+	}
+
+	void new_user_() {
+		create_user = true;
 	}
 
 

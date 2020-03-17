@@ -22,6 +22,9 @@
     <Filter Include="Source Files\ken_app_main">
       <UniqueIdentifier>{08abd4ab-1d2f-4fcb-bd6b-1c813c22ccbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ken_app_new_user">
+      <UniqueIdentifier>{b0e127a5-3b0c-4193-8aee-823793721ba8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ken_app_login.cpp">
@@ -35,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="ken_app_main.cpp">
       <Filter>Source Files\ken_app_main</Filter>
+    </ClCompile>
+    <ClCompile Include="ken_app_new_user.cpp">
+      <Filter>Source Files\ken_app_new_user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="ken_app_main.h">
       <Filter>Source Files\ken_app_main</Filter>
+    </ClInclude>
+    <ClInclude Include="ken_app_new_user.h">
+      <Filter>Source Files\ken_app_new_user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

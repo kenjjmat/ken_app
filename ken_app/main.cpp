@@ -1,6 +1,7 @@
 
 #include "ken_app_login.h"
 #include "ken_app_main.h"
+#include "ken_app_new_user.h"
 
 // gui app using main
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
@@ -28,6 +29,14 @@ int main() {
 	if (!login.run(guid_login, error)) {
 		on_error(login, error);
 	}
+	
+	if (state_data.new_user()) {
+		// run the create new user form
+		ken_app_new_user new_user(guid_main, state_data);
+       
+		if (!new_user.run(guid_main, error))
+			on_error(new_user, error);
+	 }
 
 	if (state_data.loggedin()) {
 		// run main form

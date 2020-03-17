@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="ken_app_db.cpp" />
     <ClCompile Include="ken_app_main.cpp" />
+    <ClCompile Include="ken_app_new_user.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ken_app_login.cpp" />
   </ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="ken_app_db.h" />
     <ClInclude Include="ken_app_login.h" />
     <ClInclude Include="ken_app_main.h" />
+    <ClInclude Include="ken_app_new_user.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="state.h" />
   </ItemGroup>
