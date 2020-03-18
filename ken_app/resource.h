@@ -9,4 +9,5 @@
 #define png_appointment 117;
 #define png_settings	118;
 #define png_search		119;
+#define png_new_user	120;
 

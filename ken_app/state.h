@@ -4,7 +4,7 @@
 //STL libraries
 #include <iostream>
 #include "resource.h"
-
+#include "ken_app_db.h"
 
 // including the liblec library
 #include <liblec/cui/gui.h>
@@ -18,7 +18,7 @@ class state{
 
 
 public :
-	
+	std::map<std::string, std::string> details;
 	// function for log on
 	bool loggedin() {
 		return logged_in;
@@ -38,7 +38,9 @@ public :
 	}
 
 
-	
-
+	ken_app_db db;
+	ken_app_db& get_db() {
+		return db;
+	}
 
 };

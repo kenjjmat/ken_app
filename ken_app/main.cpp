@@ -2,6 +2,7 @@
 #include "ken_app_login.h"
 #include "ken_app_main.h"
 #include "ken_app_new_user.h"
+#include "ken_app_db.h"
 
 // gui app using main
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
@@ -23,6 +24,8 @@ int main() {
 	// appication state object
 	state state_data;
 	
+	
+
 	std::string error;
 	// run login form
 	ken_app_login login(guid_login, state_data);
@@ -30,6 +33,7 @@ int main() {
 		on_error(login, error);
 	}
 	
+	if (state_data.)
 	if (state_data.new_user()) {
 		// run the create new user form
 		ken_app_new_user new_user(guid_main, state_data);
