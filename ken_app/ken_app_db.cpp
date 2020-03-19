@@ -58,7 +58,7 @@ public:
                 const int columns = sqlite3_column_count(statement);
 
                 while (true) {
-                    if (sqlite3_step(statement) == SQLITE_OK) {
+                    if (sqlite3_step(statement) == SQLITE_ROW) {
                         std::map<std::string, std::string > values;
 
                         for (int column = 0; column < columns; column++) {
@@ -153,12 +153,13 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
     table table;
 
     // users 
-    if (d_.sqlite_query("CREATE TABLE Users ("
+    if (!d_.sqlite_query("CREATE TABLE Users ("
         "Username TEXT NOT NULL , "
         "Password TEXT NOT NULL,"
         "PRIMARY KEY (Username)"
         ");", table, error)) {
-        if (error.find("already exists") == std::string::npos) return false;
+        if (error.find("already exists") == std::string::npos)
+            return false;
     }
 
     d_.connected_ = true;
@@ -167,7 +168,7 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
 
 bool ken_app_db::new_user(const user_credentials& user, const std::string& password, std::string& error)
 {
-    if (d_.connected_) {
+    if (!d_.connected_) {
         error = "Not connected to database"; 
         return false;
     }
@@ -191,9 +192,11 @@ bool ken_app_db::get_users(std::vector<user_credentials>& users, std::string& er
     //reading the database
     for (const auto& it : table) {
         user_credentials user;
-        user.username = it.at("Username");   
+        user.username = it.at("Username");
+        users.push_back(user);
     }
-    return false;
+
+    return true;
 }
 
 bool ken_app_db::get_user(const std::string& username, const std::string& password, user_credentials& user, std::string& error)

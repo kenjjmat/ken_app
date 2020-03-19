@@ -35,6 +35,7 @@ void ken_app_new_user::on_save() {
 		prompt(params, "Error", error);
 	}
 
+
 	stop();
     
 }
@@ -100,15 +101,8 @@ bool ken_app_new_user::layout(gui::page& persistent_page, gui::page& home_page, 
 	username_new_user.alias = "username_new_user";
 	username_new_user.cue_banner = "username";
 	username_new_user.rect = { 50 ,(long)width() - 50 , 235 , 255 };
+	username_new_user.on_type = [&]() { on_password(); };
 	home_page.add_editbox(username_new_user);
-
-	// add editbox
-
-	widgets::editbox password_confirm;
-	password_confirm.alias = "password_confirm";
-	password_confirm.cue_banner = "confirm password";
-	password_confirm.rect = { 50 ,(long)width() - 50 , 300 , 320 };
-	home_page.add_editbox(password_confirm);
 
 	//add passowrd editbox
 	widgets::editbox password_new_user;
@@ -116,8 +110,18 @@ bool ken_app_new_user::layout(gui::page& persistent_page, gui::page& home_page, 
 	password_new_user.cue_banner = "Password";
 	password_new_user.password = true;
 	password_new_user.rect = { 50 , (long)width() - 50  , 265 ,285 };
+	password_new_user.on_type = [&]() { on_password(); };
 	home_page.add_editbox(password_new_user);
 
+	// add editbox
+	widgets::editbox password_confirm;
+	password_confirm.alias = "password_confirm";
+	password_confirm.cue_banner = "confirm password";
+	password_confirm.password = true;
+	password_confirm.rect = { 50 ,(long)width() - 50 , 300 , 320 };
+	home_page.add_editbox(password_confirm);
+
+	
 	//add password strenght bar
 	widgets::password_strength_bar password_strength;
 	password_strength.alias = "password_strength";
@@ -135,6 +139,7 @@ bool ken_app_new_user::layout(gui::page& persistent_page, gui::page& home_page, 
 	//add a group box control 
 	widgets::groupbox group;
 	group.rects = {
+		username_new_user.rect,
 		password_new_user.rect,
 		password_confirm.rect ,
 		password_strength.rect,
