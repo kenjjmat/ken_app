@@ -1,11 +1,12 @@
 #pragma once
 #include "sqlite3.h"
 #include <string>
+#include <vector>
 
 class  ken_app_db {
 public :
 
-	struct users {
+	struct user_credentials {
 		std::string username;
 	};
 	ken_app_db();
@@ -14,11 +15,11 @@ public :
 	bool connect(const std::string& file_name, const std::string& password, std::string& error);
 
 	// users
-	bool new_user(const users& user, const std::string& password, std::string& error);
-	bool get_users(std::vector<users>& users, std::string& error);
+	bool new_user(const user_credentials& user, const std::string& password, std::string& error);
+	bool get_users(std::vector<user_credentials>& users, std::string& error);
 	bool get_user(const std::string& username, const std::string& password,
-		users& user, std::string& error);
-	bool get_user(const std::string& username, users& user, std::string& error);
+		user_credentials& user, std::string& error);
+	bool get_user(const std::string& username, user_credentials& user, std::string& error);
 
 
 private :

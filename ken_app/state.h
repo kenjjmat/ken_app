@@ -18,7 +18,7 @@ class state{
 
 
 public :
-	std::map<std::string, std::string> details;
+
 	// function for log on
 	bool loggedin() {
 		return logged_in;

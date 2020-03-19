@@ -33,7 +33,7 @@ int main() {
 		on_error(login, error);
 	}
 	
-	if (state_data.)
+
 	if (state_data.new_user()) {
 		// run the create new user form
 		ken_app_new_user new_user(guid_main, state_data);
