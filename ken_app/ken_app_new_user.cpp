@@ -23,6 +23,9 @@ void ken_app_new_user::on_save() {
 		gui::prompt_params params;
 		params.type = gui::prompt_type::ok;
 		prompt(params, "Error", "Password mis-match");
+		set_editbox_text(home_page_name + "/password_new_user", "", error);
+		set_editbox_text(home_page_name + "/password_confirm", "", error);
+
 		return;
 	}
 

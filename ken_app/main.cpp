@@ -34,7 +34,7 @@ int main() {
 		on_error(login, error);
 		return 1;
 	}
-	
+
 
 	// check if there are any users in the database
 	std::vector<ken_app_db::user_credentials> users;
@@ -47,7 +47,7 @@ int main() {
 		// load the new user form 
 		ken_app_new_user newuser(guid_login, state_data);
 
-	    // run new user 
+		// run new user 
 		if (!newuser.run(error)) {
 			on_error(newuser, error);
 			return 1;
@@ -59,24 +59,45 @@ int main() {
 		}
 		if (users.empty()) return 0;
 	}
-	
+
 	// run login
 	if (!login.run(guid_login, error)) {
 		on_error(login, error);
 	}
-	
 
-	if (state_data.loggedin()) {
-		 //main form
-		ken_app_main main_form(guid_main, state_data);
+	// run the create_user
+	if (state_data.create_acc()) {
+		// create user 
+		ken_app_new_user createacc(guid_login, state_data);
 
-		// run main form
-		if (!main_form.run(guid_main, error)) {
-			on_error(main_form, error);
+		if (!createacc.run(guid_login, error)) {
+			on_error(createacc, error);
+			return 1;
 		}
-	}
+		if (!state_data.get_db().get_users(users, error)) {
+			on_error(createacc, error);
+			return 1;
+		}
+		else {
+		
+			login.run(guid_login, error);
+		}
 
-	return 0;
-	
+
+		if (state_data.loggedin()) {
+			//main form
+			ken_app_main main_form(guid_main, state_data);
+
+			// run main form
+			if (!main_form.run(guid_main, error)) {
+				on_error(main_form, error);
+			}
+
+
+		}
+
+		return 0;
+
+	}
 }
 

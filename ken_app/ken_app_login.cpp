@@ -15,6 +15,12 @@ void ken_app_login::on_stop() {
 void ken_app_login::on_shutdown(){
 }
 
+void ken_app_login::on_create_account() {
+
+	app_state_.create();
+	stop();
+}
+
 // on logging into 
 void ken_app_login::on_login(){
 
@@ -31,17 +37,18 @@ if (get_editbox_text(home_page_name + "/username", username, error) &&
 		set_focus(home_page_name + "/password");
 		return;
 	}
-
-	std::map<std::string, std::string> users;
-	users["kennedy"] = "kenny2811";
-
 	bool found = false;
-	for (auto& it : users) {
-		if (it.first == username && it.second == password) {
-			found = true;
-			app_state_.log();
-		}
+	if (!app_state_.get_db().get_user(username, password, app_state_.get_user_(), error)) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
 	}
+	else
+	{
+		found = true;
+		app_state_.log();
+	}
+
 
 	if (!found)
 	{
@@ -99,6 +106,9 @@ bool ken_app_login::layout(gui::page& persistent_page,
 	image_login.rect = {40 , (long)width()-50 , 30, 160 };
 	//image_login.filename = "login.png";
 	image_login.filename = "LOGIN.jpg";
+	image_login.color_background_hot = color{ 255, 255, 255 };
+	image_login.tight_fit = true;
+	image_login.bar = false;
 	home_page.add_image(image_login);
 
 	//add caption
@@ -135,6 +145,15 @@ bool ken_app_login::layout(gui::page& persistent_page,
 	button_login.rect = { 120 , (long)width() - 120 , 295 , 320 };
 	button_login.on_click = [&]() { on_login(); };
 	home_page.add_button(button_login);
+
+	//add text for creating an account
+	widgets::text create_account;
+	create_account.alias = "create_account_text";
+	create_account.text_value = "Create New Account";
+	create_account.rect = { 120 , (long)width() - 100 , 350 , 366 };
+	create_account.on_click = [&]() { on_create_account(); };
+	create_account.color = { 65,105,225 };
+	home_page.add_text(create_account);
 
 	return true;
 }

@@ -18,6 +18,7 @@ class ken_app_new_user :
 
 	void on_save();
 	void on_password();
+	
 
 public:
 	ken_app_new_user(const std::string& guid, state& app_state_);

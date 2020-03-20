@@ -21,7 +21,7 @@ class ken_app_login : public gui {
 	void on_shutdown() override;
 
 	void on_login();
-
+	void on_create_account();
 public :
 	// constructor 
 	ken_app_login(const std::string& guid, state& app_state);

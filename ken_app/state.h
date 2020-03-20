@@ -15,6 +15,7 @@ class state{
 
 	bool logged_in = false;
 	bool create_user = false;
+	bool create_account = false;
 	ken_app_db db_;
 	ken_app_db::user_credentials credentials;
 
@@ -26,5 +27,9 @@ public :
 	void log() {logged_in = true;}
 	ken_app_db& get_db() {return db_;}
 	ken_app_db::user_credentials& get_user_() { return credentials; }
+
+	// create account
+	bool create_acc() { return create_account; }
+	void create() { create_account = true; }
 
 };
