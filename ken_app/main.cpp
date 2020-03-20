@@ -65,6 +65,18 @@ int main() {
 		on_error(login, error);
 	}
 
+	if (state_data.loggedin()) {
+		//main form
+		ken_app_main main_form(guid_main, state_data);
+
+		// run main form
+		if (!main_form.run(guid_main, error)) {
+			on_error(main_form, error);
+		}
+
+
+	}
+
 	// run the create_user
 	if (state_data.create_acc()) {
 		// create user 
@@ -80,7 +92,9 @@ int main() {
 		}
 		else {
 		
-			login.run(guid_login, error);
+			if (!login.run(guid_login, error)) {
+				on_error(login , error);
+			}
 		}
 
 
