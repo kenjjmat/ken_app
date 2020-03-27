@@ -9,6 +9,13 @@ public :
 	struct user_credentials {
 		std::string username;
 	};
+
+	struct stock_details {
+		std::string id;
+		std::string name;
+		std::string description;
+		std::string quantity;
+	};
 	ken_app_db();
 	~ken_app_db();
 

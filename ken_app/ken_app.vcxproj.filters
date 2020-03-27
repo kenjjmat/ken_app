@@ -28,6 +28,9 @@
     <Filter Include="Source Files\ken_app_db\sqlite_db">
       <UniqueIdentifier>{696abed7-a870-4542-9132-714e5cf0814a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\stock">
+      <UniqueIdentifier>{16b17bea-0782-4430-949f-73a83e3435c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ken_app_login.cpp">
@@ -47,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="sqlite3.c">
       <Filter>Source Files\ken_app_db\sqlite_db</Filter>
+    </ClCompile>
+    <ClCompile Include="stock.cpp">
+      <Filter>Source Files\stock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="sqlite3.h">
       <Filter>Source Files\ken_app_db\sqlite_db</Filter>
+    </ClInclude>
+    <ClInclude Include="stock.h">
+      <Filter>state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -162,9 +162,23 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
             return false;
     }
 
+    //stock details 
+    if (!d_.sqlite_query("CREATE TABLE Stock ("
+        "StockID TEXT NOT NULL, "
+        "Name TEXT NOT NULL, "
+        "Description TEXT NOT NULL, "
+        "Quantity INTEGER NOT NULL , "
+        "PRIMARY KEY (StockID)"
+        ");",
+        table, error)) {
+        if (error.find("already exists") == std::string::npos) return false;
+    }
+
     d_.connected_ = true;
     return true;
 }
+
+
 
 bool ken_app_db::new_user(const user_credentials& user, const std::string& password, std::string& error)
 {

@@ -12,6 +12,30 @@ void ken_app_main::on_shutdown()
 {
 }
 
+void ken_app_main::on_stock(){
+
+	if (!page_exists("Stock")) {
+		page page("Stock");
+
+		//add back icon 
+		widgets::image back;
+		back.png_resource = png_back;
+		back.rect.left = 900;
+		back.rect.top = 400;
+		back.rect.set_height(50);
+		back.rect.set_width(100);
+		back.on_click = [&]() {
+			show_previous_page();
+			// to-do::
+			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
+		};
+
+		page.add_image(back);
+	}
+
+}
+
+
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("Main_form"),
 	app_state_(app_state),
@@ -51,6 +75,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_stock.on_resize.perc_width = 5;
 	icon_stock.on_resize.perc_h = 20;
 	icon_stock.on_resize.perc_v = 20;
+	icon_stock.on_click = [&]() { on_stock(); };
 
 
 

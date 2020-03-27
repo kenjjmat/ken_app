@@ -152,6 +152,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ken_app_login.cpp" />
     <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="stock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ken_app_db.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="state.h" />
+    <ClInclude Include="stock.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
