@@ -164,11 +164,11 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
 
     //stock details 
     if (!d_.sqlite_query("CREATE TABLE Stock ("
-        "StockID TEXT NOT NULL, "
+        "ID TEXT NOT NULL, "
         "Name TEXT NOT NULL, "
         "Description TEXT NOT NULL, "
         "Quantity INTEGER NOT NULL , "
-        "PRIMARY KEY (StockID)"
+        "PRIMARY KEY (ID)"
         ");",
         table, error)) {
         if (error.find("already exists") == std::string::npos) return false;
@@ -254,6 +254,85 @@ bool ken_app_db::get_user(const std::string& username, user_credentials& user, s
 
     return true;
 }
+
+// this code is for adding people ino the actual database;
+bool ken_app_db::new_stock(const stock_details& stock_info, std::string& error)
+{
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+     }
+
+    table table;
+    if (!d_.sqlite_query("INSERT INTO Stock VALUE('"
+        + stock_info.description + "' , '" + stock_info.name + "' , '" + stock_info.description + "' , '" + stock_info.quantity +
+        "');", table, error)) {
+        return false;
+    }
+    return true;
+}
+
+// now we are getting data from te database and storing it into the table which is a map of type vector
+bool ken_app_db::get_stock(const std::string& stock_id, stock_details& stock, std::string& error)
+{
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    // validating whether the user has entered the primary key or not
+    if (stock_id.empty()) {
+        error = "Stock ID not specified";
+        return false;
+    }
+
+    // reading the database 
+    table table;
+    if (!d_.sqlite_query("SELECT * FROM Stock WHERE PersonID = '"
+        + stock_id + "';", table, error)) return false;
+
+    // now assigning values from the database table to the struct stock details
+    if (!table.empty()) {
+        stock_details stock_;
+        stock_.id = table.at(0).at("ID");
+        stock_.name = table.at(0).at("Name");
+        stock_.description = table.at(0).at("Description");
+        stock_.quantity = table.at(0).at("Quantity");
+
+        stock = stock_;
+    }
+
+
+    return true;
+}
+
+// now taking the values from the table and inserting then into a vector stock
+bool ken_app_db::get_stock_all(std::vector<stock_details>& stock, std::string& error)
+{
+    // clear the vector first
+    stock.clear();
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    // read the database 
+    table table;
+    if (!d_.sqlite_query("SELECT * FROM People;", table, error)) return false;
+
+    if (!table.empty()) {
+        
+     // looping through the table and inserting into the vector stock
+        for (const auto& row : table) {
+            stock_details stock_;
+            stock_.id = row.at("ID");
+            stock_.name = row.at("Name");
+            stock_.description = row.at("Description");
+            stock_.quantity = row.at("Quantity");
+
+            stock.push_back(stock_);
+        }
+    }
+    return true;
+}
+
 
 
 

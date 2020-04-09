@@ -29,27 +29,19 @@ void ken_app_main::on_stock(){
 			// to-do::
 			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
 		};
+		back.on_resize.perc_h = 100;
+		back.on_resize.perc_v = 100;
+
 		page.add_button(back);
-
-		// add stock icon 
-		widgets::icon stock;
-		stock.alias = "stock_icon";
-		stock.filename = "stock.png";
-		stock.rect.left = 10;
-		stock.rect.top = 10;
-		stock.rect.set_height(60);
-		stock.rect.set_width(60);
-
-		page.add_icon(stock);
 
 		// add tittle 
 		widgets::text title;
 		title.text_value = "Stock";
-		title.font_size = 12;
-		title.rect.left = stock.rect.right + 10;
+		title.font_size = 16;
+		title.rect.left = 20;
 		title.rect.top = 10;
-		title.rect.set_height(20);
-		title.rect.set_width(50);
+		title.rect.set_height(40);
+		title.rect.set_width(100);
 
 		page.add_text(title);
 
@@ -58,13 +50,119 @@ void ken_app_main::on_stock(){
 		widgets::text description;
 		description.text_value = "View and Manage Inventory";
 		description.color = color{ 180 , 180 , 180 };
-		description.rect.left = stock.rect.right + 10;
+		description.rect.left =  20;
 		description.rect.top = title.rect.top + 30;
 		description.rect.set_height(20);
 		description.rect.set_width(200);
 
 		page.add_text(description);
+
+
+		// add image 
+
+		widgets::image image;
+		image.bar = false;
+		image.filename = "stock.png";
+		image.rect.left = 30;
+		image.rect.top = description.rect.bottom + 20;
+		image.rect.set_height(100);
+		image.rect.set_width(100);
+
+		page.add_image(image);
+
+		// adding a group box 
+
+		widgets::groupbox border;
+		border.rects = {
+			image.rect
+		};
+
+		page.add_groupbox(border);
+
+		// add image 
+		widgets::image image_add;
+		image_add.filename = "add.png";
+		image_add.tooltip = "Add a new Item";
+		image_add.rect.left = 32;
+		image_add.rect.top = image.rect.bottom + 10;
+		image_add.rect.set_height(30);
+		image_add.rect.set_width(30);
+		image_add.change_color = true;
+		image_add.color.color = color{ 0, 150, 140 };
+		image_add.color.color_hot = color{ 21, 79, 139 };
+		image_add.color.color_border_hot = image_add.color.color_border;
+		image_add.color_background_hot = image_add.color_background_hot;
+		image_add.tight_fit = true;
+
+		page.add_image(image_add);
+
+		// add image edit
+		widgets::image image_edit;
+		image_edit.filename = "edit.png";
+		image_edit.tooltip = "Edit Item";
+		image_edit.rect.left = image_add.rect.right + 10;
+		image_edit.rect.top = image.rect.bottom + 10;
+		image_edit.rect.set_height(30);
+		image_edit.rect.set_width(30);
+		image_edit.change_color = true;
+		image_edit.color.color = color{ 0, 150, 140 };
+		image_edit.color.color_hot = color{ 21, 79, 139 };
+		image_edit.color.color_border_hot = image_edit.color.color_border;
+		image_edit.color_background_hot = image_edit.color_background_hot;
+		image_edit.tight_fit = true;
+
+		page.add_image(image_edit);
+
+		// add the delete image 
+		widgets::image image_delete;
+		image_delete.filename = "delete.png";
+		image_delete.tooltip = "Delete Item";
+		image_delete.rect.left = image_edit.rect.right + 10;
+		image_delete.rect.top = image.rect.bottom + 10;
+		image_delete.rect.set_height(30);
+		image_delete.rect.set_width(30);
+		image_delete.change_color = true;
+		image_delete.color.color = color{ 255, 0, 0 };
+		image_delete.color.color_hot = color{ 21, 79, 139 };
+		image_delete.color.color_border_hot = image_delete.color.color_border;
+		image_delete.color_background_hot = image_delete.color_background_hot;
+		image_delete.tight_fit = true;
+
+		page.add_image(image_delete);
 		
+		// add stock listview 
+		widgets::listview stock_list;
+		stock_list.alias = "stock_list";
+		stock_list.rect.left = image.rect.right + 50;
+		stock_list.rect.top = image.rect.top;
+		stock_list.rect.set_height(300);
+		stock_list.rect.set_width(400);
+		stock_list.border = true;
+		stock_list.columns = {
+			{"ID", 35 , widgets::listview_column_type::int_ },
+			{"Name" , 170 , widgets::listview_column_type::string_},
+			{"Description" , 200 , widgets::listview_column_type::string_},
+			{"Quantity" , 50  , widgets::listview_column_type::int_	 }
+		};
+		stock_list.unique_column_name = "ID";
+
+		{
+			std::vector<ken_app_db::stock_details> stock;
+			std::string error;
+
+			if (app_state_.get_db().get_stock_all(stock, error)) {
+				int i = 0;
+
+				for (const auto& stock_ : stock) {
+					widgets::listview_row row;
+					row.items.push_back({ "ID", stock_.id });
+					row.items.push_back({ "Name" , stock_.name });
+					row.items.push_back({ "Description" , stock_.description });
+					row.items.push_back({ "Quantity", stock_.quantity });
+				}
+		   }
+		}
+		page.add_listview(stock_list);
 	
 		// this is adding a new page to the form 
 		add_page(page);

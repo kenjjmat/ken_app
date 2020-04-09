@@ -28,7 +28,10 @@ public :
 		user_credentials& user, std::string& error);
 	bool get_user(const std::string& username, user_credentials& user, std::string& error);
 
-
+	// stock 
+	bool new_stock(const stock_details& stock_info, std::string& error);
+	bool get_stock(const std::string& stock_id, stock_details& stock, std::string& error);
+	bool get_stock_all(std::vector<stock_details>& stock, std::string& error);
 private :
 	class ken_app_db_impl;
 	ken_app_db_impl& d_;
