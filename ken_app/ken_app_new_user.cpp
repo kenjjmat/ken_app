@@ -85,7 +85,7 @@ bool ken_app_new_user::layout(gui::page& persistent_page, gui::page& home_page, 
 	// add caption 
 	widgets::text caption;
 	caption.rect = { 50 , (long)width() - 50 , 210 , 230 };
-	caption.text_value = "Add a new User to Database";
+	caption.text_value = "Create New User Account";
 	caption.alignment = widgets::text_alignment::center;
 	caption.color = { 180 , 180 , 180 };
 

@@ -18,26 +18,63 @@ void ken_app_main::on_stock(){
 		page page("Stock");
 
 		//add back icon 
-		widgets::image back;
-		back.png_resource = png_back;
-		back.rect.left = 900;
-		back.rect.top = 400;
-		back.rect.set_height(50);
-		back.rect.set_width(100);
+		widgets::button back;
+		back.caption = "Back";
+		back.rect.left =890;
+		back.rect.top = 420;
+		back.rect.set_height(30);
+		back.rect.set_width(80);
 		back.on_click = [&]() {
 			show_previous_page();
 			// to-do::
 			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
 		};
+		page.add_button(back);
 
-		page.add_image(back);
+		// add stock icon 
+		widgets::icon stock;
+		stock.alias = "stock_icon";
+		stock.filename = "stock.png";
+		stock.rect.left = 10;
+		stock.rect.top = 10;
+		stock.rect.set_height(60);
+		stock.rect.set_width(60);
+
+		page.add_icon(stock);
+
+		// add tittle 
+		widgets::text title;
+		title.text_value = "Stock";
+		title.font_size = 12;
+		title.rect.left = stock.rect.right + 10;
+		title.rect.top = 10;
+		title.rect.set_height(20);
+		title.rect.set_width(50);
+
+		page.add_text(title);
+
+		// add description 
+
+		widgets::text description;
+		description.text_value = "View and Manage Inventory";
+		description.color = color{ 180 , 180 , 180 };
+		description.rect.left = stock.rect.right + 10;
+		description.rect.top = title.rect.top + 30;
+		description.rect.set_height(20);
+		description.rect.set_width(200);
+
+		page.add_text(description);
+		
+	
+		// this is adding a new page to the form 
+		add_page(page);
 	}
-
+	show_page("Stock");
 }
 
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
-	home_page_name("Main_form"),
+	home_page_name("KEN_APP"),
 	app_state_(app_state),
 	gui::gui(guid){
 }
