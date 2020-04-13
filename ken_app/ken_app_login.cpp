@@ -52,10 +52,6 @@ if (get_editbox_text(home_page_name + "/username", username, error) &&
 
 	if (!found)
 	{
-		gui::prompt_params params_;
-		params_.type = gui::prompt_type::ok;
-		params_.png_icon_resource = dispaly_error;
-		prompt(params_, "Error, Wrong Credentials", error);
 		set_editbox_text(home_page_name + "/username", "", error);
 		set_focus(home_page_name + "/username");
 		set_editbox_text(home_page_name + "/password", "", error);

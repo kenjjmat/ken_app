@@ -138,13 +138,16 @@ void ken_app_main::on_stock(){
 		stock_list.rect.set_height(300);
 		stock_list.rect.set_width(400);
 		stock_list.border = true;
-		stock_list.columns = {
+
+		//this code is giving a error find a way around it
+
+		/*stock_list.columns = {
 			{"ID", 35 , widgets::listview_column_type::int_ },
 			{"Name" , 170 , widgets::listview_column_type::string_},
 			{"Description" , 200 , widgets::listview_column_type::string_},
 			{"Quantity" , 50  , widgets::listview_column_type::int_	 }
 		};
-		stock_list.unique_column_name = "ID";
+		stock_list.unique_column_name = "ID";*/
 
 		{
 			std::vector<ken_app_db::stock_details> stock;
@@ -329,9 +332,10 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.border = true;
 	list_appointments.gridlines= true;
 
-	list_appointments.columns = {
-	{"", 80 , widgets::listview_column_type::string_}
-	};
+	// this code is giving me an error find a way around it 
+	/*list_appointments.columns = {
+		{"", 80 , widgets::listview_column_type::string_}
+	};*/
 
 	list_appointments.on_resize.perc_height = 80;
 	list_appointments.on_resize.perc_width = 25;
