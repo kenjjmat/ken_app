@@ -33,6 +33,7 @@ public :
 	bool get_stock(const std::string& stock_id, stock_details& stock, std::string& error);
 	bool get_stock_all(std::vector<stock_details>& stock, std::string& error);
 private :
+	//hiding the implementation of the database by only showing the essentials
 	class ken_app_db_impl;
 	ken_app_db_impl& d_;
 };

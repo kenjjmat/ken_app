@@ -170,6 +170,11 @@ void ken_app_main::on_stock(){
 	show_page("Stock");
 }
 
+// when the add stock image has been clicked
+void ken_app_main::on_add_stock(){
+
+}
+
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("KEN_APP"),
