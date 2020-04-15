@@ -11,11 +11,12 @@ class ken_app_main : public gui {
 	const std::string home_page_name;
 	bool update_ = false;
 
+	// overriding virtual functions
 	void on_caption() override;
 	void on_stop() override;
 	void on_shutdown() override;
 
-	// on_click function for redirecting to the main windows
+	// on_click function for redirecting to the stock windows
 	void on_stock();
 	void on_add_stock();
 

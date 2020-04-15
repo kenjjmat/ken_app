@@ -78,7 +78,7 @@
       <Filter>Source Files\ken_app_db\sqlite_db</Filter>
     </ClInclude>
     <ClInclude Include="stock.h">
-      <Filter>state</Filter>
+      <Filter>Source Files\stock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

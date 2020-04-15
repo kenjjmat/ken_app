@@ -11,9 +11,15 @@ class stock : public gui {
 	bool saved_ = false;
 
 	// overiding all the virtual functions
+	void on_caption() override;
 	void on_stop() override;
-	void on_save();
+	void on_shutdown() override;
 
+
+	// functions for adding new stock/ item to the database
+	void on_new_stock();
+	void on_new_item();
+	void on_save();
 public : 
 	// constructor 
 	stock(state& app_state);

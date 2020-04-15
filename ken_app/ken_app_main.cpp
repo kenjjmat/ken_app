@@ -1,4 +1,5 @@
 #include "ken_app_main.h"
+#include "stock.h"
 
 void ken_app_main::on_caption()
 {
@@ -12,6 +13,7 @@ void ken_app_main::on_shutdown()
 {
 }
 
+// when the stock image has been clicked
 void ken_app_main::on_stock(){
 
 	if (!page_exists("Stock")) {
@@ -175,7 +177,17 @@ void ken_app_main::on_stock(){
 
 // when the add stock image has been clicked
 void ken_app_main::on_add_stock(){
+	//creating a object of type stock and passing in the state object
+	stock stock(app_state_);
+	stock.modal(*this);
 
+	std::string error;
+	if (!stock.run(error)) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+	}
 }
 
 

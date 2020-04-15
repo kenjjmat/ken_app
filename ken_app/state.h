@@ -32,4 +32,9 @@ public :
 	bool create_acc() { return create_account; }
 	void create() { create_account = true; }
 
+	// details of the system 
+	std::string version_info() {
+		return "This system is the property @Kenjjmat \n\n Version 1.1.0 \n\n Ken_App\n";
+	}
+
 };
