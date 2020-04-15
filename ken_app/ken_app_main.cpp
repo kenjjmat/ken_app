@@ -1,8 +1,10 @@
 #include "ken_app_main.h"
 #include "stock.h"
 
-void ken_app_main::on_caption()
-{
+void ken_app_main::on_caption(){
+	gui::prompt_params params;
+	params.type = gui::prompt_type::ok;
+	prompt(params, "", app_state_.version_info());
 }
 
 void ken_app_main::on_stop(){
@@ -20,28 +22,27 @@ void ken_app_main::on_stock(){
 		page page("Stock");
 
 		//add back icon 
-		widgets::button back;
-		back.caption = "Back";
-		back.rect.left =890;
-		back.rect.top = 420;
-		back.rect.set_height(30);
-		back.rect.set_width(80);
+		widgets::image back;
+		back.toggle = "Previous page";
+		back.filename = "back.png";
+		back.rect.left = 10;
+		back.rect.top =  10;
+		back.rect.set_height(50);
+		back.rect.set_width(40);
 		back.on_click = [&]() {
 			show_previous_page();
 			// to-do::
 			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
 		};
-		back.on_resize.perc_h = 100;
-		back.on_resize.perc_v = 100;
 
-		page.add_button(back);
+		page.add_image(back);
 
 		// add tittle 
 		widgets::text title;
 		title.text_value = "Stock";
 		title.font_size = 16;
-		title.rect.left = 20;
-		title.rect.top = 10;
+		title.rect.left = back.rect.right+10;
+		title.rect.top =  back.rect.top;
 		title.rect.set_height(40);
 		title.rect.set_width(100);
 
@@ -52,12 +53,14 @@ void ken_app_main::on_stock(){
 		widgets::text description;
 		description.text_value = "View and Manage Inventory";
 		description.color = color{ 180 , 180 , 180 };
-		description.rect.left =  20;
+		description.rect.left =  back.rect.right + 10;
 		description.rect.top = title.rect.top + 30;
 		description.rect.set_height(20);
 		description.rect.set_width(200);
 
 		page.add_text(description);
+
+	
 
 
 		// add image 
@@ -65,12 +68,14 @@ void ken_app_main::on_stock(){
 		widgets::image image;
 		image.bar = false;
 		image.filename = "stock.png";
-		image.rect.left = 30;
+		image.rect.left = back.rect.left;
 		image.rect.top = description.rect.bottom + 20;
 		image.rect.set_height(100);
 		image.rect.set_width(100);
 
 		page.add_image(image);
+
+		
 
 		// adding a group box 
 
@@ -81,11 +86,11 @@ void ken_app_main::on_stock(){
 
 		page.add_groupbox(border);
 
-		// add image 
+		// add "add stock item " icon 
 		widgets::image image_add;
 		image_add.filename = "add.png";
 		image_add.tooltip = "Add a new Item";
-		image_add.rect.left = 32;
+		image_add.rect.left = back.rect.left;
 		image_add.rect.top = image.rect.bottom + 10;
 		image_add.rect.set_height(30);
 		image_add.rect.set_width(30);
@@ -95,6 +100,7 @@ void ken_app_main::on_stock(){
 		image_add.color.color_border_hot = image_add.color.color_border;
 		image_add.color_background_hot = image_add.color_background_hot;
 		image_add.tight_fit = true;
+		image_add.on_click = [&] { on_add_stock(); };
 
 		page.add_image(image_add);
 
@@ -104,8 +110,8 @@ void ken_app_main::on_stock(){
 		image_edit.tooltip = "Edit Item";
 		image_edit.rect.left = image_add.rect.right + 10;
 		image_edit.rect.top = image.rect.bottom + 10;
-		image_edit.rect.set_height(30);
-		image_edit.rect.set_width(30);
+		image_edit.rect.set_height(27);
+		image_edit.rect.set_width(27);
 		image_edit.change_color = true;
 		image_edit.color.color = color{ 0, 150, 140 };
 		image_edit.color.color_hot = color{ 21, 79, 139 };
@@ -121,8 +127,8 @@ void ken_app_main::on_stock(){
 		image_delete.tooltip = "Delete Item";
 		image_delete.rect.left = image_edit.rect.right + 10;
 		image_delete.rect.top = image.rect.bottom + 10;
-		image_delete.rect.set_height(30);
-		image_delete.rect.set_width(30);
+		image_delete.rect.set_height(27);
+		image_delete.rect.set_width(27);
 		image_delete.change_color = true;
 		image_delete.color.color = color{ 255, 0, 0 };
 		image_delete.color.color_hot = color{ 21, 79, 139 };
@@ -140,6 +146,7 @@ void ken_app_main::on_stock(){
 		stock_list.rect.set_height(300);
 		stock_list.rect.set_width(400);
 		stock_list.border = true;
+
 
 		//this code is giving a error find a way around it
 
