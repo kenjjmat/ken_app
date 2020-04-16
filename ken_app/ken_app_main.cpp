@@ -248,7 +248,131 @@ void ken_app_main::on_add_stock(){
 	// This is where you gonna put the code for collecting information from the database and insert it into the listview
 }
 
-void ken_app_main::on_sales()
+// when the sales icon is clicked
+void ken_app_main::on_sales(){
+
+	if (!page_exists("Sales")) {
+		page page("Sales");
+
+
+		//add back icon 
+		widgets::image back;
+		back.toggle = "Previous page";
+		back.filename = "back.png";
+		back.rect.left = 10;
+		back.rect.top = 10;
+		back.rect.set_height(50);
+		back.rect.set_width(40);
+		back.on_click = [&]() {
+			show_previous_page();
+			// to-do::
+			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
+		};
+
+		page.add_image(back);
+
+		// add tittle 
+		widgets::text title;
+		title.text_value = "Sales";
+		title.font_size = 16;
+		title.rect.left = back.rect.right + 10;
+		title.rect.top = back.rect.top;
+		title.rect.set_height(40);
+		title.rect.set_width(100);
+
+		page.add_text(title);
+
+		// add description 
+		widgets::text description;
+		description.text_value = "The Daily Running of Business";
+		description.color = color{ 180 , 180 , 180 };
+		description.rect.left = back.rect.right + 10;
+		description.rect.top = title.rect.top + 30;
+		description.rect.set_height(20);
+		description.rect.set_width(200);
+
+		page.add_text(description);
+
+
+		// add image 
+		widgets::image image;
+		image.bar = false;
+		image.filename = "sales.png";
+		image.rect.left = back.rect.left;
+		image.rect.top = description.rect.bottom + 20;
+		image.rect.set_height(100);
+		image.rect.set_width(100);
+
+		page.add_image(image);
+
+		// adding a group box 
+		widgets::groupbox border;
+		border.rects = {
+			image.rect
+		};
+
+		page.add_groupbox(border);
+
+		// add "add stock item " icon 
+		widgets::image image_add;
+		image_add.filename = "add.png";
+		image_add.tooltip = "Add a new Item";
+		image_add.rect.left = back.rect.left;
+		image_add.rect.top = image.rect.bottom + 10;
+		image_add.rect.set_height(30);
+		image_add.rect.set_width(30);
+		image_add.change_color = true;
+		image_add.color.color = color{ 0, 150, 140 };
+		image_add.color.color_hot = color{ 21, 79, 139 };
+		image_add.color.color_border_hot = image_add.color.color_border;
+		image_add.color_background_hot = image_add.color_background_hot;
+		image_add.tight_fit = true;
+		image_add.on_click = [&] { on_add_sales(); };
+
+		page.add_image(image_add);
+
+		// add image edit
+		widgets::image image_edit;
+		image_edit.filename = "edit.png";
+		image_edit.tooltip = "Edit Item";
+		image_edit.rect.left = image_add.rect.right + 10;
+		image_edit.rect.top = image.rect.bottom + 10;
+		image_edit.rect.set_height(27);
+		image_edit.rect.set_width(27);
+		image_edit.change_color = true;
+		image_edit.color.color = color{ 0, 150, 140 };
+		image_edit.color.color_hot = color{ 21, 79, 139 };
+		image_edit.color.color_border_hot = image_edit.color.color_border;
+		image_edit.color_background_hot = image_edit.color_background_hot;
+		image_edit.tight_fit = true;
+
+		page.add_image(image_edit);
+
+		// add the delete image 
+		widgets::image image_delete;
+		image_delete.filename = "delete.png";
+		image_delete.tooltip = "Delete Item";
+		image_delete.rect.left = image_edit.rect.right + 10;
+		image_delete.rect.top = image.rect.bottom + 10;
+		image_delete.rect.set_height(27);
+		image_delete.rect.set_width(27);
+		image_delete.change_color = true;
+		image_delete.color.color = color{ 255, 0, 0 };
+		image_delete.color.color_hot = color{ 21, 79, 139 };
+		image_delete.color.color_border_hot = image_delete.color.color_border;
+		image_delete.color_background_hot = image_delete.color_background_hot;
+		image_delete.tight_fit = true;
+
+		page.add_image(image_delete);
+
+
+
+		add_page(page);
+	}
+	show_page("Sales");
+}
+
+void ken_app_main::on_add_sales()
 {
 }
 
@@ -334,6 +458,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_sales.on_resize.perc_width = 5;
 	icon_sales.on_resize.perc_h = 50;
 	icon_sales.on_resize.perc_v = 20;
+	icon_sales.on_click = [&] { on_sales(); };
 
 
 	home_page.add_icon(icon_sales);
