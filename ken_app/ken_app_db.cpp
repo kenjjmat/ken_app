@@ -174,6 +174,19 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
         if (error.find("already exists") == std::string::npos) return false;
     }
 
+    // sales details
+    if (!d_.sqlite_query("CREATE TABLE Sales ("
+        "ID TEXT NOT NULL, "
+        "Item_Name TEXT NOT NULL, "
+        "Quantity TEXT NOT NULL, "
+        "Unit_price INTEGER NOT NULL , "
+        "Cost INTERGER NOT NULL , "
+        "PRIMARY KEY (ID)"
+        ");",
+        table, error)) {
+        if (error.find("already exists") == std::string::npos) return false;
+    }
+
     d_.connected_ = true;
     return true;
 }
@@ -264,7 +277,7 @@ bool ken_app_db::new_stock(const stock_details& stock_info, std::string& error)
 
     table table;
     if (!d_.sqlite_query("INSERT INTO Stock VALUE('"
-        + stock_info.description + "' , '" + stock_info.name + "' , '" + stock_info.description + "' , '" + stock_info.quantity +
+        + stock_info.id + "' , '" + stock_info.name + "' , '" + stock_info.description + "' , '" + stock_info.quantity +
         "');", table, error)) {
         return false;
     }
@@ -315,7 +328,7 @@ bool ken_app_db::get_stock_all(std::vector<stock_details>& stock, std::string& e
 
     // read the database 
     table table;
-    if (!d_.sqlite_query("SELECT * FROM People;", table, error)) return false;
+    if (!d_.sqlite_query("SELECT * FROM Stock;", table, error)) return false;
 
     if (!table.empty()) {
         
@@ -328,6 +341,87 @@ bool ken_app_db::get_stock_all(std::vector<stock_details>& stock, std::string& e
             stock_.quantity = row.at("Quantity");
 
             stock.push_back(stock_);
+        }
+    }
+    return true;
+}
+
+// adding sales
+bool ken_app_db::new_sales(const sales_details& sales_info, std::string& error)
+{
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    table table;
+    if (!d_.sqlite_query("INSERT INTO Stock VALUE('"
+        + sales_info.item_name + "' , '" + sales_info.quantity + "' , '" + sales_info.Unit_price + "' , '" + sales_info.Cost + "','" + sales_info.id + 
+        "');", table, error)) {
+        return false;
+    }
+    return true;
+}
+
+
+// get sales
+bool ken_app_db::get_sales(const std::string& sales_id, sales_details& sales, std::string& error)
+{
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    // validating whether the user has entered the primary key or not
+    if (sales_id.empty()) {
+        error = "Sales ID not specified";
+        return false;
+    }
+
+    // reading the database 
+    table table;
+    if (!d_.sqlite_query("SELECT * FROM Sales WHERE PersonID = '"
+        + sales_id + "';", table, error)) return false;
+
+    // now assigning values from the database table to the struct stock details
+    if (!table.empty()) {
+        sales_details sales_;
+        sales_.id = table.at(0).at("ID");
+        sales_.item_name = table.at(0).at("Item_name");
+        sales_.quantity = table.at(0).at("Quantity");
+        sales_.Unit_price = table.at(0).at("Unit_price");
+        sales_.Cost = table.at(0).at("Cost");
+
+        sales = sales_;
+    }
+
+
+    return true;
+}
+
+// retrieve all the sales in the database
+bool ken_app_db::get_sales_all(std::vector<sales_details>& sales, std::string& error)
+{
+    // clear the vector first
+    sales.clear();
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    // read the database 
+    table table;
+    if (!d_.sqlite_query("SELECT * FROM Sales;", table, error)) return false;
+
+    if (!table.empty()) {
+
+        // looping through the table and inserting into the vector stock
+        for (const auto& row : table) {
+            sales_details sales_;
+            sales_.id = row.at("ID");
+            sales_.item_name = row.at("Item_name");
+            sales_.quantity = row.at("Quantity");
+            sales_.Unit_price = row.at("Unit_price");
+            sales_.Cost = row.at("Cost");
+
+            sales.push_back(sales_);
         }
     }
     return true;

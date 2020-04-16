@@ -365,8 +365,49 @@ void ken_app_main::on_sales(){
 
 		page.add_image(image_delete);
 
+		// add stock listview 
+		widgets::listview sales_list;
+		sales_list.alias = "sales_list";
+		sales_list.rect.left = image.rect.right + 50;
+		sales_list.rect.top = image.rect.top;
+		sales_list.rect.set_height(300);
+		sales_list.rect.set_width(400);
+		sales_list.border = true;
+		// on resize 
+		sales_list.on_resize.perc_h = 0;
+		sales_list.on_resize.perc_v = 5;
+		sales_list.on_resize.perc_height = 90;
+		sales_list.on_resize.perc_width = 25;
 
+		//this code is giving a error find a way around it
 
+		//sales_list.columns = {
+		//	{"ID", 35 , widgets::listview_column_type::int_ },
+		//	{"Name" , 170 , widgets::listview_column_type::string_},
+		//	{"Description" , 200 , widgets::listview_column_type::string_},
+		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
+		//};
+		//sales_list.unique_column_name = "ID";
+
+		{
+			std::vector<ken_app_db::sales_details> sales;
+			std::string error;
+
+			if (app_state_.get_db().get_stock_all(sales, error)) {
+				int i = 0;
+
+				for (const auto& stock_ : sales) {
+					widgets::listview_row row;
+					row.items.push_back({ "ID", stock_.id });
+					row.items.push_back({ "Name" , stock_.name });
+					row.items.push_back({ "Description" , stock_.description });
+					row.items.push_back({ "Quantity", stock_.quantity });
+				}
+			}
+		}
+		page.add_listview(sales_list);
+
+		// adding the page to the window
 		add_page(page);
 	}
 	show_page("Sales");

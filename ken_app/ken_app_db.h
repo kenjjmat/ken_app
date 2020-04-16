@@ -10,12 +10,24 @@ public :
 		std::string username;
 	};
 
+	// stock details
 	struct stock_details {
 		std::string id;
 		std::string name;
 		std::string description;
 		std::string quantity;
 	};
+
+	// sales details 
+	struct sales_details
+	{
+		std::string id;
+		std::string item_name;
+		std::string quantity;
+		std::string Unit_price;
+		std::string Cost;
+	};
+
 	ken_app_db();
 	~ken_app_db();
 
@@ -32,6 +44,11 @@ public :
 	bool new_stock(const stock_details& stock_info, std::string& error);
 	bool get_stock(const std::string& stock_id, stock_details& stock, std::string& error);
 	bool get_stock_all(std::vector<stock_details>& stock, std::string& error);
+
+	// sales 
+	bool new_sales(const sales_details& sales_info, std::string& error);
+	bool get_sales(const std::string& sales_id, sales_details& sales, std::string& error);
+	bool get_sales_all(std::vector<sales_details>& sales, std::string& error);
 private :
 	//hiding the implementation of the database by only showing the essentials
 	class ken_app_db_impl;
