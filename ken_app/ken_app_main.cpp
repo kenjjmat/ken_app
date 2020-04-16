@@ -393,15 +393,16 @@ void ken_app_main::on_sales(){
 			std::vector<ken_app_db::sales_details> sales;
 			std::string error;
 
-			if (app_state_.get_db().get_stock_all(sales, error)) {
+			if (app_state_.get_db().get_sales_all(sales, error)) {
 				int i = 0;
 
-				for (const auto& stock_ : sales) {
+				for (const auto& sales_ : sales) {
 					widgets::listview_row row;
-					row.items.push_back({ "ID", stock_.id });
-					row.items.push_back({ "Name" , stock_.name });
-					row.items.push_back({ "Description" , stock_.description });
-					row.items.push_back({ "Quantity", stock_.quantity });
+					row.items.push_back({ "ID", sales_.id });
+					row.items.push_back({ "Name" , sales_.item_name });
+					row.items.push_back({ "Quantity" , sales_.quantity });
+					row.items.push_back({ "Unit_price", sales_.Unit_price });
+					row.items.push_back({ "Cost"	, sales_.Cost });
 				}
 			}
 		}
