@@ -429,7 +429,14 @@ void ken_app_main::on_sales(){
 		details.label = "Eat";
 		details.value = 50;
 
+		// creating a second object of chart entry
+		widgets::chart_entry details_;
+		details_.color = color{ 180 , 180 , 180 };
+		details_.label = "Drinks";
+		details_.value = 50;
+
 		pie_data.push_back(details);
+		pie_data.push_back(details_);
 
 		pie.data.slices = pie_data;
 
