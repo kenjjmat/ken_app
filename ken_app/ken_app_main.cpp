@@ -175,7 +175,43 @@ void ken_app_main::on_stock(){
 		   }
 		}
 		page.add_listview(stock_list);
-	
+
+		// adding a barchart 
+		widgets::barchart bar;
+		bar.alias = "barchart";
+		bar.data.autocolor = false;
+		bar.data.x_label = "Fields";
+		bar.data.y_label = "Data";
+		bar.data.caption = " Stock BarChart";
+		bar.rect.left = stock_list.rect.right + 20;
+		bar.rect.top = stock_list.rect.top;
+		bar.rect.set_height(300);
+		bar.rect.set_width(400);
+
+		// setting out the bars in the barchart
+			std::vector<widgets::chart_entry>bar_data;
+			// creating object for the chart entry
+			widgets::chart_entry details;
+
+			// to-do::
+			// the barchart must desplay information from the database that is in the listview
+
+			// assigning the values in bar eat
+			details.label = "Eat";
+			details.color = color{ 180 , 180 , 180 };
+			details.value = 50;
+
+			// assigning the values in bar drink
+			widgets::chart_entry detail_;
+			detail_.label = "Drink";
+			detail_.value = 100;
+			detail_.color = color{ 180 , 200 , 255 };
+			bar_data.push_back(detail_);
+			bar_data.push_back(details);
+		
+		bar.data.bars = bar_data;
+
+		page.add_barchart(bar);
 		// this is adding a new page to the form 
 		add_page(page);
 	}
@@ -195,6 +231,8 @@ void ken_app_main::on_add_stock(){
 		prompt(params, "Error", error);
 		return;
 	}
+	// to-do:
+	// This is where you gonna put the code for collecting information from the database and insert it into the listview
 }
 
 
