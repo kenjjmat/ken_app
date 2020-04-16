@@ -17,8 +17,7 @@ class stock : public gui {
 
 
 	// functions for adding new stock/ item to the database
-	void on_new_stock();
-	void on_new_item();
+	void on_add();
 	void on_save();
 public : 
 	// constructor 

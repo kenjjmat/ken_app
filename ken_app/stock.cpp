@@ -15,16 +15,15 @@ void stock::on_shutdown()
 {
 }
 
-void stock::on_new_stock()
-{
-}
 
-void stock::on_new_item()
-{
+void stock::on_add(){
+	// to-do::
+	// this is where i put the code for implementing the add button
 }
 
 void stock::on_save(){
-
+	// to-do::
+	// this is where i put the code for implementating the save button
 }
 
 stock::stock(state& app_state): 

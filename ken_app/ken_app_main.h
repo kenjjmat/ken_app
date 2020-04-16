@@ -20,6 +20,10 @@ class ken_app_main : public gui {
 	void on_stock();
 	void on_add_stock();
 
+	// on_click function for redirecting to the sales window 
+	void on_sales();
+	void on_add_sales();
+
 public :
 	ken_app_main(const std::string& guid, state& app_state);
 	~ken_app_main();

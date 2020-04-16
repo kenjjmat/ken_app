@@ -146,17 +146,21 @@ void ken_app_main::on_stock(){
 		stock_list.rect.set_height(300);
 		stock_list.rect.set_width(400);
 		stock_list.border = true;
-
+		// on resize 
+		stock_list.on_resize.perc_h = 0;
+		stock_list.on_resize.perc_v = 5;
+		stock_list.on_resize.perc_height = 90;
+		stock_list.on_resize.perc_width = 25;
 
 		//this code is giving a error find a way around it
 
-		/*stock_list.columns = {
-			{"ID", 35 , widgets::listview_column_type::int_ },
-			{"Name" , 170 , widgets::listview_column_type::string_},
-			{"Description" , 200 , widgets::listview_column_type::string_},
-			{"Quantity" , 50  , widgets::listview_column_type::int_	 }
-		};
-		stock_list.unique_column_name = "ID";*/
+		//stock_list.columns = {
+		//	{"ID", 35 , widgets::listview_column_type::int_ },
+		//	{"Name" , 170 , widgets::listview_column_type::string_},
+		//	{"Description" , 200 , widgets::listview_column_type::string_},
+		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
+		//};
+		//stock_list.unique_column_name = "ID";
 
 		{
 			std::vector<ken_app_db::stock_details> stock;
@@ -187,6 +191,8 @@ void ken_app_main::on_stock(){
 		bar.rect.top = stock_list.rect.top;
 		bar.rect.set_height(300);
 		bar.rect.set_width(400);
+		bar.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
+		bar.on_resize.perc_v = stock_list.on_resize.perc_height + 5;
 
 		// setting out the bars in the barchart
 			std::vector<widgets::chart_entry>bar_data;
@@ -208,6 +214,9 @@ void ken_app_main::on_stock(){
 			detail_.color = color{ 180 , 200 , 255 };
 			bar_data.push_back(detail_);
 			bar_data.push_back(details);
+
+			// on resize 
+			
 		
 		bar.data.bars = bar_data;
 
@@ -216,6 +225,10 @@ void ken_app_main::on_stock(){
 		add_page(page);
 	}
 	show_page("Stock");
+
+	// to-do::
+	// when on_resize the listview must increase the width and height and the barchar must move a little lower
+	//on the bottom so as to increase the space where the information in the listview is going to be desplayed
 }
 
 // when the add stock image has been clicked
@@ -233,6 +246,10 @@ void ken_app_main::on_add_stock(){
 	}
 	// to-do:
 	// This is where you gonna put the code for collecting information from the database and insert it into the listview
+}
+
+void ken_app_main::on_sales()
+{
 }
 
 
@@ -423,4 +440,5 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	
 	return true;
 }
+
 
