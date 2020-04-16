@@ -408,6 +408,42 @@ void ken_app_main::on_sales(){
 		}
 		page.add_listview(sales_list);
 
+		// adding a pie chart 
+		widgets::piechart pie;
+		pie.rect.left = sales_list.rect.right + 20 ;
+		pie.rect.top = sales_list.rect.top;
+		pie.rect.set_height(300);
+		pie.rect.set_width(400);
+		pie.alias = "piechart";
+		pie.data.caption = "Sales statistics";
+		pie.data.autocolor = false;
+		pie.data.doughnut = true;
+		pie.data.on_hover = widgets::piechart_hover_effect::glow_and_shrink_others;
+		
+		// assigning values to the pie chart 
+		std::vector< widgets::chart_entry> pie_data;
+
+		// creating object for chart_entry 
+		widgets::chart_entry details;
+		details.color = color { 180 , 200 , 255 }; 
+		details.label = "Eat";
+		details.value = 50;
+
+		pie_data.push_back(details);
+
+		pie.data.slices = pie_data;
+
+		page.add_piechart(pie);
+
+		// wrapping the pie chart in a groupbox 
+		widgets::groupbox group;
+		group.color.blue;
+		group.rects = {
+			pie.rect
+		};
+
+		page.add_groupbox(group);
+
 		// adding the page to the window
 		add_page(page);
 	}
@@ -429,6 +465,7 @@ ken_app_main::~ken_app_main()
 {
 }
 
+// the layout of the main window
 bool ken_app_main::layout(gui::page& persistent_page,
 	gui::page& home_page, 
 	std::string& error) {
