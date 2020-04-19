@@ -420,6 +420,8 @@ void ken_app_main::on_sales(){
 		pie.data.autocolor = false;
 		pie.data.doughnut = true;
 		pie.data.on_hover = widgets::piechart_hover_effect::glow_and_shrink_others;
+		pie.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
+		pie.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
 		
 		// assigning values to the pie chart 
 		std::vector< widgets::chart_entry> pie_data;
@@ -449,6 +451,8 @@ void ken_app_main::on_sales(){
 		group.rects = {
 			pie.rect
 		};
+		group.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
+		group.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
 
 		page.add_groupbox(group);
 
