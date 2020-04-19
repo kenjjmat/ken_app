@@ -1,5 +1,6 @@
 #include "ken_app_main.h"
 #include "stock.h"
+#include "sales.h"
 
 void ken_app_main::on_caption(){
 	gui::prompt_params params;
@@ -457,8 +458,22 @@ void ken_app_main::on_sales(){
 	show_page("Sales");
 }
 
-void ken_app_main::on_add_sales()
-{
+void ken_app_main::on_add_sales(){
+
+	// creating object 
+
+	sales sales(app_state_);
+	sales.modal(*this);
+
+	std::string error;
+	if (!sales.run(error)) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+	}
+	// to-do:
+	// This is where you gonna put the code for collecting information from the database and insert it into the listview
 }
 
 
