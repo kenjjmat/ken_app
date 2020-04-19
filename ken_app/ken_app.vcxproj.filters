@@ -31,6 +31,9 @@
     <Filter Include="Source Files\stock">
       <UniqueIdentifier>{16b17bea-0782-4430-949f-73a83e3435c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\sales">
+      <UniqueIdentifier>{50194d14-a5a3-4766-b102-87db0b81f925}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ken_app_login.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="stock.cpp">
       <Filter>Source Files\stock</Filter>
+    </ClCompile>
+    <ClCompile Include="sales.cpp">
+      <Filter>Source Files\sales</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="stock.h">
       <Filter>Source Files\stock</Filter>
+    </ClInclude>
+    <ClInclude Include="sales.h">
+      <Filter>Source Files\sales</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
