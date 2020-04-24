@@ -6,6 +6,7 @@
 class  ken_app_db {
 public :
 
+	// username and password
 	struct user_credentials {
 		std::string username;
 	};
@@ -26,6 +27,16 @@ public :
 		std::string quantity;
 		std::string Unit_price;
 		std::string Cost;
+	};
+
+	// appointments details 
+	struct appointments_details
+	{
+		std::string id;
+		std::string time;
+		std::string name;
+		std::string surname;
+		std::string description;
 	};
 
 	ken_app_db();
@@ -49,6 +60,13 @@ public :
 	bool new_sales(const sales_details& sales_info, std::string& error);
 	bool get_sales(const std::string& sales_id, sales_details& sales, std::string& error);
 	bool get_sales_all(std::vector<sales_details>& sales, std::string& error);
+
+	//appointment
+	bool new_appointment(const appointments_details& appointment_info, std::string& error);
+	bool get_appointment(const std::string& appointment_id, appointments_details& sales, std::string& error);
+	bool get_appointments(std::vector<appointments_details>& appointment, std::string& error);
+
+
 private :
 	//hiding the implementation of the database by only showing the essentials
 	class ken_app_db_impl;

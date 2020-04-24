@@ -34,6 +34,9 @@
     <Filter Include="Source Files\sales">
       <UniqueIdentifier>{50194d14-a5a3-4766-b102-87db0b81f925}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\appointment">
+      <UniqueIdentifier>{6778eb42-c563-4524-ae14-9711eb2191f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ken_app_login.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="sales.cpp">
       <Filter>Source Files\sales</Filter>
+    </ClCompile>
+    <ClCompile Include="appointment.cpp">
+      <Filter>Source Files\appointment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="sales.h">
       <Filter>Source Files\sales</Filter>
+    </ClInclude>
+    <ClInclude Include="appointment.h">
+      <Filter>Source Files\appointment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
