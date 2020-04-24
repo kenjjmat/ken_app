@@ -63,7 +63,7 @@ public :
 
 	//appointment
 	bool new_appointment(const appointments_details& appointment_info, std::string& error);
-	bool get_appointment(const std::string& appointment_id, appointments_details& sales, std::string& error);
+	bool get_appointment(const std::string& appointment_id, appointments_details& appointment, std::string& error);
 	bool get_appointments(std::vector<appointments_details>& appointment, std::string& error);
 
 

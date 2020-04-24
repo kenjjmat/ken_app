@@ -152,7 +152,7 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
 
     table table;
 
-    // users 
+    // users table
     if (!d_.sqlite_query("CREATE TABLE Users ("
         "Username TEXT NOT NULL , "
         "Password TEXT NOT NULL,"
@@ -162,7 +162,7 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
             return false;
     }
 
-    //stock details 
+    //stock details table
     if (!d_.sqlite_query("CREATE TABLE Stock ("
         "ID TEXT NOT NULL, "
         "Name TEXT NOT NULL, "
@@ -174,13 +174,26 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
         if (error.find("already exists") == std::string::npos) return false;
     }
 
-    // sales details
+    // sales details table
     if (!d_.sqlite_query("CREATE TABLE Sales ("
         "ID TEXT NOT NULL, "
         "Item_Name TEXT NOT NULL, "
-        "Quantity TEXT NOT NULL, "
+        "Quantity INTEGER NOT NULL, "
         "Unit_price INTEGER NOT NULL , "
         "Cost INTERGER NOT NULL , "
+        "PRIMARY KEY (ID)"
+        ");",
+        table, error)) {
+        if (error.find("already exists") == std::string::npos) return false;
+    }
+
+    // appointment details Table
+    if (!d_.sqlite_query("CREATE TABLE Appointment ("
+        "ID TEXT NOT NULL, "
+        "Time TIME NOT NULL, "
+        "Name TEXT NOT NULL, "
+        "Surname TEXT NOT NULL , "
+        "Description TEXT NOT NULL , "
         "PRIMARY KEY (ID)"
         ");",
         table, error)) {
@@ -422,6 +435,87 @@ bool ken_app_db::get_sales_all(std::vector<sales_details>& sales, std::string& e
             sales_.Cost = row.at("Cost");
 
             sales.push_back(sales_);
+        }
+    }
+    return true;
+}
+
+// appointments
+
+bool ken_app_db::new_appointment(const appointments_details& appointment_info, std::string& error)
+{
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    table table;
+    if (!d_.sqlite_query("INSERT INTO Appointment VALUE('"
+        + appointment_info.time + "' , '" + appointment_info.name + "' , '" + appointment_info.surname + "' , '" + appointment_info.description +
+        "');", table, error)) {
+        return false;
+    }
+	return true;
+}
+
+// appointments
+bool ken_app_db::get_appointment(const std::string& appointment_id, appointments_details& appointment, std::string& error)
+{
+
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    // validating whether the user has entered the primary key or not
+    if (appointment_id.empty()) {
+        error = "Appointment ID not specified";
+        return false;
+    }
+
+    // reading the database 
+    table table;
+    if (!d_.sqlite_query("SELECT * FROM Appointment WHERE PersonID = '"
+        + appointment_id + "';", table, error)) return false;
+
+    // now assigning values from the database table to the struct stock details
+    if (!table.empty()) {
+        appointments_details appointment_;
+        appointment_.id = table.at(0).at("ID");
+        appointment_.time = table.at(0).at("Time");
+        appointment_.name = table.at(0).at("Name");
+        appointment_.surname = table.at(0).at("Surname");
+        appointment_.description = table.at(0).at("Description");
+
+        appointment= appointment_;
+    }
+    return true;
+}
+
+// appointments
+
+bool ken_app_db::get_appointments(std::vector<appointments_details>& appointment, std::string& error)
+{
+    // clear the vector first
+    appointment.clear();
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+    }
+
+    // read the database 
+    table table;
+    if (!d_.sqlite_query("SELECT * FROM Appointment;", table, error)) return false;
+
+    if (!table.empty()) {
+
+        // looping through the table and inserting into the vector stock
+        for (const auto& row : table) {
+            appointments_details appointment_;
+            appointment_.id = row.at("ID");
+            appointment_.name = row.at("Name");
+            appointment_.time = row.at("Time");
+            appointment_.surname = row.at("Surname");
+            appointment_.description = row.at("Description");
+
+            appointment.push_back(appointment_);
         }
     }
     return true;
