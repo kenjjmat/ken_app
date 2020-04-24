@@ -32,5 +32,5 @@ public:
 	bool saved();
 
 private:
-	const ken_app_db::appointment_details details_;
+	const ken_app_db::appointments_details details_;
 }; 
