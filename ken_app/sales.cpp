@@ -90,6 +90,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	unit_price.rect.top = unit_price_caption.rect.bottom + 3;
 	unit_price.rect.set_height(20);
 	unit_price.rect.set_width(100);
+	unit_price.allowed_set = "0123456789";
 
 	home_page.add_editbox(unit_price);
 
@@ -111,6 +112,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	cost.rect.top = cost_caption.rect.bottom + 3;
 	cost.rect.set_height(20);
 	cost.rect.set_width(100);
+	cost.allowed_set = "0123456789";
 
 	home_page.add_editbox(cost);
 
