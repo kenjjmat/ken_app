@@ -24,6 +24,10 @@ class ken_app_main : public gui {
 	void on_sales();
 	void on_add_sales();
 
+	// on_clicking function for redirecting to appontments window 
+	void on_appoinment();
+	void on_add_appointment();
+
 public :
 	ken_app_main(const std::string& guid, state& app_state);
 	~ken_app_main();

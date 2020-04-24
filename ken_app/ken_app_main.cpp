@@ -1,6 +1,7 @@
 #include "ken_app_main.h"
 #include "stock.h"
 #include "sales.h"
+#include "appointment.h"
 
 void ken_app_main::on_caption(){
 	gui::prompt_params params;
@@ -227,9 +228,6 @@ void ken_app_main::on_stock(){
 	}
 	show_page("Stock");
 
-	// to-do::
-	// when on_resize the listview must increase the width and height and the barchar must move a little lower
-	//on the bottom so as to increase the space where the information in the listview is going to be desplayed
 }
 
 // when the add stock image has been clicked
@@ -480,6 +478,235 @@ void ken_app_main::on_add_sales(){
 	// This is where you gonna put the code for collecting information from the database and insert it into the listview
 }
 
+void ken_app_main::on_appoinment(){
+
+	if (!page_exists("appointment")) {
+		page page("appointment");
+
+		//add back icon 
+		widgets::image back;
+		back.toggle = "Previous page";
+		back.filename = "back.png";
+		back.rect.left = 10;
+		back.rect.top = 10;
+		back.rect.set_height(50);
+		back.rect.set_width(40);
+		back.on_click = [&]() {
+			show_previous_page();
+			// to-do::
+			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
+		};
+
+		page.add_image(back);
+
+		// add tittle 
+		widgets::text title;
+		title.text_value = "appointment";
+		title.font_size = 16;
+		title.rect.left = back.rect.right + 10;
+		title.rect.top = back.rect.top;
+		title.rect.set_height(40);
+		title.rect.set_width(100);
+
+		page.add_text(title);
+
+		// add description 
+
+		widgets::text description;
+		description.text_value = "View and Manage Inventory";
+		description.color = color{ 180 , 180 , 180 };
+		description.rect.left = back.rect.right + 10;
+		description.rect.top = title.rect.top + 30;
+		description.rect.set_height(20);
+		description.rect.set_width(200);
+
+		page.add_text(description);
+
+
+
+
+		// add image 
+
+		widgets::image image;
+		image.bar = false;
+		image.filename = "appointment.jpg";
+		image.rect.left = back.rect.left;
+		image.rect.top = description.rect.bottom + 20;
+		image.rect.set_height(100);
+		image.rect.set_width(100);
+
+		page.add_image(image);
+
+
+
+		// adding a group box 
+
+		widgets::groupbox border;
+		border.rects = {
+			image.rect
+		};
+
+		page.add_groupbox(border);
+
+		// add "add appointment item " icon 
+		widgets::image image_add;
+		image_add.filename = "add.png";
+		image_add.tooltip = "Add a new Item";
+		image_add.rect.left = back.rect.left;
+		image_add.rect.top = image.rect.bottom + 10;
+		image_add.rect.set_height(30);
+		image_add.rect.set_width(30);
+		image_add.change_color = true;
+		image_add.color.color = color{ 0, 150, 140 };
+		image_add.color.color_hot = color{ 21, 79, 139 };
+		image_add.color.color_border_hot = image_add.color.color_border;
+		image_add.color_background_hot = image_add.color_background_hot;
+		image_add.tight_fit = true;
+		image_add.on_click = [&] { on_add_appointment(); };
+
+		page.add_image(image_add);
+
+		// add image edit
+		widgets::image image_edit;
+		image_edit.filename = "edit.png";
+		image_edit.tooltip = "Edit Item";
+		image_edit.rect.left = image_add.rect.right + 10;
+		image_edit.rect.top = image.rect.bottom + 10;
+		image_edit.rect.set_height(27);
+		image_edit.rect.set_width(27);
+		image_edit.change_color = true;
+		image_edit.color.color = color{ 0, 150, 140 };
+		image_edit.color.color_hot = color{ 21, 79, 139 };
+		image_edit.color.color_border_hot = image_edit.color.color_border;
+		image_edit.color_background_hot = image_edit.color_background_hot;
+		image_edit.tight_fit = true;
+
+		page.add_image(image_edit);
+
+		// add the delete image 
+		widgets::image image_delete;
+		image_delete.filename = "delete.png";
+		image_delete.tooltip = "Delete Item";
+		image_delete.rect.left = image_edit.rect.right + 10;
+		image_delete.rect.top = image.rect.bottom + 10;
+		image_delete.rect.set_height(27);
+		image_delete.rect.set_width(27);
+		image_delete.change_color = true;
+		image_delete.color.color = color{ 255, 0, 0 };
+		image_delete.color.color_hot = color{ 21, 79, 139 };
+		image_delete.color.color_border_hot = image_delete.color.color_border;
+		image_delete.color_background_hot = image_delete.color_background_hot;
+		image_delete.tight_fit = true;
+
+		page.add_image(image_delete);
+
+		// add appointment listview 
+		widgets::listview appointment_list;
+		appointment_list.alias = "appointment_list";
+		appointment_list.rect.left = image.rect.right + 50;
+		appointment_list.rect.top = image.rect.top;
+		appointment_list.rect.set_height(300);
+		appointment_list.rect.set_width(400);
+		appointment_list.border = true;
+		// on resize 
+		appointment_list.on_resize.perc_h = 0;
+		appointment_list.on_resize.perc_v = 5;
+		appointment_list.on_resize.perc_height = 90;
+		appointment_list.on_resize.perc_width = 25;
+
+		//this code is giving a error find a way around it
+
+		//appointment_list.columns = {
+		//	{"ID", 35 , widgets::listview_column_type::int_ },
+		//	{"Name" , 170 , widgets::listview_column_type::string_},
+		//	{"Description" , 200 , widgets::listview_column_type::string_},
+		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
+		//};
+		//appointment_list.unique_column_name = "ID";
+
+		{
+			std::vector<ken_app_db::appointments_details> appointment;
+			std::string error;
+
+			if (app_state_.get_db().get_appointments(appointment, error)) {
+				int i = 0;
+
+				for (const auto& appointment_ : appointment) {
+					widgets::listview_row row;
+					row.items.push_back({ "ID", appointment_.id });
+					row.items.push_back({ "Time", appointment_.time });
+					row.items.push_back({ "Name" , appointment_.name });
+					row.items.push_back({ "Surname", appointment_.surname });
+					row.items.push_back({ "Description" , appointment_.description });
+				}
+			}
+		}
+		page.add_listview(appointment_list);
+
+		// adding a barchart 
+		widgets::barchart bar;
+		bar.alias = "barchart";
+		bar.data.autocolor = false;
+		bar.data.x_label = "Fields";
+		bar.data.y_label = "Data";
+		bar.data.caption = " appointment BarChart";
+		bar.rect.left = appointment_list.rect.right + 20;
+		bar.rect.top = appointment_list.rect.top;
+		bar.rect.set_height(300);
+		bar.rect.set_width(400);
+		bar.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		bar.on_resize.perc_v = appointment_list.on_resize.perc_height + 5;
+
+		// setting out the bars in the barchart
+		std::vector<widgets::chart_entry>bar_data;
+		// creating object for the chart entry
+		widgets::chart_entry details;
+
+		// to-do::
+		// the barchart must desplay information from the database that is in the listview
+
+		// assigning the values in bar eat
+		details.label = "Eat";
+		details.color = color{ 180 , 180 , 180 };
+		details.value = 50;
+
+		// assigning the values in bar drink
+		widgets::chart_entry detail_;
+		detail_.label = "Drink";
+		detail_.value = 100;
+		detail_.color = color{ 180 , 200 , 255 };
+		bar_data.push_back(detail_);
+		bar_data.push_back(details);
+
+		// on resize 
+
+
+		bar.data.bars = bar_data;
+
+		page.add_barchart(bar);
+		// this is adding a new page to the form 
+		add_page(page);
+	}
+	show_page("appointment");
+}
+
+void ken_app_main::on_add_appointment(){
+	// creating object 
+    appointment appointment(app_state_);
+	appointment.modal(*this);
+
+	std::string error;
+	if (!appointment.run(error)) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+	}
+	// to-do:
+	// This is where you gonna put the code for collecting information from the database and insert it into the listview
+}
+
+
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("KEN_APP"),
@@ -603,6 +830,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_appointment.on_resize.perc_width = 5;
 	icon_appointment.on_resize.perc_h = 50;
 	icon_appointment.on_resize.perc_v = 80;
+	icon_appointment.on_click = [&]() {on_appoinment(); };
 
 
 	home_page.add_icon(icon_appointment);
