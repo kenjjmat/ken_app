@@ -522,11 +522,7 @@ void ken_app_main::on_appoinment(){
 
 		page.add_text(description);
 
-
-
-
 		// add image 
-
 		widgets::image image;
 		image.bar = false;
 		image.filename = "appointment.jpg";
@@ -540,7 +536,6 @@ void ken_app_main::on_appoinment(){
 
 
 		// adding a group box 
-
 		widgets::groupbox border;
 		border.rects = {
 			image.rect

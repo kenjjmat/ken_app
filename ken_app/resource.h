@@ -1,5 +1,6 @@
 #pragma once
 
+#define icon_resource   100
 #define  LOGIN          111;
 #define  dispaly_error  112;
 #define  png_stock		113;
