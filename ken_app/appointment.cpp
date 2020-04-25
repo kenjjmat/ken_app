@@ -136,19 +136,27 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 
 
 	// add a quantity textbox 
-	widgets::editbox Time;
+	widgets::date Time;
 	Time.rect.left = description.rect.right + 40;
 	Time.rect.top = description.rect.top;
 	Time.rect.set_height(20);
 	Time.rect.set_width(80);
 
-	home_page.add_editbox(Time);
+	home_page.add_date(Time);
 
+	// add a time textbox for selecting 
+	widgets::time time;
+	time.rect.left = Time.rect.left;
+	time.rect.top = Time.rect.bottom + 6;
+	time.rect.set_height(20);
+	time.rect.set_width(80);
+
+	home_page.add_time(time);
 	// add a button to add the added items into a listview
 	widgets::button add;
 	add.tooltip = "Add items";
 	add.rect.left = description.rect.right + 45;
-	add.rect.top = Time.rect.bottom + 6;
+	add.rect.top = time.rect.bottom + 6;
 	add.rect.set_height(25);
 	add.rect.set_width(60);
 	add.caption = "Add";
@@ -162,7 +170,9 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 		description.rect,
 		Time.rect,
 		Time_caption.rect,
-		add.rect
+		add.rect,
+		time.rect
+		
 	};
 
 	home_page.add_groupbox(box);
@@ -173,8 +183,8 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	listview.border = false;
 	listview.gridlines = true;
 	listview.rect.left = 10;
-	listview.rect.top = description.rect.bottom + 10;
-	listview.rect.set_height(150);
+	listview.rect.top = description.rect.bottom + 50;
+	listview.rect.set_height(130);
 	listview.rect.set_width(330);
 
 	//listview.columns = {
@@ -189,7 +199,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	widgets::button save;
 	save.caption = "Save";
 	save.rect.left = 130;
-	save.rect.top = listview.rect.bottom + 20;
+	save.rect.top = listview.rect.bottom + 10;
 	save.rect.set_height(25);
 	save.rect.set_width(80);
 

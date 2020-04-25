@@ -501,12 +501,12 @@ void ken_app_main::on_appoinment(){
 
 		// add tittle 
 		widgets::text title;
-		title.text_value = "appointment";
+		title.text_value = "Appointment";
 		title.font_size = 16;
 		title.rect.left = back.rect.right + 10;
 		title.rect.top = back.rect.top;
 		title.rect.set_height(40);
-		title.rect.set_width(100);
+		title.rect.set_width(150);
 
 		page.add_text(title);
 
