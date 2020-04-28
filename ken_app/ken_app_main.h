@@ -28,6 +28,8 @@ class ken_app_main : public gui {
 	void on_appoinment();
 	void on_add_appointment();
 
+	// on_clicking function for redirecting to users 
+	void on_users();
 public :
 	ken_app_main(const std::string& guid, state& app_state);
 	~ken_app_main();
