@@ -77,7 +77,7 @@ void ken_app_main::on_stock(){
 		search.cue_banner = "search " + home_page_name;
 		search.rect.left = description.rect.right + 525;
 		search.rect.top = description.rect.top;
-		search.rect.set_height(25);
+		search.rect.set_height(22);
 		search.rect.set_width(200);
 		search.rect.top = description.rect.top;
 		search.control_to_invoke_alias = "Enter";
@@ -90,7 +90,7 @@ void ken_app_main::on_stock(){
 		icon_search.tight_fit = true;
 		icon_search.rect.left = description.rect.right + 495;
 		icon_search.rect.top = search.rect.top;
-		icon_search.rect.set_height(25);
+		icon_search.rect.set_height(22);
 		icon_search.rect.set_width(30);
 
 		page.add_image(icon_search);
