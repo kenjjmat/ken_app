@@ -1,6 +1,5 @@
 #pragma once
-
-#define icon_resource   100
+#define icon_resource   100;
 #define  LOGIN          111;
 #define  dispaly_error  112;
 #define  png_stock		113;
@@ -10,6 +9,6 @@
 #define png_appointment 117;
 #define png_settings	118;
 #define png_search		119;
-#define png_new_user	120;
+#define png_new_user    120;
 #define png_back		125;
 #define png_share		130;

@@ -98,7 +98,6 @@ bool ken_app_login::layout(gui::page& persistent_page,
 	set_min_height(400);
 
 	//set up form icons // but still not working ohh no !!!
-	set_icons(icon_resource,gui::caption_icon_png{ icon_resource });
 
 	// adding a image 
 	widgets::image image_login;

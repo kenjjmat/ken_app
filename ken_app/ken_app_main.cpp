@@ -762,8 +762,8 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_reports.filename = "report.png";
 	icon_reports.alias = "icon_settings";
 	icon_reports.size = { 48, 48 };
-	icon_reports.on_resize.perc_height = 5;
-	icon_reports.on_resize.perc_width = 5;
+	icon_reports.on_resize.perc_height = 1;
+	icon_reports.on_resize.perc_width = 1;
 	icon_reports.on_resize.perc_h = 0;
 	icon_reports.on_resize.perc_v = 100;
 
@@ -832,7 +832,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 
 	//add setting
 	widgets::icon icon_settings;
-	icon_settings.rect.left = icon_reports.rect.left + 210;
+	icon_settings.rect.left = icon_reports.rect.right + 20;
 	icon_settings.rect.top = 400;
 	icon_settings.rect.set_width(160);
 	icon_settings.rect.set_height(60);
@@ -842,12 +842,33 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_settings.filename = "settings.png";
 	icon_settings.alias = "icon_settings";
 	icon_settings.size = { 48, 48 };
-	icon_settings.on_resize.perc_height = 5;
-	icon_settings.on_resize.perc_width = 5;
+	icon_settings.on_resize.perc_height = 1;
+	icon_settings.on_resize.perc_width = 1;
 	icon_settings.on_resize.perc_h = 0;
 	icon_settings.on_resize.perc_v =100;
 
 	persistent_page.add_icon(icon_settings);
+
+	// add a share icon for sharing information on a network
+	widgets::icon icon_share;
+	icon_share.rect.left = icon_settings.rect.right +35;
+	icon_share.rect.top = icon_settings.rect.top;
+	icon_share.rect.set_height(60);
+	icon_share.rect.set_width(160);
+	icon_share.text = "Sharing";
+	icon_share.description = "Share files";
+	icon_share.text_position = widgets::image_text_placement::right_top;
+	icon_share.filename = "share.png";
+	icon_share.alias = "icon_share";
+	icon_share.size = { 42 , 42 };
+	icon_share.on_resize.perc_height = 1;
+	icon_share.on_resize.perc_width = 1;
+	icon_share.on_resize.perc_h = 0;
+	icon_share.on_resize.perc_v = 100;
+
+	persistent_page.add_icon(icon_share);
+
+
 	
 	//add a list view for the appointments
 	widgets::listview list_appointments;
@@ -887,6 +908,19 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	caption_appointments.on_resize.perc_h = 60;
 	caption_appointments.on_resize.perc_v = 10;
 
+
+	// wrapping the appointments in a listview
+
+	widgets::groupbox group;
+	group.rects = {
+		icon_settings.rect ,
+		icon_reports.rect ,
+		icon_share.rect
+	};
+	group.on_resize.perc_h = 0;
+	group.on_resize.perc_v = 100;
+
+	persistent_page.add_groupbox(group);
 
 	home_page.add_text(caption_appointments);
 	//add icon for the search bar
