@@ -7,10 +7,17 @@ void ken_app_main::on_caption(){
 	gui::prompt_params params;
 	params.type = gui::prompt_type::ok;
 	prompt(params, "", app_state_.version_info());
+
+	
 }
 
 void ken_app_main::on_stop(){
-	stop();
+	// asking if the user wants to quit the application or not
+	/*std::string message = "Do you really want to exist";
+	gui::prompt_params params;
+	params.type = gui::prompt_type::yes_no;
+	prompt(params, "", message);*/
+	close();
 }
 
 void ken_app_main::on_shutdown()
@@ -702,11 +709,11 @@ void ken_app_main::on_add_appointment(){
 }
 
 
-
+// on_clicking the users icon
 void ken_app_main::on_users(){
 
-	if (!page_exists("Sales")) {
-		page page("Sales");
+	if (!page_exists("users")) {
+		page page("users");
 
 
 		//add back icon 
@@ -727,7 +734,7 @@ void ken_app_main::on_users(){
 
 		// add tittle 
 		widgets::text title;
-		title.text_value = "Sales";
+		title.text_value = "Users";
 		title.font_size = 16;
 		title.rect.left = back.rect.right + 10;
 		title.rect.top = back.rect.top;
@@ -738,7 +745,7 @@ void ken_app_main::on_users(){
 
 		// add description 
 		widgets::text description;
-		description.text_value = "The Daily Running of Business";
+		description.text_value = "All the User Credentials";
 		description.color = color{ 180 , 180 , 180 };
 		description.rect.left = back.rect.right + 10;
 		description.rect.top = title.rect.top + 30;
@@ -751,7 +758,7 @@ void ken_app_main::on_users(){
 		// add image 
 		widgets::image image;
 		image.bar = false;
-		image.filename = "sales.png";
+		image.filename = "users.png";
 		image.rect.left = back.rect.left;
 		image.rect.top = description.rect.bottom + 20;
 		image.rect.set_height(100);
@@ -767,29 +774,11 @@ void ken_app_main::on_users(){
 
 		page.add_groupbox(border);
 
-		// add "add stock item " icon 
-		widgets::image image_add;
-		image_add.filename = "add.png";
-		image_add.tooltip = "Add a new Item";
-		image_add.rect.left = back.rect.left;
-		image_add.rect.top = image.rect.bottom + 10;
-		image_add.rect.set_height(30);
-		image_add.rect.set_width(30);
-		image_add.change_color = true;
-		image_add.color.color = color{ 0, 150, 140 };
-		image_add.color.color_hot = color{ 21, 79, 139 };
-		image_add.color.color_border_hot = image_add.color.color_border;
-		image_add.color_background_hot = image_add.color_background_hot;
-		image_add.tight_fit = true;
-		image_add.on_click = [&] { on_add_sales(); };
-
-		page.add_image(image_add);
-
 		// add image edit
 		widgets::image image_edit;
 		image_edit.filename = "edit.png";
 		image_edit.tooltip = "Edit Item";
-		image_edit.rect.left = image_add.rect.right + 10;
+		image_edit.rect.left = back.rect.left;
 		image_edit.rect.top = image.rect.bottom + 10;
 		image_edit.rect.set_height(27);
 		image_edit.rect.set_width(27);
@@ -820,61 +809,58 @@ void ken_app_main::on_users(){
 		page.add_image(image_delete);
 
 		// add stock listview 
-		widgets::listview sales_list;
-		sales_list.alias = "sales_list";
-		sales_list.rect.left = image.rect.right + 50;
-		sales_list.rect.top = image.rect.top;
-		sales_list.rect.set_height(300);
-		sales_list.rect.set_width(400);
-		sales_list.border = true;
+		widgets::listview users_list;
+		users_list.alias = "users_list";
+		users_list.rect.left = image.rect.right + 50;
+		users_list.rect.top = image.rect.top;
+		users_list.rect.set_height(300);
+		users_list.rect.set_width(400);
+		users_list.border = true;
 		// on resize 
-		sales_list.on_resize.perc_h = 0;
-		sales_list.on_resize.perc_v = 5;
-		sales_list.on_resize.perc_height = 90;
-		sales_list.on_resize.perc_width = 25;
+		users_list.on_resize.perc_h = 0;
+		users_list.on_resize.perc_v = 5;
+		users_list.on_resize.perc_height = 90;
+		users_list.on_resize.perc_width = 25;
 
 		//this code is giving a error find a way around it
 
-		//sales_list.columns = {
+		//users_list.columns = {
 		//	{"ID", 35 , widgets::listview_column_type::int_ },
 		//	{"Name" , 170 , widgets::listview_column_type::string_},
 		//	{"Description" , 200 , widgets::listview_column_type::string_},
 		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
 		//};
-		//sales_list.unique_column_name = "ID";
+		//users_list.unique_column_name = "ID";
 
 		{
-			std::vector<ken_app_db::sales_details> sales;
+			std::vector<ken_app_db::user_credentials> users;
 			std::string error;
 
-			if (app_state_.get_db().get_sales_all(sales, error)) {
+			if (app_state_.get_db().get_users(users, error)) {
 				int i = 0;
 
-				for (const auto& sales_ : sales) {
+				for (const auto& users_ : users) {
 					widgets::listview_row row;
-					row.items.push_back({ "ID", sales_.id });
-					row.items.push_back({ "Name" , sales_.item_name });
-					row.items.push_back({ "Quantity" , sales_.quantity });
-					row.items.push_back({ "Unit_price", sales_.Unit_price });
-					row.items.push_back({ "Cost"	, sales_.Cost });
+					row.items.push_back({ "Username", users_.username });
+				
 				}
 			}
 		}
-		page.add_listview(sales_list);
+		page.add_listview(users_list);
 
 		// adding a pie chart 
 		widgets::piechart pie;
-		pie.rect.left = sales_list.rect.right + 20;
-		pie.rect.top = sales_list.rect.top;
+		pie.rect.left = users_list.rect.right + 20;
+		pie.rect.top = users_list.rect.top;
 		pie.rect.set_height(300);
 		pie.rect.set_width(400);
 		pie.alias = "piechart";
-		pie.data.caption = "Sales statistics";
+		pie.data.caption = "users statistics";
 		pie.data.autocolor = false;
 		pie.data.doughnut = true;
 		pie.data.on_hover = widgets::piechart_hover_effect::glow_and_shrink_others;
-		pie.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
-		pie.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
+		pie.on_resize.perc_h = users_list.on_resize.perc_width + 15;
+		pie.on_resize.perc_v = users_list.on_resize.perc_height + 5;
 
 		// assigning values to the pie chart 
 		std::vector< widgets::chart_entry> pie_data;
@@ -904,223 +890,15 @@ void ken_app_main::on_users(){
 		group.rects = {
 			pie.rect
 		};
-		group.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
-		group.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
+		group.on_resize.perc_h = users_list.on_resize.perc_width + 15;
+		group.on_resize.perc_v = users_list.on_resize.perc_height + 5;
 
 		page.add_groupbox(group);
 
 		// adding the page to the window
 		add_page(page);
 	}
-	show_page("Sales");
-	if (!page_exists("Sales")) {
-		page page("Sales");
-
-
-		//add back icon 
-		widgets::image back;
-		back.toggle = "Previous page";
-		back.filename = "back.png";
-		back.rect.left = 10;
-		back.rect.top = 10;
-		back.rect.set_height(50);
-		back.rect.set_width(40);
-		back.on_click = [&]() {
-			show_previous_page();
-			// to-do::
-			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
-		};
-
-		page.add_image(back);
-
-		// add tittle 
-		widgets::text title;
-		title.text_value = "Sales";
-		title.font_size = 16;
-		title.rect.left = back.rect.right + 10;
-		title.rect.top = back.rect.top;
-		title.rect.set_height(40);
-		title.rect.set_width(100);
-
-		page.add_text(title);
-
-		// add description 
-		widgets::text description;
-		description.text_value = "The Daily Running of Business";
-		description.color = color{ 180 , 180 , 180 };
-		description.rect.left = back.rect.right + 10;
-		description.rect.top = title.rect.top + 30;
-		description.rect.set_height(20);
-		description.rect.set_width(200);
-
-		page.add_text(description);
-
-
-		// add image 
-		widgets::image image;
-		image.bar = false;
-		image.filename = "sales.png";
-		image.rect.left = back.rect.left;
-		image.rect.top = description.rect.bottom + 20;
-		image.rect.set_height(100);
-		image.rect.set_width(100);
-
-		page.add_image(image);
-
-		// adding a group box 
-		widgets::groupbox border;
-		border.rects = {
-			image.rect
-		};
-
-		page.add_groupbox(border);
-
-		// add "add stock item " icon 
-		widgets::image image_add;
-		image_add.filename = "add.png";
-		image_add.tooltip = "Add a new Item";
-		image_add.rect.left = back.rect.left;
-		image_add.rect.top = image.rect.bottom + 10;
-		image_add.rect.set_height(30);
-		image_add.rect.set_width(30);
-		image_add.change_color = true;
-		image_add.color.color = color{ 0, 150, 140 };
-		image_add.color.color_hot = color{ 21, 79, 139 };
-		image_add.color.color_border_hot = image_add.color.color_border;
-		image_add.color_background_hot = image_add.color_background_hot;
-		image_add.tight_fit = true;
-		image_add.on_click = [&] { on_add_sales(); };
-
-		page.add_image(image_add);
-
-		// add image edit
-		widgets::image image_edit;
-		image_edit.filename = "edit.png";
-		image_edit.tooltip = "Edit Item";
-		image_edit.rect.left = image_add.rect.right + 10;
-		image_edit.rect.top = image.rect.bottom + 10;
-		image_edit.rect.set_height(27);
-		image_edit.rect.set_width(27);
-		image_edit.change_color = true;
-		image_edit.color.color = color{ 0, 150, 140 };
-		image_edit.color.color_hot = color{ 21, 79, 139 };
-		image_edit.color.color_border_hot = image_edit.color.color_border;
-		image_edit.color_background_hot = image_edit.color_background_hot;
-		image_edit.tight_fit = true;
-
-		page.add_image(image_edit);
-
-		// add the delete image 
-		widgets::image image_delete;
-		image_delete.filename = "delete.png";
-		image_delete.tooltip = "Delete Item";
-		image_delete.rect.left = image_edit.rect.right + 10;
-		image_delete.rect.top = image.rect.bottom + 10;
-		image_delete.rect.set_height(27);
-		image_delete.rect.set_width(27);
-		image_delete.change_color = true;
-		image_delete.color.color = color{ 255, 0, 0 };
-		image_delete.color.color_hot = color{ 21, 79, 139 };
-		image_delete.color.color_border_hot = image_delete.color.color_border;
-		image_delete.color_background_hot = image_delete.color_background_hot;
-		image_delete.tight_fit = true;
-
-		page.add_image(image_delete);
-
-		// add stock listview 
-		widgets::listview sales_list;
-		sales_list.alias = "sales_list";
-		sales_list.rect.left = image.rect.right + 50;
-		sales_list.rect.top = image.rect.top;
-		sales_list.rect.set_height(300);
-		sales_list.rect.set_width(400);
-		sales_list.border = true;
-		// on resize 
-		sales_list.on_resize.perc_h = 0;
-		sales_list.on_resize.perc_v = 5;
-		sales_list.on_resize.perc_height = 90;
-		sales_list.on_resize.perc_width = 25;
-
-		//this code is giving a error find a way around it
-
-		//sales_list.columns = {
-		//	{"ID", 35 , widgets::listview_column_type::int_ },
-		//	{"Name" , 170 , widgets::listview_column_type::string_},
-		//	{"Description" , 200 , widgets::listview_column_type::string_},
-		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
-		//};
-		//sales_list.unique_column_name = "ID";
-
-		{
-			std::vector<ken_app_db::sales_details> sales;
-			std::string error;
-
-			if (app_state_.get_db().get_sales_all(sales, error)) {
-				int i = 0;
-
-				for (const auto& sales_ : sales) {
-					widgets::listview_row row;
-					row.items.push_back({ "ID", sales_.id });
-					row.items.push_back({ "Name" , sales_.item_name });
-					row.items.push_back({ "Quantity" , sales_.quantity });
-					row.items.push_back({ "Unit_price", sales_.Unit_price });
-					row.items.push_back({ "Cost"	, sales_.Cost });
-				}
-			}
-		}
-		page.add_listview(sales_list);
-
-		// adding a pie chart 
-		widgets::piechart pie;
-		pie.rect.left = sales_list.rect.right + 20;
-		pie.rect.top = sales_list.rect.top;
-		pie.rect.set_height(300);
-		pie.rect.set_width(400);
-		pie.alias = "piechart";
-		pie.data.caption = "Sales statistics";
-		pie.data.autocolor = false;
-		pie.data.doughnut = true;
-		pie.data.on_hover = widgets::piechart_hover_effect::glow_and_shrink_others;
-		pie.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
-		pie.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
-
-		// assigning values to the pie chart 
-		std::vector< widgets::chart_entry> pie_data;
-
-		// creating object for chart_entry 
-		widgets::chart_entry details;
-		details.color = color{ 180 , 200 , 255 };
-		details.label = "Eat";
-		details.value = 50;
-
-		// creating a second object of chart entry
-		widgets::chart_entry details_;
-		details_.color = color{ 180 , 180 , 180 };
-		details_.label = "Drinks";
-		details_.value = 50;
-
-		pie_data.push_back(details);
-		pie_data.push_back(details_);
-
-		pie.data.slices = pie_data;
-
-		page.add_piechart(pie);
-
-		// wrapping the pie chart in a groupbox 
-		widgets::groupbox group;
-		group.color.blue;
-		group.rects = {
-			pie.rect
-		};
-		group.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
-		group.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
-
-		page.add_groupbox(group);
-
-		// adding the page to the window
-		add_page(page);
-	}
-	show_page("Sales");
+	show_page("users");
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
@@ -1130,7 +908,10 @@ ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 }
 
 ken_app_main::~ken_app_main(){
-
+	// displaying the message that the system is shutting down whilst the system is shutting down
+	std::string message = "The system is shutting down";
+	gui::notification_params params;
+	notification(params, "Error", message,1000);
 }
 
 // the layout of the main window
@@ -1226,6 +1007,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_credentials.on_resize.perc_width = 5;
 	icon_credentials.on_resize.perc_h = 20;
 	icon_credentials.on_resize.perc_v = 80;
+	icon_credentials.on_click = [&]() { on_users(); };
 
 	home_page.add_icon(icon_credentials);
 
