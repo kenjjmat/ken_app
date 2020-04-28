@@ -71,6 +71,38 @@ void ken_app_main::on_stock(){
 
 	
 
+	// adding a a search space on the form 
+		widgets::editbox search;
+		search.alias = "search";
+		search.cue_banner = "search " + home_page_name;
+		search.rect.left = description.rect.right + 525;
+		search.rect.top = description.rect.top;
+		search.rect.set_height(25);
+		search.rect.set_width(200);
+		search.rect.top = description.rect.top;
+		search.control_to_invoke_alias = "Enter";
+		
+		page.add_editbox(search);
+
+		//add icon for the search bar
+		widgets::image icon_search;
+		icon_search.filename = "search.png";
+		icon_search.tight_fit = true;
+		icon_search.rect.left = description.rect.right + 495;
+		icon_search.rect.top = search.rect.top;
+		icon_search.rect.set_height(25);
+		icon_search.rect.set_width(30);
+
+		page.add_image(icon_search);
+
+		widgets::groupbox box;
+		box.rects = {
+			icon_search.rect ,
+			search.rect
+		};
+
+		page.add_groupbox(box);
+
 
 		// add image 
 

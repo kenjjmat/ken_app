@@ -31,7 +31,7 @@ class ken_app_main : public gui {
 	// on_clicking function for redirecting to users 
 	void on_users();
 public :
-	ken_app_main(const std::string& guid, state& app_state);
+	ken_app_main(const std::string& guid, state& app_state );
 	~ken_app_main();
 
 	bool layout(gui::page& persistent_page,
