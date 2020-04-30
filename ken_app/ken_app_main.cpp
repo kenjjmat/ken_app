@@ -68,9 +68,6 @@ void ken_app_main::on_stock(){
 		description.rect.set_width(200);
 
 		page.add_text(description);
-
-	
-
 	// adding a a search space on the form 
 		widgets::editbox search;
 		search.alias = "search";
@@ -81,6 +78,8 @@ void ken_app_main::on_stock(){
 		search.rect.set_width(200);
 		search.rect.top = description.rect.top;
 		search.control_to_invoke_alias = "Enter";
+		search.on_resize.perc_h = 100;
+		search.on_resize.perc_v = 0;
 		
 		page.add_editbox(search);
 
@@ -92,6 +91,8 @@ void ken_app_main::on_stock(){
 		icon_search.rect.top = search.rect.top;
 		icon_search.rect.set_height(22);
 		icon_search.rect.set_width(30);
+		icon_search.on_resize.perc_h = 100;
+		icon_search.on_resize.perc_v = 0;
 
 		page.add_image(icon_search);
 
@@ -100,7 +101,8 @@ void ken_app_main::on_stock(){
 			icon_search.rect ,
 			search.rect
 		};
-
+		box.on_resize.perc_h = 100;
+		box.on_resize.perc_v = 0;
 		page.add_groupbox(box);
 
 
@@ -331,6 +333,44 @@ void ken_app_main::on_sales(){
 
 		page.add_text(description);
 
+		// adding a a search space on the form 
+		widgets::editbox search;
+		search.alias = "search";
+		search.cue_banner = "search " + home_page_name;
+		search.rect.left = description.rect.right + 525;
+		search.rect.top = description.rect.top;
+		search.rect.set_height(22);
+		search.rect.set_width(200);
+		search.rect.top = description.rect.top;
+		search.control_to_invoke_alias = "Enter";
+		search.on_resize.perc_h = 100;
+		search.on_resize.perc_v = 0;
+
+		page.add_editbox(search);
+
+		//add icon for the search bar
+		widgets::image icon_search;
+		icon_search.filename = "search.png";
+		icon_search.tight_fit = true;
+		icon_search.rect.left = description.rect.right + 495;
+		icon_search.rect.top = search.rect.top;
+		icon_search.rect.set_height(22);
+		icon_search.rect.set_width(30);
+		icon_search.on_resize.perc_h = 100;
+		icon_search.on_resize.perc_v = 0;
+
+		page.add_image(icon_search);
+
+		widgets::groupbox box;
+		box.rects = {
+			icon_search.rect ,
+			search.rect
+		};
+		box.on_resize.perc_h = 100;
+		box.on_resize.perc_v = 0;
+		page.add_groupbox(box);
+
+
 
 		// add image 
 		widgets::image image;
@@ -559,7 +599,42 @@ void ken_app_main::on_appoinment(){
 		description.rect.set_height(20);
 		description.rect.set_width(200);
 
-		page.add_text(description);
+		page.add_text(description);// adding a a search space on the form 
+		widgets::editbox search;
+		search.alias = "search";
+		search.cue_banner = "search " + home_page_name;
+		search.rect.left = description.rect.right + 525;
+		search.rect.top = description.rect.top;
+		search.rect.set_height(22);
+		search.rect.set_width(200);
+		search.rect.top = description.rect.top;
+		search.control_to_invoke_alias = "Enter";
+		search.on_resize.perc_h = 100;
+		search.on_resize.perc_v = 0;
+
+		page.add_editbox(search);
+
+		//add icon for the search bar
+		widgets::image icon_search;
+		icon_search.filename = "search.png";
+		icon_search.tight_fit = true;
+		icon_search.rect.left = description.rect.right + 495;
+		icon_search.rect.top = search.rect.top;
+		icon_search.rect.set_height(22);
+		icon_search.rect.set_width(30);
+		icon_search.on_resize.perc_h = 100;
+		icon_search.on_resize.perc_v = 0;
+
+		page.add_image(icon_search);
+
+		widgets::groupbox box;
+		box.rects = {
+			icon_search.rect ,
+			search.rect
+		};
+		box.on_resize.perc_h = 100;
+		box.on_resize.perc_v = 0;
+		page.add_groupbox(box);
 
 		// add image 
 		widgets::image image;
@@ -785,6 +860,44 @@ void ken_app_main::on_users(){
 		description.rect.set_width(200);
 
 		page.add_text(description);
+
+		// adding a a search space on the form 
+		widgets::editbox search;
+		search.alias = "search";
+		search.cue_banner = "search " + home_page_name;
+		search.rect.left = description.rect.right + 525;
+		search.rect.top = description.rect.top;
+		search.rect.set_height(22);
+		search.rect.set_width(200);
+		search.rect.top = description.rect.top;
+		search.control_to_invoke_alias = "Enter";
+		search.on_resize.perc_h = 100;
+		search.on_resize.perc_v = 0;
+
+		page.add_editbox(search);
+
+		//add icon for the search bar
+		widgets::image icon_search;
+		icon_search.filename = "search.png";
+		icon_search.tight_fit = true;
+		icon_search.rect.left = description.rect.right + 495;
+		icon_search.rect.top = search.rect.top;
+		icon_search.rect.set_height(22);
+		icon_search.rect.set_width(30);
+		icon_search.on_resize.perc_h = 100;
+		icon_search.on_resize.perc_v = 0;
+
+		page.add_image(icon_search);
+
+		widgets::groupbox box;
+		box.rects = {
+			icon_search.rect ,
+			search.rect
+		};
+		box.on_resize.perc_h = 100;
+		box.on_resize.perc_v = 0;
+		page.add_groupbox(box);
+
 
 
 		// add image 
