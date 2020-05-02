@@ -855,7 +855,7 @@ void ken_app_main::on_users(){
 		description.text_value = "All the User Credentials";
 		description.color = color{ 180 , 180 , 180 };
 		description.rect.left = back.rect.right + 10;
-		description.rect.top = title.rect.top + 30;
+		description.rect.top = title.rect.top + 10;
 		description.rect.set_height(20);
 		description.rect.set_width(200);
 
@@ -889,6 +889,7 @@ void ken_app_main::on_users(){
 
 		page.add_image(icon_search);
 
+		// adding wrappers for the elements
 		widgets::groupbox box;
 		box.rects = {
 			icon_search.rect ,
@@ -898,6 +899,7 @@ void ken_app_main::on_users(){
 		box.on_resize.perc_v = 0;
 		page.add_groupbox(box);
 
+		
 
 
 		// add image 
