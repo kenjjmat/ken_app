@@ -30,6 +30,12 @@ class ken_app_main : public gui {
 
 	// on_clicking function for redirecting to users 
 	void on_users();
+
+	// on clicking function for redirecting to share files 
+	void on_share();
+
+	// selecting the folder where the files are
+	void on_upload();
 public :
 	ken_app_main(const std::string& guid, state& app_state );
 	~ken_app_main();

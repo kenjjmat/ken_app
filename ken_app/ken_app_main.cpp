@@ -844,9 +844,9 @@ void ken_app_main::on_users(){
 		title.text_value = "Users";
 		title.font_size = 16;
 		title.rect.left = back.rect.right + 10;
-		title.rect.top = back.rect.top;
-		title.rect.set_height(40);
-		title.rect.set_width(100);
+		title.rect.top = 15;
+		title.rect.set_height(50);
+		title.rect.set_width(200);
 
 		page.add_text(title);
 
@@ -855,7 +855,7 @@ void ken_app_main::on_users(){
 		description.text_value = "All the User Credentials";
 		description.color = color{ 180 , 180 , 180 };
 		description.rect.left = back.rect.right + 10;
-		description.rect.top = title.rect.top + 10;
+		description.rect.top = title.rect.top + 30;;
 		description.rect.set_height(20);
 		description.rect.set_width(200);
 
@@ -1048,6 +1048,147 @@ void ken_app_main::on_users(){
 	show_page("users");
 }
 
+void ken_app_main::on_share(){
+
+	if (!page_exists("share")) {
+		page page("share");
+
+		//add back icon 
+		widgets::image back;
+		back.toggle = "Previous page";
+		back.filename = "back.png";
+		back.rect.left = 10;
+		back.rect.top = 10;
+		back.rect.set_height(50);
+		back.rect.set_width(40);
+		back.on_click = [&]() {
+			show_previous_page();
+			// to-do::
+			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
+		};
+
+		page.add_image(back);
+
+		// add tittle 
+		widgets::text title;
+		title.text_value = "Share Files";
+		title.font_size = 16;
+		title.rect.left = back.rect.right + 10;
+		title.rect.top = back.rect.top;
+		title.rect.set_height(40);
+		title.rect.set_width(200);
+
+		page.add_text(title);
+
+		// add description 
+
+		widgets::text description;
+		description.text_value = "Share files amoung your piers";
+		description.color = color{ 180 , 180 , 180 };
+		description.rect.left = back.rect.right + 10;
+		description.rect.top = title.rect.top + 30;
+		description.rect.set_height(20);
+		description.rect.set_width(200);
+
+		page.add_text(description);
+
+		widgets::image image;
+		image.bar = false;
+		image.filename = "share.png";
+		image.rect.left = back.rect.left;
+		image.rect.top = description.rect.bottom + 20;
+		image.rect.set_height(100);
+		image.rect.set_width(100);
+
+		page.add_image(image);
+
+		// adding a group box 
+		widgets::groupbox border;
+		border.rects = {
+			image.rect
+		};
+
+		page.add_groupbox(border);
+
+		widgets::richedit rich;
+		rich.alias = "Upload_space";
+		rich.cue_banner = "Drag and Drop or Upload Files";
+		rich.border = true;
+		rich.read_only = true;
+		rich.rect.left = image.rect.right + 20;
+		rich.rect.top = image.rect.top;
+		rich.rect.set_height(300);
+		rich.rect.set_width(400);
+		rich.color_border = color{ 0 , 0 , 0 };
+
+		page.add_richedit(rich);
+
+
+		// adding the upload button
+		widgets::button btn_upload;
+		btn_upload.alias = "btn_upload";
+		btn_upload.caption = "Upload";
+		btn_upload.tooltip = "Click to upload files from the computer";
+		btn_upload.rect.left = rich.rect.right + 10;
+		btn_upload.rect.top = rich.rect.top;
+		btn_upload.rect.set_height(25);
+		btn_upload.rect.set_width(60);
+		btn_upload.on_click = [&]() {on_upload(); };
+
+		page.add_button(btn_upload);
+
+		// adding the send button
+		widgets::button btn_share;
+		btn_share.alias = "btn_share";
+		btn_share.caption = "Send";
+		btn_share.tooltip = "Share files over a network";
+		btn_share.rect.left = rich.rect.right + 10;
+		btn_share.rect.top = rich.rect.top + 280;
+		btn_share.rect.set_height(25);
+		btn_share.rect.set_width(60);
+
+		page.add_button(btn_share);
+	
+		// adding the page to the form
+		add_page(page);
+	}
+	show_page("share");
+}
+// selecting the folder with the files 
+void ken_app_main::on_upload(){
+	// creatind object of word
+	file_type file;
+	file_type file2;
+	file_type file3;
+	
+	std::vector<file_type> types;
+	//adding the first extension
+	file.extension = "docx";
+	file.description = "Word";
+	types.push_back(file);
+
+	// adding the second extension 
+	file2.description = "PDF";
+	file2.extension = "pdf";
+	types.push_back(file2);
+
+	// adding the third extension 
+	file3.description = "Text Document";
+	file3.extension = "txt";
+	types.push_back(file3);
+
+	// creating parameters for the file types
+	gui::open_file_params params;
+	params.small_window = true;
+	params.title = "Select File";
+	params.include_all_supported_types = false;
+	params.file_types = types;
+
+	open_file(params);
+	// to-do::
+	// the user must be able to select a folder after selecting the folder the user then upload it and send it over the network
+}
+
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("KEN_APP"),
 	app_state_(app_state),
@@ -1214,6 +1355,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_share.on_resize.perc_width = 1;
 	icon_share.on_resize.perc_h = 0;
 	icon_share.on_resize.perc_v = 100;
+	icon_share.on_click = [&]() { on_share(); };
 
 	persistent_page.add_icon(icon_share);
 
