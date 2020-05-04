@@ -37,6 +37,9 @@
     <Filter Include="Source Files\appointment">
       <UniqueIdentifier>{6778eb42-c563-4524-ae14-9711eb2191f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Sync_folder">
+      <UniqueIdentifier>{48e2ec3a-c842-4ec5-8a8e-cb3f5dd13a71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ken_app_login.cpp">
@@ -65,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="appointment.cpp">
       <Filter>Source Files\appointment</Filter>
+    </ClCompile>
+    <ClCompile Include="sync.cpp">
+      <Filter>Source Files\Sync_folder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="appointment.h">
       <Filter>Source Files\appointment</Filter>
+    </ClInclude>
+    <ClInclude Include="sync.h">
+      <Filter>Source Files\Sync_folder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

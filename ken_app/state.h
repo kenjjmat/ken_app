@@ -6,9 +6,9 @@
 #include "resource.h"
 #include "ken_app_db.h"
 
+
 // including the liblec library
 #include <liblec/cui/gui.h>
-
 using namespace liblec::cui;
 
 class state{
@@ -34,7 +34,7 @@ public :
 
 	// details of the system 
 	std::string version_info() {
-		return "This system is the property @Kenjjmat \n\n Version 1.1.0 \n\n Ken_App\n";
+		return "This system is the property @Kenjjmat \n Version 1.1.0 \n Ken_App\n";
 	}
 
 };

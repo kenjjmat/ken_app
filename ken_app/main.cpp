@@ -1,13 +1,26 @@
+//STL inlcudes 
+#include <filesystem> // C++17 and upwards
+
 #include "ken_app_login.h"
+// location of the main window
 #include "ken_app_main.h"
+
+// location for creating a new user
 #include "ken_app_new_user.h"
+
+//location of the database
 #include "ken_app_db.h"
+
+// sync folder location
+#include "sync.h"
 
 // gui app using main
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 int main() {
-
+	
+    // creating a sync folder directory
+	get_sync_folder();
 
 	// constants used by the app to only allow one instance
 	const std::string guid_login = "{F7AA7B63 - 6AAC - 4B7D - 84DC - 107F352217A1}";

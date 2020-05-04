@@ -5,6 +5,10 @@
 
 
 void ken_app_login::on_caption(){
+	gui::prompt_params params;
+	params.type = gui::prompt_type::ok;
+	params.png_icon_resource = icon_resource;
+	prompt(params, "", app_state_.version_info());
 }
 
 void ken_app_login::on_stop() {

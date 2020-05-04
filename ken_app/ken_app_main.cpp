@@ -3,6 +3,9 @@
 #include "sales.h"
 #include "appointment.h"
 
+// sync folder location
+#include "sync.h"
+
 void ken_app_main::on_caption(){
 	gui::prompt_params params;
 	params.type = gui::prompt_type::ok;
@@ -1156,37 +1159,22 @@ void ken_app_main::on_share(){
 }
 // selecting the folder with the files 
 void ken_app_main::on_upload(){
-	// creatind object of word
-	file_type file;
-	file_type file2;
-	file_type file3;
+
+	std::string details = "Please Create a file Directory";
+	auto drop_files = [&]() {
+		std::string file = sync_folder();
+		// getting the path of sync folder 
+		std::filesystem::path path(file);
+
+		if (!std::filesystem::exists(path)) {
+			gui::prompt_params params;
+			params.type = gui::prompt_type::ok;
+			prompt(params, "", details);
+		}
+		return file;
+	};
+
 	
-	std::vector<file_type> types;
-	//adding the first extension
-	file.extension = "docx";
-	file.description = "Word";
-	types.push_back(file);
-
-	// adding the second extension 
-	file2.description = "PDF";
-	file2.extension = "pdf";
-	types.push_back(file2);
-
-	// adding the third extension 
-	file3.description = "Text Document";
-	file3.extension = "txt";
-	types.push_back(file3);
-
-	// creating parameters for the file types
-	gui::open_file_params params;
-	params.small_window = true;
-	params.title = "Select File";
-	params.include_all_supported_types = false;
-	params.file_types = types;
-
-	open_file(params);
-	// to-do::
-	// the user must be able to select a folder after selecting the folder the user then upload it and send it over the network
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
