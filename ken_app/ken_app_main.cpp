@@ -1160,20 +1160,22 @@ void ken_app_main::on_share(){
 // selecting the folder with the files 
 void ken_app_main::on_upload(){
 
-	std::string details = "Please Create a file Directory";
 	auto drop_files = [&]() {
+		std::string details = "Please Create a file Directory";
+
 		std::string file = sync_folder();
 		// getting the path of sync folder 
 		std::filesystem::path path(file);
 
-		if (!std::filesystem::exists(path)) {
-			gui::prompt_params params;
-			params.type = gui::prompt_type::ok;
-			prompt(params, "", details);
+		if (std::filesystem::exists(path)) {
+			gui::notification_params params;
+			params.color = color{ 0 ,0 , 0 };
+			notification(params, "File Path", details, 1000);
 		}
 		return file;
 	};
 
+	drop_files();
 	
 }
 
