@@ -189,7 +189,7 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
 
     // appointment details Table
     if (!d_.sqlite_query("CREATE TABLE Appointment ("
-        "ID TEXT NOT NULL, "
+        "ID INTEGER NOT NULL, "
         "Time TIME NOT NULL, "
         "Name TEXT NOT NULL, "
         "Surname TEXT NOT NULL , "

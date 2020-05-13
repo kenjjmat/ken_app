@@ -1159,7 +1159,7 @@ void ken_app_main::on_share(){
 }
 // selecting the folder with the files 
 void ken_app_main::on_upload(){
-
+	// function for creating a directory
 	auto drop_files = [&]() {
 		std::string details = "Please Create a file Directory";
 
@@ -1361,10 +1361,10 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.border = true;
 	list_appointments.gridlines= true;
 
-	// this code is giving me an error find a way around it 
-	/*list_appointments.columns = {
-		{"", 80 , widgets::listview_column_type::string_}
-	};*/
+	list_appointments.columns = {
+	};
+
+	list_appointments.unique_column_name = "#";
 
 	list_appointments.on_resize.perc_height = 80;
 	list_appointments.on_resize.perc_width = 25;

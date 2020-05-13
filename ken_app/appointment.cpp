@@ -179,27 +179,30 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 
 	// add a listview 
 
-	widgets::listview listview;
-	listview.border = false;
-	listview.gridlines = true;
-	listview.rect.left = 10;
-	listview.rect.top = description.rect.bottom + 50;
-	listview.rect.set_height(130);
-	listview.rect.set_width(330);
+	widgets::listview appointment_list;
+	appointment_list.border = false;
+	appointment_list.gridlines = true;
+	appointment_list.rect.left = 10;
+	appointment_list.rect.top = description.rect.bottom + 40;
+	appointment_list.rect.set_height(140);
+	appointment_list.rect.set_width(340);
 
-	//listview.columns = {
-	//	{ "Name" , 180  , widgets::listview_column_type::string_},
-	//	{"Description" , 200 , widgets::listview_column_type::string_},
-	//	{"Quantity" , 60 , widgets::listview_column_type::int_ }
-	//};
+	/*appointment_list.columns = {
+		{"ID", 60 , widgets::listview_column_type::int_ },
+		{"Time", 80 , widgets::listview_column_type::float_},
+		{ "Name" , 180  , widgets::listview_column_type::string_},
+		{"Description", 200 , widgets::listview_column_type::string_},
+	};
 
-	home_page.add_listview(listview);
+	appointment_list.unique_column_name = "ID";*/
+
+	home_page.add_listview(appointment_list);
 
 	// add a sava button 
 	widgets::button save;
 	save.caption = "Save";
 	save.rect.left = 130;
-	save.rect.top = listview.rect.bottom + 10;
+	save.rect.top = appointment_list.rect.bottom + 10;
 	save.rect.set_height(25);
 	save.rect.set_width(80);
 
