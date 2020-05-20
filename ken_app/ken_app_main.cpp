@@ -1362,6 +1362,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.gridlines= true;
 
 	list_appointments.columns = {
+		{""}
 	};
 
 	list_appointments.unique_column_name = "#";
