@@ -1360,12 +1360,12 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.alias = "list_appointments";
 	list_appointments.border = true;
 	list_appointments.gridlines= true;
-
+ 
 	list_appointments.columns = {
-		{""}
+	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_),
+	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_),
+	   app_state_.column_details("Description", 400, widgets::listview_column_type::string_)
 	};
-
-	list_appointments.unique_column_name = "#";
 
 	list_appointments.on_resize.perc_height = 80;
 	list_appointments.on_resize.perc_width = 25;

@@ -37,4 +37,14 @@ public :
 		return "This system is the property @Kenjjmat \n Version 1.1.0 \n Ken_App\n";
 	}
 
+	// for assigning values to the listview columns
+	auto column_details(std::string name, int width, widgets::listview_column_type type) {
+		widgets::listview_column col;
+		col.name = name;
+		col.width = width;
+		col.type = type;
+
+		return col;
+	}
+
 };
