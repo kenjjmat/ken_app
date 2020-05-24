@@ -185,16 +185,16 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	appointment_list.rect.left = 10;
 	appointment_list.rect.top = description.rect.bottom + 40;
 	appointment_list.rect.set_height(140);
-	appointment_list.rect.set_width(340);
+	appointment_list.rect.set_width(330);
 
-	/*appointment_list.columns = {
-		{"ID", 60 , widgets::listview_column_type::int_ },
-		{"Time", 80 , widgets::listview_column_type::float_},
-		{ "Name" , 180  , widgets::listview_column_type::string_},
-		{"Description", 200 , widgets::listview_column_type::string_},
+	appointment_list.columns = {
+		app_state_.column_details("ID", 60 , widgets::listview_column_type::int_ ),
+		app_state_.column_details("Time", 80 , widgets::listview_column_type::float_),
+		app_state_.column_details( "Name" , 180  , widgets::listview_column_type::string_),
+		app_state_.column_details("Description", 200 , widgets::listview_column_type::string_)
 	};
 
-	appointment_list.unique_column_name = "ID";*/
+	appointment_list.unique_column_name = "ID";
 
 	home_page.add_listview(appointment_list);
 
@@ -205,6 +205,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	save.rect.top = appointment_list.rect.bottom + 10;
 	save.rect.set_height(25);
 	save.rect.set_width(80);
+	save.on_click = [&]() {};
 
 	home_page.add_button(save);
 	return true;
