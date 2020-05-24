@@ -198,15 +198,14 @@ void ken_app_main::on_stock(){
 		stock_list.on_resize.perc_height = 90;
 		stock_list.on_resize.perc_width = 25;
 
-		//this code is giving a error find a way around it
 
-		//stock_list.columns = {
-		//	{"ID", 35 , widgets::listview_column_type::int_ },
-		//	{"Name" , 170 , widgets::listview_column_type::string_},
-		//	{"Description" , 200 , widgets::listview_column_type::string_},
-		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
-		//};
-		//stock_list.unique_column_name = "ID";
+		stock_list.columns = {
+			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
+			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
+			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
+			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_	 )
+		};
+		stock_list.unique_column_name = "ID";
 
 		{
 			std::vector<ken_app_db::stock_details> stock;
@@ -460,15 +459,13 @@ void ken_app_main::on_sales(){
 		sales_list.on_resize.perc_height = 90;
 		sales_list.on_resize.perc_width = 25;
 
-		//this code is giving a error find a way around it
-
-		//sales_list.columns = {
-		//	{"ID", 35 , widgets::listview_column_type::int_ },
-		//	{"Name" , 170 , widgets::listview_column_type::string_},
-		//	{"Description" , 200 , widgets::listview_column_type::string_},
-		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
-		//};
-		//sales_list.unique_column_name = "ID";
+		sales_list.columns = {
+			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
+			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
+			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
+			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_)
+		};
+		sales_list.unique_column_name = "ID";
 
 		{
 			std::vector<ken_app_db::sales_details> sales;
@@ -726,15 +723,14 @@ void ken_app_main::on_appoinment(){
 		appointment_list.on_resize.perc_height = 90;
 		appointment_list.on_resize.perc_width = 25;
 
-		//this code is giving a error find a way around it
 
-		//appointment_list.columns = {
-		//	{"ID", 35 , widgets::listview_column_type::int_ },
-		//	{"Name" , 170 , widgets::listview_column_type::string_},
-		//	{"Description" , 200 , widgets::listview_column_type::string_},
-		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
-		//};
-		//appointment_list.unique_column_name = "ID";
+		appointment_list.columns = {
+			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
+			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
+			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
+			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_)
+		};
+		appointment_list.unique_column_name = "ID";
 
 		{
 			std::vector<ken_app_db::appointments_details> appointment;
@@ -972,16 +968,17 @@ void ken_app_main::on_users(){
 		users_list.on_resize.perc_height = 90;
 		users_list.on_resize.perc_width = 25;
 
-		//this code is giving a error find a way around it
+		
 
-		//users_list.columns = {
-		//	{"ID", 35 , widgets::listview_column_type::int_ },
-		//	{"Name" , 170 , widgets::listview_column_type::string_},
-		//	{"Description" , 200 , widgets::listview_column_type::string_},
-		//	{"Quantity" , 50  , widgets::listview_column_type::int_	 }
-		//};
-		//users_list.unique_column_name = "ID";
+		users_list.columns = {
+			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
+			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
+			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
+			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_ )
+		};
+		users_list.unique_column_name = "ID";
 
+		// adding the values to the listview
 		{
 			std::vector<ken_app_db::user_credentials> users;
 			std::string error;
