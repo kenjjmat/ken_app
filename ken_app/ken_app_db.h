@@ -34,6 +34,7 @@ public :
 	{
 		std::string id;
 		std::string time;
+		std::string date;
 		std::string name;
 		std::string surname;
 		std::string description;

@@ -191,6 +191,7 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
     if (!d_.sqlite_query("CREATE TABLE Appointment ("
         "ID INTEGER NOT NULL, "
         "Time TIME NOT NULL, "
+        "Date DATE NOT NULL, "
         "Name TEXT NOT NULL, "
         "Surname TEXT NOT NULL , "
         "Description TEXT NOT NULL , "
@@ -449,8 +450,8 @@ bool ken_app_db::new_appointment(const appointments_details& appointment_info, s
     }
 
     table table;
-    if (!d_.sqlite_query("INSERT INTO Appointment VALUE('"
-        + appointment_info.time + "' , '" + appointment_info.name + "' , '" + appointment_info.surname + "' , '" + appointment_info.description +
+    if (!d_.sqlite_query("INSERT INTO Appointment VALUES('"
+        +  appointment_info.time + "','" + appointment_info.id +"','"+ appointment_info.date +"' , '" + appointment_info.name + "' , '" + appointment_info.surname + "' , '" + appointment_info.description +
         "');", table, error)) {
         return false;
     }
@@ -465,7 +466,7 @@ bool ken_app_db::get_appointment(const std::string& appointment_id, appointments
         error = "Not connected to database"; return false;
     }
 
-    // validating whether the user has entered the primary key or not
+     //validating whether the user has entered the primary key or not
     if (appointment_id.empty()) {
         error = "Appointment ID not specified";
         return false;
@@ -473,7 +474,7 @@ bool ken_app_db::get_appointment(const std::string& appointment_id, appointments
 
     // reading the database 
     table table;
-    if (!d_.sqlite_query("SELECT * FROM Appointment WHERE PersonID = '"
+    if (!d_.sqlite_query("SELECT * FROM Appointment WHERE  ID = '"
         + appointment_id + "';", table, error)) return false;
 
     // now assigning values from the database table to the struct stock details
@@ -481,6 +482,7 @@ bool ken_app_db::get_appointment(const std::string& appointment_id, appointments
         appointments_details appointment_;
         appointment_.id = table.at(0).at("ID");
         appointment_.time = table.at(0).at("Time");
+        appointment_.date = table.at(0).at("Date");
         appointment_.name = table.at(0).at("Name");
         appointment_.surname = table.at(0).at("Surname");
         appointment_.description = table.at(0).at("Description");
@@ -512,6 +514,7 @@ bool ken_app_db::get_appointments(std::vector<appointments_details>& appointment
             appointment_.id = row.at("ID");
             appointment_.name = row.at("Name");
             appointment_.time = row.at("Time");
+            appointment_.date = row.at("Date");
             appointment_.surname = row.at("Surname");
             appointment_.description = row.at("Description");
 
