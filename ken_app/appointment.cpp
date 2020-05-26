@@ -18,15 +18,104 @@ void appointment::on_shutdown()
 
 void appointment::on_add()
 {
-	// to-do:: 
-	// what happens whe the user press the button add
+	// declaring the values that we gonna get form the textbox
+	ken_app_db::appointments_details details;
+	std::string appointment_id , error;
+	
+	get_editbox_text(home_page_name + "/name_edit", details.name, error);
+	get_editbox_text(home_page_name + "/surname_edit", details.surname, error);
+	get_editbox_text(home_page_name + "/description_edit", details.description, error);
+	get_editbox_text(home_page_name + "/time_edit",details.time, error);
+	get_editbox_text(home_page_name + "/date_edit", details.date, error);
+	
+	// assingning the id to be a unique number and assinging it to appointment id
+	details.id = unique_string_short();
+	appointment_id = details.id;
+
+	// new variable for date and time 
+	
+	// getting the listview and its columns and data 
+	std::vector<widgets::listview_column> columns;
+	std::vector<widgets::listview_row> data;
+	get_listview(home_page_name + "/appointment_list", columns, data, error);
+
+	for (auto& row : data) {
+		for (auto& item : row.items) {
+			if (item.column_name == "ID")
+				if (appointment_id == item.item_data)
+					return;
+		}
+	}
+
+	// inserting the elements into the database
+	if (!app_state_.get_db().new_appointment(details, error)) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+		
+	}
+
+   // getting the elements from the database 
+	if (!app_state_.get_db().get_appointment(appointment_id , details, error)) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+
+	}
+	
+	
+	widgets::listview_row row = {
+		{{{"Name"} , {details.name}},
+		{{ "Description"}, {details.description}},
+		{{"Surname"} , {details.surname}},
+		{{ "Time" } , {details.time}},
+		{{"Date"} , {details.date}},
+		{{ "ID" } , {details.id}}}
+	};
+
+	add_listview_row(home_page_name + "/appointment_list", row, true, error);
+	set_editbox_text(home_page_name + "/name_edit", "", error);
+	set_editbox_text(home_page_name + "/surname_edit", "", error);
+	set_editbox_text(home_page_name + "/description_edit", "", error);
+	set_editbox_text(home_page_name + "/time_edit", "", error);
+	set_editbox_text(home_page_name + "/date_edit", "", error);
+	set_editbox_text(home_page_name + "/id_edit", "", error);
+	
 }
 
 void appointment::on_save()
 {
-	// to-do:: 
-	// what happens whe the user press the button save
+	ken_app_db::appointments_details details;
+	std::vector<ken_app_db::appointments_details> appoint_details;
+	std::vector<widgets::listview_column> columns;
+	std::vector <widgets::listview_row> data;
+	std::string error , appointment_id;
+	get_listview(home_page_name + "/appointments_list", columns, data, error);
+
+	if (!app_state_.get_db().get_appointments(appoint_details, error)) {
+		gui::prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+
+	}
+
+	widgets::listview_row row = {
+			{{{"Name"} , {details.name}},
+		{{ "Description"}, {details.description}},
+		{{"Surname"} , {details.surname}},
+		{{ "Time" } , {details.time}},
+		{{"Date"} , {details.date}},
+		{{ "ID" } , {details.id}}}
+	};
+
+	add_listview_row(home_page_name + "/appointments_list", row, true, error);
+
+	stop();
 }
+
 
 appointment::appointment(state& app_state):
 	home_page_name("Appointment"),
@@ -51,7 +140,6 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	set_min_width(350);
 	set_height(400);
 	set_min_height(400);
-
 
 	// add name caption
 	widgets::text name_caption;
@@ -82,7 +170,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	surname_caption.text_value = "Surname";
 	surname_caption.color = color{ 180 , 180 , 180 };
 	surname_caption.rect.left = name_caption.rect.right + 80;
-	surname_caption.rect.top = 10;
+	surname_caption.rect.top = name_caption.rect.top;
 	surname_caption.rect.set_height(20);
 	surname_caption.rect.set_width(100);
 
@@ -90,7 +178,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 
 	// add a surname textbox
 	widgets::editbox surname;
-	surname.alias = "surname";
+	surname.alias = "surname_edit";
 	surname.rect.left = surname_caption.rect.left;
 	surname.rect.top = name_edit.rect.top;
 	surname.rect.set_height(20);
@@ -113,6 +201,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 
 	// add a description textbox 
 	widgets::editbox description;
+	description.alias = "description_edit";
 	description.rect.left = description_caption.rect.left;
 	description.rect.top = description_caption.rect.bottom + 3;
 	description.rect.set_height(50);
@@ -136,22 +225,25 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 
 
 	// add a quantity textbox 
-	widgets::date Time;
-	Time.rect.left = description.rect.right + 40;
-	Time.rect.top = description.rect.top;
-	Time.rect.set_height(20);
-	Time.rect.set_width(80);
+	widgets::editbox date;
+	date.alias = "date_edit";
+	date.rect.left = description.rect.right + 40;
+	date.rect.top = description.rect.top;
+	date.rect.set_height(20);
+	date.rect.set_width(80);
 
-	home_page.add_date(Time);
+	home_page.add_editbox(date);
 
 	// add a time textbox for selecting 
-	widgets::time time;
-	time.rect.left = Time.rect.left;
-	time.rect.top = Time.rect.bottom + 6;
+	widgets::editbox time;
+	time.alias = "time_edit";
+	time.rect.left = date.rect.left;
+	time.rect.top = date.rect.bottom + 6;
 	time.rect.set_height(20);
 	time.rect.set_width(80);
 
-	home_page.add_time(time);
+	home_page.add_editbox(time);
+
 	// add a button to add the added items into a listview
 	widgets::button add;
 	add.tooltip = "Add items";
@@ -160,6 +252,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	add.rect.set_height(25);
 	add.rect.set_width(60);
 	add.caption = "Add";
+	add.on_click = [&]() { on_add(); };
 
 	home_page.add_button(add);
 
@@ -168,7 +261,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	box.rects = {
 		description_caption.rect ,
 		description.rect,
-		Time.rect,
+		date.rect,
 		Time_caption.rect,
 		add.rect,
 		time.rect
@@ -186,11 +279,14 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	appointment_list.rect.top = description.rect.bottom + 40;
 	appointment_list.rect.set_height(140);
 	appointment_list.rect.set_width(330);
+	appointment_list.alias = "appointment_list";
 
 	appointment_list.columns = {
-		app_state_.column_details("ID", 60 , widgets::listview_column_type::int_ ),
-		app_state_.column_details("Time", 80 , widgets::listview_column_type::float_),
+		app_state_.column_details("ID", 60 , widgets::listview_column_type::int_),
+		app_state_.column_details("Time", 80 , widgets::listview_column_type::string_),
+		app_state_.column_details("Date", 80 , widgets::listview_column_type::string_),
 		app_state_.column_details( "Name" , 180  , widgets::listview_column_type::string_),
+		app_state_.column_details("Surname" , 100 , widgets::listview_column_type::string_),
 		app_state_.column_details("Description", 200 , widgets::listview_column_type::string_)
 	};
 
@@ -205,7 +301,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	save.rect.top = appointment_list.rect.bottom + 10;
 	save.rect.set_height(25);
 	save.rect.set_width(80);
-	save.on_click = [&]() {};
+	save.on_click = [&]() { on_save(); };
 
 	home_page.add_button(save);
 	return true;

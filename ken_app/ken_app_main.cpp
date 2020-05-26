@@ -711,7 +711,7 @@ void ken_app_main::on_appoinment(){
 
 		// add appointment listview 
 		widgets::listview appointment_list;
-		appointment_list.alias = "appointment_list";
+		appointment_list.alias = "appointments_list";
 		appointment_list.rect.left = image.rect.right + 50;
 		appointment_list.rect.top = image.rect.top;
 		appointment_list.rect.set_height(300);
@@ -727,28 +727,33 @@ void ken_app_main::on_appoinment(){
 		appointment_list.columns = {
 			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
 			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
+			app_state_.column_details("Time" , 170 , widgets::listview_column_type::string_),
+			app_state_.column_details("Date" , 170 , widgets::listview_column_type::string_),
 			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
 			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_)
 		};
 		appointment_list.unique_column_name = "ID";
 
-		{
+		
 			std::vector<ken_app_db::appointments_details> appointment;
 			std::string error;
 
 			if (app_state_.get_db().get_appointments(appointment, error)) {
-				int i = 0;
+	
 
 				for (const auto& appointment_ : appointment) {
 					widgets::listview_row row;
 					row.items.push_back({ "ID", appointment_.id });
 					row.items.push_back({ "Time", appointment_.time });
+					row.items.push_back({ "Date", appointment_.date });
 					row.items.push_back({ "Name" , appointment_.name });
 					row.items.push_back({ "Surname", appointment_.surname });
 					row.items.push_back({ "Description" , appointment_.description });
+					appointment_list.data.push_back(row);
 				}
-			}
-		}
+				}
+				
+		
 		page.add_listview(appointment_list);
 
 		// adding a barchart 

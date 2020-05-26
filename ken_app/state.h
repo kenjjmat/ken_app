@@ -3,6 +3,8 @@
 
 //STL libraries
 #include <iostream>
+#include <cstdlib>
+#include <stdlib.h>
 #include "resource.h"
 #include "ken_app_db.h"
 

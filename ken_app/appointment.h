@@ -19,6 +19,7 @@ class appointment : public gui {
 	// functions for adding new appointment/ item to the database
 	void on_add();
 	void on_save();
+
 public:
 	// constructor 
 	appointment(state& app_state);
