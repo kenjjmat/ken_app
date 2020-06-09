@@ -727,10 +727,10 @@ void ken_app_main::on_appoinment(){
 		appointment_list.columns = {
 			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
 			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
+			app_state_.column_details("Surname" , 100  , widgets::listview_column_type::string_),
 			app_state_.column_details("Time" , 170 , widgets::listview_column_type::string_),
 			app_state_.column_details("Date" , 170 , widgets::listview_column_type::string_),
 			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
-			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_)
 		};
 		appointment_list.unique_column_name = "ID";
 
@@ -1210,7 +1210,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 
 	// add stock
 	widgets::icon icon_stock;
-	icon_stock.rect.left =50;
+	icon_stock.rect.left =(long)width() - 950;
 	icon_stock.rect.top = 50;
 	icon_stock.rect.set_width(200);
 	icon_stock.rect.set_height(100);

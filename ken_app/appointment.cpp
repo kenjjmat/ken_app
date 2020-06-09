@@ -87,29 +87,30 @@ void appointment::on_add()
 
 void appointment::on_save()
 {
-	ken_app_db::appointments_details details;
-	std::vector<ken_app_db::appointments_details> appoint_details;
 	std::vector<widgets::listview_column> columns;
 	std::vector <widgets::listview_row> data;
 	std::string error , appointment_id;
 	get_listview(home_page_name + "/appointments_list", columns, data, error);
 
-	if (!app_state_.get_db().get_appointments(appoint_details, error)) {
-		gui::prompt_params params;
-		params.type = gui::prompt_type::ok;
-		prompt(params, "Error", error);
-		return;
+	widgets::listview_row row;
+	std::vector<ken_app_db::appointments_details> appointment;
 
+	if (app_state_.get_db().get_appointments(appointment, error)) {
+
+
+		for (const auto& appointment_ : appointment) {
+			
+			row.items.push_back({ "ID", appointment_.id });
+			row.items.push_back({ "Time", appointment_.time });
+			row.items.push_back({ "Date", appointment_.date });
+			row.items.push_back({ "Name" , appointment_.name });
+			row.items.push_back({ "Surname", appointment_.surname });
+			row.items.push_back({ "Description" , appointment_.description });
+		
+		}
 	}
 
-	widgets::listview_row row = {
-			{{{"Name"} , {details.name}},
-		{{ "Description"}, {details.description}},
-		{{"Surname"} , {details.surname}},
-		{{ "Time" } , {details.time}},
-		{{"Date"} , {details.date}},
-		{{ "ID" } , {details.id}}}
-	};
+
 
 	add_listview_row(home_page_name + "/appointments_list", row, true, error);
 
@@ -146,8 +147,8 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	name_caption.alias = "name_caption";
 	name_caption.text_value = "Name";
 	name_caption.color = color{ 180 , 180 , 180 };
-	name_caption.rect.left = 10;
-	name_caption.rect.top = 10;
+	name_caption.rect.left = width()- 340;
+	name_caption.rect.top = height() - 390;
 	name_caption.rect.set_height(20);
 	name_caption.rect.set_width(100);
 
