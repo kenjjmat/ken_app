@@ -24,6 +24,10 @@ class state{
 
 public :
 
+	// form parameters 
+	const int hieght_ = 600;
+	const int width_ = 1000;
+
 	// function for log on
 	bool loggedin() {return logged_in;}
 	void log() {logged_in = true;}
