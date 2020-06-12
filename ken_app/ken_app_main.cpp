@@ -1202,6 +1202,10 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	// set parameters
 	home_page.set_name(home_page_name);
 
+	//set up form icons 
+	/*set_icons(icon_resource, 
+		gui::caption_icon_png{ icon_16, icon_20 , icon_24, icon_28, icon_32 });*/
+
 	// setting the parameters for the window
 	set_width(app_state_.width_);
 	set_min_width(width());

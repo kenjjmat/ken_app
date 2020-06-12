@@ -12,3 +12,10 @@
 #define png_new_user    120;
 #define png_back		125;
 #define png_share		130;
+#define icon_16			101;
+#define icon_20			102;
+#define icon_24			103;
+#define icon_28			104;
+#define icon_32			105;
+
+
