@@ -37,8 +37,8 @@ void ken_app_main::on_stock(){
 		widgets::image back;
 		back.toggle = "Previous page";
 		back.filename = "back.png";
-		back.rect.left = 10;
-		back.rect.top =  10;
+		back.rect.right = (long)width() + 10;
+		back.rect.bottom = (long)height() -20;
 		back.rect.set_height(50);
 		back.rect.set_width(40);
 		back.on_click = [&]() {
@@ -1203,17 +1203,14 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	home_page.set_name(home_page_name);
 
 	// setting the parameters for the window
-	set_width(1000);
-	set_min_width(1000);
-	set_height(500);
-	set_min_height(500);
+	set_width(app_state_.width_);
+	set_min_width(width());
+	set_height(app_state_.hieght_);
+	set_min_height(height());
 
 	// add stock
 	widgets::icon icon_stock;
-	icon_stock.rect.left =(long)width() - 950;
-	icon_stock.rect.top = 50;
-	icon_stock.rect.set_width(200);
-	icon_stock.rect.set_height(100);
+	icon_stock.rect = { margin , (long)width() - (margin + 780) , (long)height() - 520 , (long)height() - 420};
 	icon_stock.text = "Stock";
 	icon_stock.description = "View and Management Inventory";
 	icon_stock.text_position = widgets::image_text_placement::right_top;
@@ -1231,24 +1228,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	home_page.add_icon(icon_stock);
 
 
-	//add  reports 
-	widgets::icon icon_reports;
-	icon_reports.rect.left = 10;
-	icon_reports.rect.top = 400;
-	icon_reports.rect.set_width(160);
-	icon_reports.rect.set_height(60);
-	icon_reports.text = "Reports";
-	icon_reports.description = "Printing pdf";
-	icon_reports.text_position = widgets::image_text_placement::right_top;
-	icon_reports.filename = "report.png";
-	icon_reports.alias = "icon_settings";
-	icon_reports.size = { 48, 48 };
-	icon_reports.on_resize.perc_height = 1;
-	icon_reports.on_resize.perc_width = 1;
-	icon_reports.on_resize.perc_h = 0;
-	icon_reports.on_resize.perc_v = 100;
-
-	persistent_page.add_icon(icon_reports);
+	
 
 	//add sales
 	widgets::icon icon_sales;
@@ -1273,8 +1253,8 @@ bool ken_app_main::layout(gui::page& persistent_page,
 
 	//add share information
 	widgets::icon icon_credentials;
-	icon_credentials.rect.left = 50;
-	icon_credentials.rect.top = icon_sales.rect.top + 170;
+	icon_credentials.rect.left = icon_stock.rect.left;
+	icon_credentials.rect.top = icon_sales.rect.top + 200;
 	icon_credentials.rect.set_width(200);
 	icon_credentials.rect.set_height(100);
 	icon_credentials.text = "Users";
@@ -1291,10 +1271,29 @@ bool ken_app_main::layout(gui::page& persistent_page,
 
 	home_page.add_icon(icon_credentials);
 
+	//add  reports 
+	widgets::icon icon_reports;
+	icon_reports.rect.left = margin;
+	icon_reports.rect.top = icon_credentials.rect.bottom + 150;
+	icon_reports.rect.set_width(160);
+	icon_reports.rect.set_height(60);
+	icon_reports.text = "Reports";
+	icon_reports.description = "Printing pdf";
+	icon_reports.text_position = widgets::image_text_placement::right_top;
+	icon_reports.filename = "report.png";
+	icon_reports.alias = "icon_settings";
+	icon_reports.size = { 48, 48 };
+	icon_reports.on_resize.perc_height = 1;
+	icon_reports.on_resize.perc_width = 1;
+	icon_reports.on_resize.perc_h = 0;
+	icon_reports.on_resize.perc_v = 100;
+
+	persistent_page.add_icon(icon_reports);
+
 	//add appointments
 	widgets::icon icon_appointment;
 	icon_appointment.rect.left = icon_stock.rect.left + 270;;
-	icon_appointment.rect.top = icon_sales.rect.top + 170;
+	icon_appointment.rect.top = icon_credentials.rect.top;
 	icon_appointment.rect.set_width(200);
 	icon_appointment.rect.set_height(100);
 	icon_appointment.text = "Apointment";
@@ -1315,7 +1314,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	//add setting
 	widgets::icon icon_settings;
 	icon_settings.rect.left = icon_reports.rect.right + 20;
-	icon_settings.rect.top = 400;
+	icon_settings.rect.top = icon_reports.rect.top;
 	icon_settings.rect.set_width(160);
 	icon_settings.rect.set_height(60);
 	icon_settings.text = "Settings";
@@ -1334,7 +1333,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	// add a share icon for sharing information on a network
 	widgets::icon icon_share;
 	icon_share.rect.left = icon_settings.rect.right +35;
-	icon_share.rect.top = icon_settings.rect.top;
+	icon_share.rect.top = icon_reports.rect.top;
 	icon_share.rect.set_height(60);
 	icon_share.rect.set_width(160);
 	icon_share.text = "Sharing";
@@ -1355,10 +1354,10 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	
 	//add a list view for the appointments
 	widgets::listview list_appointments;
-	list_appointments.rect.top = 50;
+	list_appointments.rect.top = icon_stock.rect.top;
 	list_appointments.rect.left = icon_stock.rect.left + 600;
-	list_appointments.rect.set_width(320);
-	list_appointments.rect.set_height(350);
+	list_appointments.rect.set_width(330);
+	list_appointments.rect.set_height(450);
 	list_appointments.alias = "list_appointments";
 	list_appointments.border = true;
 	list_appointments.gridlines= true;

@@ -9,7 +9,7 @@
 class ken_app_main : public gui {
 	state& app_state_;
 	const std::string home_page_name;
-	bool update_ = false;
+	const int margin = 10;
 
 	// overriding virtual functions
 	void on_caption() override;
