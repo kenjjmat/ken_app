@@ -9,7 +9,11 @@ void appointment::on_caption()
 
 void appointment::on_stop()
 {
-	close();
+	prompt_params params;
+	params.type = prompt_type::yes_no;
+	if (prompt(params, "", "Are you sure you want to close"))
+		close();
+      
 }
 
 void appointment::on_shutdown()
@@ -27,6 +31,8 @@ void appointment::on_add()
 	get_editbox_text(home_page_name + "/description_edit", details.description, error);
 	get_editbox_text(home_page_name + "/time_edit",details.time, error);
 	get_editbox_text(home_page_name + "/date_edit", details.date, error);
+
+	
 	
 	// assingning the id to be a unique number and assinging it to appointment id
 	details.id = unique_string_short();
@@ -47,24 +53,6 @@ void appointment::on_add()
 		}
 	}
 
-	// inserting the elements into the database
-	if (!app_state_.get_db().new_appointment(details, error)) {
-		gui::prompt_params params;
-		params.type = gui::prompt_type::ok;
-		prompt(params, "Error", error);
-		return;
-		
-	}
-
-   // getting the elements from the database 
-	if (!app_state_.get_db().get_appointment(appointment_id , details, error)) {
-		gui::prompt_params params;
-		params.type = gui::prompt_type::ok;
-		prompt(params, "Error", error);
-		return;
-
-	}
-	
 	
 	widgets::listview_row row = {
 		{{{"Name"} , {details.name}},
@@ -76,43 +64,69 @@ void appointment::on_add()
 	};
 
 	add_listview_row(home_page_name + "/appointment_list", row, true, error);
-	set_editbox_text(home_page_name + "/name_edit", "", error);
-	set_editbox_text(home_page_name + "/surname_edit", "", error);
-	set_editbox_text(home_page_name + "/description_edit", "", error);
-	set_editbox_text(home_page_name + "/time_edit", "", error);
-	set_editbox_text(home_page_name + "/date_edit", "", error);
-	set_editbox_text(home_page_name + "/id_edit", "", error);
 	
 }
 
 void appointment::on_save()
 {
+	ken_app_db::appointments_details details;
+	std::string error;
+	std::string appointments_id;
+
+
+	get_editbox_text(home_page_name + "/name_edit", details.name, error);
+	get_editbox_text(home_page_name + "/surname_edit", details.surname, error);
+	get_editbox_text(home_page_name + "/description_edit", details.description, error);
+	get_editbox_text(home_page_name + "/time_edit", details.time, error);
+	get_editbox_text(home_page_name + "/date_edit", details.date, error);
+
+
+
+	// assingning the id to be a unique number and assinging it to appointment id
+	details.id = unique_string_short();
+	appointments_id = details.id;
+
+	// inserting appointments details in the database
+	if (!app_state_.get_db().new_appointment(details, error)) {
+		prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+     }
+
+	// getting the new appointment in the database and assinging them to details struct
+	if (!app_state_.get_db().get_appointment(appointments_id, details, error)) {
+		prompt_params params;
+		params.type = gui::prompt_type::ok;
+		prompt(params, "Error", error);
+		return;
+	}
+	
+	// getting the listview and its columns and data 
 	std::vector<widgets::listview_column> columns;
-	std::vector <widgets::listview_row> data;
-	std::string error , appointment_id;
-	get_listview(home_page_name + "/appointments_list", columns, data, error);
-
-	widgets::listview_row row;
-	std::vector<ken_app_db::appointments_details> appointment;
-
-	if (app_state_.get_db().get_appointments(appointment, error)) {
+	std::vector<widgets::listview_row> data;
+	get_listview("Appointment/Appointment_page_list", columns, data, error);
 
 
-		for (const auto& appointment_ : appointment) {
-			
-			row.items.push_back({ "ID", appointment_.id });
-			row.items.push_back({ "Time", appointment_.time });
-			row.items.push_back({ "Date", appointment_.date });
-			row.items.push_back({ "Name" , appointment_.name });
-			row.items.push_back({ "Surname", appointment_.surname });
-			row.items.push_back({ "Description" , appointment_.description });
-		
+	for (auto& row : data) {
+		for (auto& item : row.items) {
+			if (item.column_name == "ID")
+				if (appointments_id == item.item_data)
+					return;
 		}
 	}
 
-
-
-	add_listview_row(home_page_name + "/appointments_list", row, true, error);
+	widgets::listview_row row = {
+		{{{"Name"} , {details.name}},
+		{{ "Description"}, {details.description}},
+		{{"Surname"} , {details.surname}},
+		{{ "Time" } , {details.time}},
+		{{"Date"} , {details.date}},
+		{{ "ID" } , {details.id}}}
+	};
+     
+	//adding the row to the appointments listview
+	add_listview_row(home_page_name + "/Appointment_page_list", row, true, error);
 
 	stop();
 }

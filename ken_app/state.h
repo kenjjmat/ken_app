@@ -25,6 +25,8 @@ class state{
 public :
 
 	// form parameters 
+	const size icon_size = { 40 , 40 };
+	const int title_width = 200;
 	const int hieght_ = 600;
 	const int width_ = 1000;
 

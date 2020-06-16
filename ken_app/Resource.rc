@@ -12,7 +12,7 @@ png_settings	PNG					"settings.png"
 png_search		PNG					"search.png"
 png_new_user	PNG					"new_user.png"
 png_back		PNG					"back.png"
-ico_resource	PNG					"favicon.png"
+ico_resource	ICON			    "icon_resource.ico"
 
 icon_16			PNG		"icons/icon_16.png"
 icon_20			PNG		"icons/icon_20.png"

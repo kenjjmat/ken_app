@@ -15,11 +15,10 @@ void ken_app_main::on_caption(){
 }
 
 void ken_app_main::on_stop(){
-	// asking if the user wants to quit the application or not
-	/*std::string message = "Do you really want to exist";
+	// checking to see if the user really wants to close 
 	gui::prompt_params params;
-	params.type = gui::prompt_type::yes_no;
-	prompt(params, "", message);*/
+	params.type = prompt_type::yes_no;
+	if(prompt(params, "", "Do you really want to exist"))
 	close();
 }
 
@@ -37,10 +36,7 @@ void ken_app_main::on_stock(){
 		widgets::image back;
 		back.toggle = "Previous page";
 		back.filename = "back.png";
-		back.rect.right = (long)width() + 10;
-		back.rect.bottom = (long)height() -20;
-		back.rect.set_height(50);
-		back.rect.set_width(40);
+		back.rect = { margin, margin + app_state_.icon_size.width , margin, margin + app_state_.icon_size.height };
 		back.on_click = [&]() {
 			show_previous_page();
 			// to-do::
@@ -53,11 +49,7 @@ void ken_app_main::on_stock(){
 		widgets::text title;
 		title.text_value = "Stock";
 		title.font_size = 16;
-		title.rect.left = back.rect.right+10;
-		title.rect.top =  back.rect.top;
-		title.rect.set_height(40);
-		title.rect.set_width(100);
-
+		title.rect = { back.rect.right + margin , back.rect.right + margin + app_state_.title_width, back.rect.top, back.rect.top + (app_state_.icon_size.height) };
 		page.add_text(title);
 
 		// add description 
@@ -195,7 +187,7 @@ void ken_app_main::on_stock(){
 		// on resize 
 		stock_list.on_resize.perc_h = 0;
 		stock_list.on_resize.perc_v = 5;
-		stock_list.on_resize.perc_height = 90;
+		stock_list.on_resize.perc_height = 120;
 		stock_list.on_resize.perc_width = 25;
 
 
@@ -559,8 +551,9 @@ void ken_app_main::on_add_sales(){
 
 void ken_app_main::on_appoinment(){
 
-	if (!page_exists("appointment")) {
-		page page("appointment");
+	if (!page_exists("Appointment")) {
+		page page("Appointment");
+
 
 		//add back icon 
 		widgets::image back;
@@ -711,7 +704,7 @@ void ken_app_main::on_appoinment(){
 
 		// add appointment listview 
 		widgets::listview appointment_list;
-		appointment_list.alias = "appointments_list";
+		appointment_list.alias = "Appointment_page_list";
 		appointment_list.rect.left = image.rect.right + 50;
 		appointment_list.rect.top = image.rect.top;
 		appointment_list.rect.set_height(300);
@@ -800,7 +793,7 @@ void ken_app_main::on_appoinment(){
 		// this is adding a new page to the form 
 		add_page(page);
 	}
-	show_page("appointment");
+	show_page("Appointment");
 }
 
 void ken_app_main::on_add_appointment(){
@@ -1202,9 +1195,9 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	// set parameters
 	home_page.set_name(home_page_name);
 
-	//set up form icons 
-	/*set_icons(icon_resource, 
-		gui::caption_icon_png{ icon_16, icon_20 , icon_24, icon_28, icon_32 });*/
+	////set up form icons 
+	//set_icons(icon_resource,
+	//	gui::caption_icon_png{ icon_16, icon_20 , icon_24, icon_28, icon_32 });
 
 	// setting the parameters for the window
 	set_width(app_state_.width_);
