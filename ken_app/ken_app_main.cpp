@@ -809,8 +809,33 @@ void ken_app_main::on_add_appointment(){
 		prompt(params, "Error", error);
 		return;
 	}
-	// to-do:
-	// This is where you gonna put the code for collecting information from the database and insert it into the listview
+	
+	if (appointment.saved()) {
+		const auto& app_info = appointment.get_details();
+
+		std::vector<ken_app_db::appointments_details> appointments;
+		std::string error;
+
+		std::vector<widgets::listview_column> columns;
+		std::vector<widgets::listview_row> data;
+		if (app_state_.get_db().get_appointments(appointments, error)) {
+			for (const auto& app : appointments) {
+				widgets::listview_row row;
+
+				row.items.push_back({ "ID", app.id });
+				row.items.push_back({ "Name", app.name });
+				row.items.push_back({ "Surname", app.surname });
+				row.items.push_back({ "Description", app.description });
+				row.items.push_back({ "Date", app.date });
+				row.items.push_back({ "Time", app.time });
+
+				data.push_back(row);
+			}
+		}
+		get_listview("Appointment/Appointment_page_list", columns, data, error);
+		repopulate_listview("Appointment/Appointment_page_list", data, error);
+	}
+
 }
 
 

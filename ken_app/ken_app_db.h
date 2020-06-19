@@ -38,7 +38,10 @@ public :
 		std::string name;
 		std::string surname;
 		std::string description;
+		std::vector<appointments_details>items;
 	};
+
+
 
 	ken_app_db();
 	~ken_app_db();

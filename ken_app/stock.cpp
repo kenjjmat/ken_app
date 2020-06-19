@@ -17,8 +17,22 @@ void stock::on_shutdown()
 
 
 void stock::on_add(){
-	// to-do::
-	// this is where i put the code for implementing the add button
+	std::string error;
+	std::string stock_id;
+	ken_app_db::stock_details details;
+
+	// getting all the information in the textboxes
+	get_editbox_text(home_page_name + "/name_edit", details.name, error);
+	get_editbox_text(home_page_name + "/description_edit", details.name, error);
+	get_editbox_text(home_page_name + "/quantity_edit", details.name, error);
+
+	details.id = unique_string_short();
+	stock_id = details.id;
+
+	std::vector<widgets::listview_column> columns;
+	std::vector<widgets::listview_row> data;
+
+	get_listview(home_page_name + "/stock_list", columns, data, error);
 }
 
 void stock::on_save(){
@@ -88,6 +102,7 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 	// add a description textbox 
 	widgets::editbox description;
+	description.alias = "description_edit";
 	description.rect.left = description_caption.rect.left;
 	description.rect.top = description_caption.rect.bottom + 3;
 	description.rect.set_height(50);
@@ -112,6 +127,7 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 	// add a quantity textbox 
 	widgets::editbox quantity;
+	quantity.alias = "quantity_edit";
 	quantity.rect.left = description.rect.right + 40;
 	quantity.rect.top = description.rect.top;
 	quantity.rect.set_height(20);
@@ -146,6 +162,7 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	// add a listview 
 
 	widgets::listview listview;
+	listview.alias = "stock_list";
 	listview.border = false;
 	listview.gridlines = true;
 	listview.rect.left = 10;
@@ -153,11 +170,11 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	listview.rect.set_height(150);
 	listview.rect.set_width(330);
 
-	//listview.columns = {
-	//	{ "Name" , 180  , widgets::listview_column_type::string_},
-	//	{"Description" , 200 , widgets::listview_column_type::string_},
-	//	{"Quantity" , 60 , widgets::listview_column_type::int_ }
-	//};
+	listview.columns = {
+	app_state_.column_details("Name", 100 , widgets::listview_column_type::string_),
+	app_state_.column_details("Description", 100 , widgets::listview_column_type::string_),
+	app_state_.column_details("Quantity", 80 , widgets::listview_column_type::int_)
+	};
 
 	home_page.add_listview(listview);
 

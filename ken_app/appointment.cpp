@@ -74,15 +74,6 @@ void appointment::on_save()
 	std::string error;
 	std::string appointments_id;
 
-
-	get_editbox_text(home_page_name + "/name_edit", details.name, error);
-	get_editbox_text(home_page_name + "/surname_edit", details.surname, error);
-	get_editbox_text(home_page_name + "/description_edit", details.description, error);
-	get_editbox_text(home_page_name + "/time_edit", details.time, error);
-	get_editbox_text(home_page_name + "/date_edit", details.date, error);
-
-
-
 	// assingning the id to be a unique number and assinging it to appointment id
 	details.id = unique_string_short();
 	appointments_id = details.id;
@@ -95,39 +86,49 @@ void appointment::on_save()
 		return;
      }
 
-	// getting the new appointment in the database and assinging them to details struct
-	if (!app_state_.get_db().get_appointment(appointments_id, details, error)) {
-		prompt_params params;
-		params.type = gui::prompt_type::ok;
-		prompt(params, "Error", error);
-		return;
-	}
-	
 	// getting the listview and its columns and data 
 	std::vector<widgets::listview_column> columns;
 	std::vector<widgets::listview_row> data;
-	get_listview("Appointment/Appointment_page_list", columns, data, error);
+	get_listview(home_page_name +"/appointment_list", columns, data, error);
 
-
+	// getting data that is in the listview
 	for (auto& row : data) {
+		ken_app_db::appointments_details app_item;
 		for (auto& item : row.items) {
-			if (item.column_name == "ID")
-				if (appointments_id == item.item_data)
-					return;
+			if (item.column_name == "Name")
+				app_item.name = item.item_data;
+			else
+				if (item.column_name == "Description")
+					app_item.description = item.item_data;
+				else
+					if (item.column_name == "Time")
+						app_item.time = item.item_data;
+					else
+						if (item.column_name == "Date")
+							app_item.date = item.item_data;
+						else
+							if (item.column_name == "Surname")
+								app_item.surname = item.item_data;
+							else
+								if (item.column_name == "ID")
+									app_item.id = item.item_data;
+
 		}
+		details.items.push_back(app_item);
 	}
 
-	widgets::listview_row row = {
-		{{{"Name"} , {details.name}},
-		{{ "Description"}, {details.description}},
-		{{"Surname"} , {details.surname}},
-		{{ "Time" } , {details.time}},
-		{{"Date"} , {details.date}},
-		{{ "ID" } , {details.id}}}
-	};
-     
-	//adding the row to the appointments listview
-	add_listview_row(home_page_name + "/Appointment_page_list", row, true, error);
+	if (details.items.empty()) {
+		prompt_params params;
+		params.type = prompt_type::ok;
+		prompt(params, "Empty vector", "Error");
+	}
+
+	if (!app_state_.get_db().new_appointment(details, error)) {
+		prompt_params params;
+		params.type = prompt_type::ok;
+		prompt(params, "Error", error);
+	}
+	
 
 	saved_ = true;
 	details_ = details;
@@ -325,11 +326,14 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	return true;
 }
 
+//checks to see if the data has been saved successfully in the database
+
 bool appointment::saved()
 {
 	return saved_;
 }
 
+// returns the details from the database
 const ken_app_db::appointments_details& appointment::get_details()
 {
 	return details_;
