@@ -551,8 +551,8 @@ void ken_app_main::on_add_sales(){
 
 void ken_app_main::on_appoinment(){
 
-	if (!page_exists("Appointment")) {
-		page page("Appointment");
+	if (!page_exists(page_name)) {
+		page page(page_name);
 
 
 		//add back icon 
@@ -793,15 +793,16 @@ void ken_app_main::on_appoinment(){
 		// this is adding a new page to the form 
 		add_page(page);
 	}
-	show_page("Appointment");
+	show_page(page_name);
 }
 
 void ken_app_main::on_add_appointment(){
+	std::string error;
 	// creating object 
     appointment appointment(app_state_);
 	appointment.modal(*this);
 
-	std::string error;
+	
 	if (!appointment.run(error)) {
 		gui::prompt_params params;
 		params.type = gui::prompt_type::ok;

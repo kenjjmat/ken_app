@@ -10,6 +10,7 @@ class ken_app_main : public gui {
 	state& app_state_;
 	const std::string home_page_name;
 	const int margin = 10;
+	const std::string page_name = "Appointment";
 
 	// overriding virtual functions
 	void on_caption() override;

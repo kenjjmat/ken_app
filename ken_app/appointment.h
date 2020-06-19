@@ -9,6 +9,7 @@ class appointment : public gui {
 	const std::string home_page_name;
 	const int margin = 10;
 	bool saved_ = false;
+	const std::string page_name = "Appointment";
 
 	// overiding all the virtual functions
 	void on_caption() override;
@@ -31,7 +32,8 @@ public:
 		gui::page& home_page,
 		std::string& error)override;
 	bool saved();
+	const ken_app_db::appointments_details& get_details();
 
 private:
-	const ken_app_db::appointments_details details_;
+	 ken_app_db::appointments_details details_;
 }; 

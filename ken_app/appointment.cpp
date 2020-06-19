@@ -40,10 +40,11 @@ void appointment::on_add()
 
 	// new variable for date and time 
 	
-	// getting the listview and its columns and data 
+	 //getting the listview and its columns and data 
 	std::vector<widgets::listview_column> columns;
 	std::vector<widgets::listview_row> data;
 	get_listview(home_page_name + "/appointment_list", columns, data, error);
+
 
 	for (auto& row : data) {
 		for (auto& item : row.items) {
@@ -128,6 +129,8 @@ void appointment::on_save()
 	//adding the row to the appointments listview
 	add_listview_row(home_page_name + "/Appointment_page_list", row, true, error);
 
+	saved_ = true;
+	details_ = details;
 	stop();
 }
 
@@ -320,4 +323,14 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 
 	home_page.add_button(save);
 	return true;
+}
+
+bool appointment::saved()
+{
+	return saved_;
+}
+
+const ken_app_db::appointments_details& appointment::get_details()
+{
+	return details_;
 }
