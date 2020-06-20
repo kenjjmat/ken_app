@@ -23,8 +23,8 @@ void stock::on_add(){
 
 	// getting all the information in the textboxes
 	get_editbox_text(home_page_name + "/name_edit", details.name, error);
-	get_editbox_text(home_page_name + "/description_edit", details.name, error);
-	get_editbox_text(home_page_name + "/quantity_edit", details.name, error);
+	get_editbox_text(home_page_name + "/description_edit", details.description, error);
+	get_editbox_text(home_page_name + "/quantity_edit", details.quantity, error);
 
 	details.id = unique_string_short();
 	stock_id = details.id;
@@ -33,11 +33,44 @@ void stock::on_add(){
 	std::vector<widgets::listview_row> data;
 
 	get_listview(home_page_name + "/stock_list", columns, data, error);
+
+	widgets::listview_row row = {
+		{{{"ID"} , {stock_id}},
+		{{"Name"} , {details.name}},
+		{{ "Description"}, {details.description}},
+		{{"Quantity"} , {details.quantity}}}
+	};
+		
+	//add the row to the listview
+	add_listview_row(home_page_name + "/stock_list", row, true , error);
 }
 
 void stock::on_save(){
-	// to-do::
-	// this is where i put the code for implementating the save button
+	
+	// get the listview data and save it to the page listview 
+	std::vector<widgets::listview_column> columns;
+	std::vector<widgets::listview_row> data;
+	std::string error;
+	get_listview(home_page_name + "/stock_list", columns, data, error);
+
+	for (auto& row : data) {
+		for (auto& item : row.items) {
+			ken_app_db::stock_details details;
+			
+			if (item.column_name == "Name")
+				details.name = item.item_data;
+			else
+				if (item.column_name == "ID")
+					details.id = item.item_data;
+				else
+					if (item.column_name == "Description")
+						details.description = item.item_data;
+					else
+						if (item.column_name == "Quantity")
+							details.quantity = item.item_data;
+		}
+		
+	}
 }
 
 stock::stock(state& app_state): 
@@ -144,6 +177,7 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	add.rect.set_height(25);
 	add.rect.set_width(60);
 	add.caption = "Add";
+	add.on_click = [&]() { on_add(); };
 
 	home_page.add_button(add);
 
@@ -171,6 +205,7 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	listview.rect.set_width(330);
 
 	listview.columns = {
+	app_state_.column_details("ID", 80 , widgets::listview_column_type::string_),
 	app_state_.column_details("Name", 100 , widgets::listview_column_type::string_),
 	app_state_.column_details("Description", 100 , widgets::listview_column_type::string_),
 	app_state_.column_details("Quantity", 80 , widgets::listview_column_type::int_)

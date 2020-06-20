@@ -17,6 +17,7 @@ public :
 		std::string name;
 		std::string description;
 		std::string quantity;
+		std::vector<stock_details>items;
 	};
 
 	// sales details 
@@ -27,6 +28,7 @@ public :
 		std::string quantity;
 		std::string Unit_price;
 		std::string Cost;
+		std::vector<sales_details> items;
 	};
 
 	// appointments details 
