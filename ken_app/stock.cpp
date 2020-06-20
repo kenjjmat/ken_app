@@ -51,11 +51,12 @@ void stock::on_save(){
 	std::vector<widgets::listview_column> columns;
 	std::vector<widgets::listview_row> data;
 	std::string error;
+	ken_app_db::stock_details stock;
 	get_listview(home_page_name + "/stock_list", columns, data, error);
 
 	for (auto& row : data) {
+		ken_app_db::stock_details details;
 		for (auto& item : row.items) {
-			ken_app_db::stock_details details;
 			
 			if (item.column_name == "Name")
 				details.name = item.item_data;
@@ -69,8 +70,17 @@ void stock::on_save(){
 						if (item.column_name == "Quantity")
 							details.quantity = item.item_data;
 		}
-		
+		stock.items.push_back(details);
 	}
+
+	if (!app_state_.get_db().new_stock(stock, error)) {
+		prompt_params params;
+		params.type = prompt_type::ok;
+		prompt(params, "Error", error);
+	}
+	saved_ = true;
+	stock = details_;
+	close();
 }
 
 stock::stock(state& app_state): 
@@ -220,6 +230,7 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	save.rect.top = listview.rect.bottom + 20;
 	save.rect.set_height(25);
 	save.rect.set_width(80);
+	save.on_click = [&]() {on_save(); };
 
 	home_page.add_button(save);
 
