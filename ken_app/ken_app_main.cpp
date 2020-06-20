@@ -178,7 +178,7 @@ void ken_app_main::on_stock(){
 		
 		// add stock listview 
 		widgets::listview stock_list;
-		stock_list.alias = "stock_list";
+		stock_list.alias = "Stock_list";
 		stock_list.rect.left = image.rect.right + 50;
 		stock_list.rect.top = image.rect.top;
 		stock_list.rect.set_height(300);
@@ -281,8 +281,26 @@ void ken_app_main::on_add_stock(){
 	
 	if (stock.saved()) {
 
-	// declaring variables 
-		const auto& stock_info = stock.get
+		// declaring variables 
+		const auto& stock_info = stock.get_details();
+
+		//getting the data from the database 
+		std::vector<widgets::listview_row> data;
+		std::vector<ken_app_db::stock_details> stocks;
+
+		if (app_state_.get_db().get_stock_all(stocks, error)) {
+			for (const auto& stock_ : stocks) {
+				widgets::listview_row row;
+
+				row.items.push_back({ "ID", stock_.id });
+				row.items.push_back({ "Name", stock_.name });
+				row.items.push_back({ "Description", stock_.description });
+				row.items.push_back({ "Quantity", stock_.quantity });
+
+				data.push_back(row);
+			}
+		}
+		repopulate_listview("Stock/Stock_list", data, error);
 	}
 }
 
