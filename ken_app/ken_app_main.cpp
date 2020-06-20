@@ -192,7 +192,7 @@ void ken_app_main::on_stock(){
 
 
 		stock_list.columns = {
-			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
+			app_state_.column_details("ID", 80 , widgets::listview_column_type::int_ ),
 			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
 			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
 			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_	 )
@@ -212,6 +212,7 @@ void ken_app_main::on_stock(){
 					row.items.push_back({ "Name" , stock_.name });
 					row.items.push_back({ "Description" , stock_.description });
 					row.items.push_back({ "Quantity", stock_.quantity });
+					stock_list.data.push_back(row);
 				}
 		   }
 		}
@@ -287,11 +288,10 @@ void ken_app_main::on_add_stock(){
 		//getting the data from the database 
 		std::vector<widgets::listview_row> data;
 		std::vector<ken_app_db::stock_details> stocks;
-
+		widgets::listview_row row;
 		if (app_state_.get_db().get_stock_all(stocks, error)) {
 			for (const auto& stock_ : stocks) {
-				widgets::listview_row row;
-
+				
 				row.items.push_back({ "ID", stock_.id });
 				row.items.push_back({ "Name", stock_.name });
 				row.items.push_back({ "Description", stock_.description });
@@ -832,6 +832,7 @@ void ken_app_main::on_add_appointment(){
 		return;
 	}
 	
+	//adding infomation to the listview
 	if (appointment.saved()) {
 		const auto& app_info = appointment.get_details();
 

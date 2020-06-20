@@ -38,6 +38,7 @@ void appointment::on_add()
 	details.id = unique_string_short();
 	appointment_id = details.id;
 
+	
 	// new variable for date and time 
 	
 	 //getting the listview and its columns and data 
@@ -115,13 +116,9 @@ void appointment::on_save()
 
 		}
 		details.items.push_back(app_item);
+		details = app_item;
 	}
 
-	if (details.items.empty()) {
-		prompt_params params;
-		params.type = prompt_type::ok;
-		prompt(params, "Empty vector", "Error");
-	}
 
 	if (!app_state_.get_db().new_appointment(details, error)) {
 		prompt_params params;
@@ -132,7 +129,7 @@ void appointment::on_save()
 
 	saved_ = true;
 	details_ = details;
-	stop();
+	close();
 }
 
 

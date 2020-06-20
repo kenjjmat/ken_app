@@ -71,15 +71,17 @@ void stock::on_save(){
 							details.quantity = item.item_data;
 		}
 		stock.items.push_back(details);
+		stock = details;
 	}
 
+	//saving the information from the listview into the database
 	if (!app_state_.get_db().new_stock(stock, error)) {
 		prompt_params params;
 		params.type = prompt_type::ok;
 		prompt(params, "Error", error);
 	}
 	saved_ = true;
-	stock = details_;
+	details_ = stock;
 	close();
 }
 
@@ -215,7 +217,7 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	listview.rect.set_width(330);
 
 	listview.columns = {
-	app_state_.column_details("ID", 80 , widgets::listview_column_type::string_),
+	app_state_.column_details("ID", 100 , widgets::listview_column_type::string_),
 	app_state_.column_details("Name", 100 , widgets::listview_column_type::string_),
 	app_state_.column_details("Description", 100 , widgets::listview_column_type::string_),
 	app_state_.column_details("Quantity", 80 , widgets::listview_column_type::int_)
