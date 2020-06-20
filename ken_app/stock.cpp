@@ -240,5 +240,10 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 bool stock::saved()
 {
-	return false;
+	return saved_;
+}
+
+const ken_app_db::stock_details& stock::get_details()
+{
+	return details_;
 }

@@ -278,8 +278,12 @@ void ken_app_main::on_add_stock(){
 		prompt(params, "Error", error);
 		return;
 	}
-	// to-do:
-	// This is where you gonna put the code for collecting information from the database and insert it into the listview
+	
+	if (stock.saved()) {
+
+	// declaring variables 
+		const auto& stock_info = stock.get
+	}
 }
 
 // when the sales icon is clicked
@@ -816,6 +820,7 @@ void ken_app_main::on_add_appointment(){
 		std::vector<ken_app_db::appointments_details> appointments;
 		std::string error;
 
+		// getting the data from the database
 		std::vector<widgets::listview_column> columns;
 		std::vector<widgets::listview_row> data;
 		if (app_state_.get_db().get_appointments(appointments, error)) {
@@ -832,7 +837,8 @@ void ken_app_main::on_add_appointment(){
 				data.push_back(row);
 			}
 		}
-		get_listview("Appointment/Appointment_page_list", columns, data, error);
+
+		//adding the data to the listview
 		repopulate_listview("Appointment/Appointment_page_list", data, error);
 	}
 

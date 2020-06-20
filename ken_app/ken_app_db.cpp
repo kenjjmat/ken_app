@@ -290,7 +290,7 @@ bool ken_app_db::new_stock(const stock_details& stock_info, std::string& error)
      }
 
     table table;
-    if (!d_.sqlite_query("INSERT INTO Stock VALUE('"
+    if (!d_.sqlite_query("INSERT INTO Stock VALUES('"
         + stock_info.id + "' , '" + stock_info.name + "' , '" + stock_info.description + "' , '" + stock_info.quantity +
         "');", table, error)) {
         return false;
@@ -368,7 +368,7 @@ bool ken_app_db::new_sales(const sales_details& sales_info, std::string& error)
     }
 
     table table;
-    if (!d_.sqlite_query("INSERT INTO Stock VALUE('"
+    if (!d_.sqlite_query("INSERT INTO Sales VALUES('"
         + sales_info.item_name + "' , '" + sales_info.quantity + "' , '" + sales_info.Unit_price + "' , '" + sales_info.Cost + "','" + sales_info.id + 
         "');", table, error)) {
         return false;
