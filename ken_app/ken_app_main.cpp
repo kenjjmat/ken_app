@@ -220,17 +220,71 @@ void ken_app_main::on_stock(){
 			}
 			page.add_listview(stock_list);
 
-			// name text 
+			// name caption
 			widgets::text name_caption;
 			name_caption.alias = "name_caption";
 			name_caption.text_value = "Name";
 			name_caption.rect.left = stock_list.rect.right + margin + 40;
 			name_caption.rect.top = stock_list.rect.top;
 			name_caption.rect.set_height(20);
-			name_caption.rect.set_width(50);
+			name_caption.rect.set_width(100);
 			name_caption.color = { 180, 180 , 180 };
 
 			page.add_text(name_caption);
+
+			// name value text 
+			widgets::text name; 
+			name.alias = "Name";
+			name.rect.left = name_caption.rect.left;
+			name.rect.top = name_caption.rect.bottom + (margin / 2);
+			name.rect.set_height(20);
+			name.rect.set_width(100);
+
+			page.add_text(name);
+
+			// descritption caption
+			widgets::text description_caption;
+			description_caption.alias = "description_caption";
+			description_caption.text_value = "Description";
+			description_caption.rect.left = name.rect.left;
+			description_caption.rect.top = name.rect.bottom + margin;
+			description_caption.rect.set_height(20);
+			description_caption.rect.set_width(100);
+			description_caption.color = { 180 , 180 , 180 };
+
+			page.add_text(description_caption);
+
+			// description_ text value 
+			widgets::text description_;
+			description_.alias = "description_";
+			description_.rect.left = description_caption.rect.left;
+			description_.rect.top = description_caption.rect.bottom + (margin / 2);
+			description_.rect.set_height(20);
+			description_.rect.set_width(100);
+
+			page.add_text(description_);
+
+			// descritption caption
+			widgets::text quantity_caption;
+			quantity_caption.alias = "quantity_caption";
+			quantity_caption.text_value = "Quantity";
+			quantity_caption.rect.left = description_.rect.left;
+			quantity_caption.rect.top = description_.rect.bottom + margin;
+			quantity_caption.rect.set_height(20);
+			quantity_caption.rect.set_width(100);
+			quantity_caption.color = { 180 , 180 , 180 };
+
+			page.add_text(quantity_caption);
+
+			// quantity text value 
+			widgets::text quantity;
+			quantity.alias = "Quantity";
+			quantity.rect.left = quantity_caption.rect.left;
+			quantity.rect.top = quantity_caption.rect.bottom + (margin / 2);
+			quantity.rect.set_height(20);
+			quantity.rect.set_width(100);
+
+			page.add_text(quantity);
 
 
 			// adding a barchart 
@@ -241,9 +295,9 @@ void ken_app_main::on_stock(){
 			bar.data.y_label = "Data";
 			bar.data.caption = " Stock BarChart";
 			bar.rect.left = stock_list.rect.right + 50;
-			bar.rect.top = stock_list.rect.top + 250;
-			bar.rect.set_height(150);
-			bar.rect.set_width(250);
+			bar.rect.top = stock_list.rect.top + 170;
+			bar.rect.set_height(230);
+			bar.rect.set_width(300);
 			bar.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
 			bar.on_resize.perc_v = stock_list.on_resize.perc_height + 5;
 
@@ -1240,6 +1294,22 @@ void ken_app_main::on_upload(){
 	
 }
 
+// function for hiding information of a widgets
+void ken_app_main::hide_info(std::vector<std::string> aliases)
+{
+	for (auto& alias : aliases) {
+		hide(alias);
+	}
+}
+
+// for showing the information of a widgets
+void ken_app_main::show_info(std::vector<std::string> aliases)
+{
+	for (auto& alias : aliases) {
+		show(alias);
+	}
+}
+
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("KEN_APP"),
 	app_state_(app_state),
@@ -1475,9 +1545,12 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	const auto today = liblec::cui::date_gen::time_stamp();
 	widgets::text time;
 	time.alias = "time stamp";
-	time.text_value = today;
+	time.font_size = 10;
+	time.text_value = "Date and Time : " + today;
 	time.rect.left = icon_share.rect.right + 100;
 	time.rect.top = icon_share.rect.top + 20;
+	time.rect.set_height(20);
+	time.rect.set_width(300);
 	time.color = color{ 65,105,225 };
 
 	persistent_page.add_text(time);

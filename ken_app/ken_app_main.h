@@ -37,6 +37,10 @@ class ken_app_main : public gui {
 
 	// selecting the folder where the files are
 	void on_upload();
+
+	// hiding and showing widgets
+	void hide_info(std::vector<std::string> aliases);
+	void show_info(std::vector<std::string> aliases);
 public :
 	ken_app_main(const std::string& guid, state& app_state );
 	~ken_app_main();
