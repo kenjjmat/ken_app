@@ -79,13 +79,6 @@ void appointment::on_save()
 	details.id = unique_string_short();
 	appointments_id = details.id;
 
-	// inserting appointments details in the database
-	if (!app_state_.get_db().new_appointment(details, error)) {
-		prompt_params params;
-		params.type = gui::prompt_type::ok;
-		prompt(params, "Error", error);
-		return;
-     }
 
 	// getting the listview and its columns and data 
 	std::vector<widgets::listview_column> columns;
@@ -118,7 +111,7 @@ void appointment::on_save()
 		details.items.push_back(app_item);
 		details = app_item;
 	}
-
+	
 
 	if (!app_state_.get_db().new_appointment(details, error)) {
 		prompt_params params;
