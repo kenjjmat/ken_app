@@ -41,6 +41,8 @@ class ken_app_main : public gui {
 	// hiding and showing widgets
 	void hide_info(std::vector<std::string> aliases);
 	void show_info(std::vector<std::string> aliases);
+
+	void on_stock_list();
 public :
 	ken_app_main(const std::string& guid, state& app_state );
 	~ken_app_main();

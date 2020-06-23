@@ -1319,6 +1319,11 @@ void ken_app_main::show_info(std::vector<std::string> aliases)
 	}
 }
 
+// function for on_selection on the listview stock
+void ken_app_main::on_stock_list()
+{
+}
+
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("KEN_APP"),
 	app_state_(app_state),
