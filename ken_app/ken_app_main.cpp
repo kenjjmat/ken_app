@@ -185,6 +185,7 @@ void ken_app_main::on_stock() {
 		stock_list.rect.set_width(400);
 		stock_list.border = true;
 		stock_list.sort_by_clicking_column = true;
+		stock_list.on_selection = [&]() {on_stock_list(); };
 		// on resize 
 		stock_list.on_resize.perc_h = 0;
 		stock_list.on_resize.perc_v = 5;
@@ -277,7 +278,7 @@ void ken_app_main::on_stock() {
 
 		// quantity text value 
 		widgets::text quantity;
-		quantity.alias = "Quantity_text";
+		quantity.alias = "Quantity";
 		quantity.rect.left = quantity_caption.rect.left;
 		quantity.rect.top = quantity_caption.rect.bottom + (margin / 2);
 		quantity.rect.set_height(20);
@@ -337,6 +338,10 @@ void ken_app_main::on_stock() {
 		aliases.push_back("Stock/name_caption");
 		aliases.push_back("Stock/description_caption");
 		aliases.push_back("Stock/caption_quantity");
+		aliases.push_back("Stock/Name");
+		aliases.push_back("Stock/description_");
+		aliases.push_back("Stock/Quantity");
+
 		hide_info(aliases);
 
 	}
@@ -1322,6 +1327,56 @@ void ken_app_main::show_info(std::vector<std::string> aliases)
 // function for on_selection on the listview stock
 void ken_app_main::on_stock_list()
 {
+	std::vector<widgets::listview_row> rows;
+	std::string error;
+	get_listview_selected("Stock/Stock_list", rows, error);
+
+	if (rows.size() == 1) {
+		std::string stock_id;
+		for (auto& item : rows[0].items) {
+			if (item.column_name == "ID") {
+				stock_id = item.item_data;
+				break;
+			}
+		}
+
+		if (!stock_id.empty()) {
+			ken_app_db::stock_details stock;
+			if (!app_state_.get_db().get_stock(stock_id, stock, error)) {
+				prompt_params params;
+				params.type = gui::prompt_type::ok;
+				prompt(params, "Error", error);
+				return;
+			}
+
+			// setting the text of the widgets
+			set_text("Stock/Name", stock.name, error);
+			set_text("Stock/description_", stock.description, error);
+			set_text("Stock/Quantity", stock.quantity, error);
+
+			{
+				// showing the stock information
+				std::vector<std::string> aliases;
+				aliases.push_back("Stock/name_caption");
+				aliases.push_back("Stock/description_caption");
+				aliases.push_back("Stock/caption_quantity");
+				aliases.push_back("Stock/Name");
+				aliases.push_back("Stock/description_");
+				aliases.push_back("Stock/Quantity");
+				show_info(aliases);
+			}
+		}
+
+	}
+	else {
+		// hiding the stock information
+		std::vector<std::string> aliases;
+		aliases.push_back("Stock/name_caption");
+		aliases.push_back("Stock/description_caption");
+		aliases.push_back("Stock/caption_quantity");
+		hide_info(aliases);
+	}
+		
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
