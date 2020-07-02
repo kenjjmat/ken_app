@@ -42,7 +42,9 @@ class ken_app_main : public gui {
 	void hide_info(std::vector<std::string> aliases);
 	void show_info(std::vector<std::string> aliases);
 
+	// function for on_selection of the listviews
 	void on_stock_list();
+	void on_sales_list();
 public :
 	ken_app_main(const std::string& guid, state& app_state );
 	~ken_app_main();

@@ -591,9 +591,111 @@ void ken_app_main::on_sales(){
 				}
 			}
 		}
+		sales_list.on_selection = [&]() {on_sales_list(); };
 		page.add_listview(sales_list);
-		// adding widgets for displaying the information on the listview 
+		// adding widgets for displaying the information on the listview
+		// name caption
+		widgets::text name_caption;
+		name_caption.alias = "name_caption";
+		name_caption.text_value = "Item Name";
+		name_caption.rect.left = sales_list.rect.right + margin + 40;
+		name_caption.rect.top = sales_list.rect.top;
+		name_caption.rect.set_height(20);
+		name_caption.rect.set_width(100);
+		name_caption.color = { 180, 180 , 180 };
+		name_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		name_caption.on_resize.perc_v = 0;
+		page.add_text(name_caption);
 
+		// cost caption 
+		widgets::text cost_caption;
+		cost_caption.alias = "caption_cost";
+		cost_caption.text_value = "Cost";
+		cost_caption.rect.left = name_caption.rect.right + margin +40;
+		cost_caption.rect.top = name_caption.rect.top;
+		cost_caption.rect.set_height(20);
+		cost_caption.rect.set_width(100);
+		cost_caption.color = { 180, 180 , 180 };
+		cost_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		cost_caption.on_resize.perc_v = 0;
+		page.add_text(cost_caption);
+	
+
+		// name value text 
+		widgets::text name;
+		name.alias = "Item Name";
+		name.rect.left = name_caption.rect.left;
+		name.rect.top = name_caption.rect.bottom + (margin / 2);
+		name.rect.set_height(20);
+		name.rect.set_width(300);
+		name.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		name.on_resize.perc_v = 0;
+
+		page.add_text(name);
+
+		// cost value text 
+		widgets::text cost;
+		cost.alias = "cost";
+		cost.rect.left = cost_caption.rect.left;
+		cost.rect.top = cost_caption.rect.bottom + (margin / 2);
+		cost.rect.set_height(20);
+		cost.rect.set_width(300);
+		cost.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		cost.on_resize.perc_v = 0;
+
+		page.add_text(cost);
+
+		// descritption caption
+		widgets::text unit_price_caption;
+		unit_price_caption.alias = "unit_price_caption";
+		unit_price_caption.text_value = "Unit Price";
+		unit_price_caption.rect.left = name.rect.left;
+		unit_price_caption.rect.top = name.rect.bottom + margin;
+		unit_price_caption.rect.set_height(20);
+		unit_price_caption.rect.set_width(300);
+		unit_price_caption.color = { 180 , 180 , 180 };
+		unit_price_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		unit_price_caption.on_resize.perc_v = 5;
+
+		page.add_text(unit_price_caption);
+
+		// description_ text value 
+		widgets::text unit_price_;
+		unit_price_.alias = "unit_price";
+		unit_price_.rect.left = unit_price_caption.rect.left;
+		unit_price_.rect.top = unit_price_caption.rect.bottom + (margin / 2);
+		unit_price_.rect.set_height(20);
+		unit_price_.rect.set_width(300);
+		unit_price_.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		unit_price_.on_resize.perc_v = 5;
+
+		page.add_text(unit_price_);
+
+		// descritption caption
+		widgets::text quantity_caption;
+		quantity_caption.alias = "caption_quantity";
+		quantity_caption.text_value = "Quantity";
+		quantity_caption.rect.left = unit_price_.rect.left;
+		quantity_caption.rect.top = unit_price_.rect.bottom + margin;
+		quantity_caption.rect.set_height(20);
+		quantity_caption.rect.set_width(300);
+		quantity_caption.color = { 180 , 180 , 180 };
+		quantity_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		quantity_caption.on_resize.perc_v = 5;
+
+		page.add_text(quantity_caption);
+
+		// quantity text value 
+		widgets::text quantity;
+		quantity.alias = "Quantity";
+		quantity.rect.left = quantity_caption.rect.left;
+		quantity.rect.top = quantity_caption.rect.bottom + (margin / 2);
+		quantity.rect.set_height(20);
+		quantity.rect.set_width(300);
+		quantity.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		quantity.on_resize.perc_v = 5;
+
+		page.add_text(quantity);
 
 		// adding a pie chart 
 		widgets::piechart pie;
@@ -646,6 +748,22 @@ void ken_app_main::on_sales(){
 		add_page(page);
 	}
 	show_page("Sales");
+
+	{
+		{
+			std::vector<std::string> aliases;
+			aliases.push_back("Sales/name_caption");
+			aliases.push_back("Sales/unit_price_caption");
+			aliases.push_back("Sales/caption_quantity");
+			aliases.push_back("Sales/caption_cost");
+			aliases.push_back("Sales/cost");
+			aliases.push_back("Sales/Quantity");
+			aliases.push_back("Sales/Item Name");
+			
+			hide_info(aliases);
+
+		}
+	}
 }
 
 void ken_app_main::on_add_sales(){
@@ -1394,12 +1512,67 @@ void ken_app_main::on_stock_list()
 			{
 				// showing the stock information
 				std::vector<std::string> aliases;
-				aliases.push_back("Stock/name_caption");
-				aliases.push_back("Stock/description_caption");
-				aliases.push_back("Stock/caption_quantity");
-				aliases.push_back("Stock/Name");
-				aliases.push_back("Stock/description_");
-				aliases.push_back("Stock/Quantity");
+				aliases.push_back("Sales/name_caption");
+				aliases.push_back("Sales/unit_price_caption");
+				aliases.push_back("Sales/caption_quantity");
+				aliases.push_back("Sales/caption_cost");
+				aliases.push_back("Sales/cost");
+				aliases.push_back("Sales/Quantity");
+				aliases.push_back("Sales/Item Name");
+				show_info(aliases);
+			}
+		}
+
+	}
+	else {
+		// hiding the stock information
+		std::vector<std::string> aliases;
+		aliases.push_back("Sales/name_caption");
+		aliases.push_back("Sales/unit_price_caption");
+		aliases.push_back("Sales/caption_quantity");
+		aliases.push_back("Sales/caption_cost");
+		aliases.push_back("Sales/cost");
+		aliases.push_back("Sales/Quantity");
+		aliases.push_back("Sales/Item Name");
+		hide_info(aliases);
+	}
+		
+}
+
+void ken_app_main::on_sales_list()
+{
+	std::vector<widgets::listview_row> rows;
+	std::string error;
+	get_listview_selected("Sales/Sales_list", rows, error);
+
+	if (rows.size() == 1) {
+		std::string sales_id;
+		for (auto& item : rows[0].items) {
+			if (item.column_name == "ID") {
+				sales_id = item.item_data;
+				break;
+			}
+		}
+
+		if (!sales_id.empty()) {
+			ken_app_db::sales_details sales;
+			if (!app_state_.get_db().get_sales(sales_id, sales, error)) {
+				prompt_params params;
+				params.type = gui::prompt_type::ok;
+				prompt(params, "Error", error);
+				return;
+			}
+
+			// setting the text of the widgets
+			set_text("Stock/Item Name", sales.item_name, error);
+			set_text("Stock/unit_price", sales.Unit_price, error);
+			set_text("Stock/cost", sales.Cost, error);
+			set_text("Stock/Quantity", sales.quantity, error);
+
+			{
+				// showing the stock information
+				std::vector<std::string> aliases;
+				
 				show_info(aliases);
 			}
 		}
@@ -1413,7 +1586,6 @@ void ken_app_main::on_stock_list()
 		aliases.push_back("Stock/caption_quantity");
 		hide_info(aliases);
 	}
-		
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
