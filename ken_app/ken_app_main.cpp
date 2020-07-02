@@ -658,8 +658,33 @@ void ken_app_main::on_add_sales(){
 		prompt(params, "Error", error);
 		return;
 	}
-	// to-do:
-	// This is where you gonna put the code for collecting information from the database and insert it into the listview
+
+	//displaying information to the listview of the sales window
+	if (sales.saved()) {
+
+		// declaring variables 
+		const auto& sales_info = sales.get_details();
+
+		//getting the data from the database 
+		std::vector<widgets::listview_row> data;
+		std::vector<ken_app_db::sales_details> sales_;
+		widgets::listview_row row;
+		if (app_state_.get_db().get_sales_all(sales_, error)) {
+			for (const auto& details : sales_) {
+
+				row.items.push_back({ "ID", details.id });
+				row.items.push_back({ "Item Name", details.item_name });
+				row.items.push_back({ "Unit Price", details.Unit_price });
+				row.items.push_back({ "Cost", details.Cost });
+				row.items.push_back({ "Quantity", details.quantity });
+
+				data.push_back(row);
+			}
+		}
+		repopulate_listview("Sales/sales_list", data, error);
+
+
+	}
 }
 
 void ken_app_main::on_appoinment(){

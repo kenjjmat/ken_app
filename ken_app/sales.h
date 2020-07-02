@@ -30,9 +30,10 @@ public:
 		gui::page& home_page,
 		std::string& error)override;
 	bool saved();
+	const ken_app_db::sales_details& get_details();
 
 private:
-	const ken_app_db::stock_details details_;
+	 ken_app_db::sales_details details_;
 };
 
 

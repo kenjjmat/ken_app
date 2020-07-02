@@ -23,7 +23,7 @@ void sales::on_add()
 	std::string sales_id;
 	ken_app_db::sales_details sales;
 	// getting the edit box values
-	get_editbox_text(home_page_name + "/Item_name_edit", sales.item_name, error);
+	get_editbox_text(home_page_name + "/item_name_edit", sales.item_name, error);
 	get_editbox_text(home_page_name + "/unit_price_edit", sales.Unit_price, error);
 	get_editbox_text(home_page_name + "/cost_edit", sales.Cost, error);
 	get_editbox_text(home_page_name + "/quantity_edit", sales.quantity, error);
@@ -54,6 +54,46 @@ void sales::on_add()
 // on clicking the button save
 void sales::on_save()
 {
+
+	// get the listview data and save it to the page listview 
+	std::vector<widgets::listview_column> columns;
+	std::vector<widgets::listview_row> data;
+	std::string error;
+	ken_app_db::sales_details sales;
+	get_listview(home_page_name + "/sales_list", columns, data, error);
+
+	for (auto& row : data) {
+		ken_app_db::sales_details details;
+		for (auto& item : row.items) {
+
+			if (item.column_name == "Item Name")
+				details.item_name = item.item_data;
+			else
+				if (item.column_name == "ID")
+					details.id = item.item_data;
+				else
+					if (item.column_name == "Cost")
+						details.Cost = item.item_data;
+					else
+						if (item.column_name == "Quantity")
+							details.quantity = item.item_data;
+						else 
+							if (item.column_name == "Unit Price")
+								details.Unit_price = item.item_data;
+		}
+		sales.items.push_back(details);
+		sales = details;
+	}
+
+	//saving the information from the listview into the database
+	if (!app_state_.get_db().new_sales(sales, error)) {
+		prompt_params params;
+		params.type = prompt_type::ok;
+		prompt(params, "Error", error);
+	}
+	saved_ = true;
+	details_ = sales;
+	close();
 }
 
 // initializing the the constructor 
@@ -183,6 +223,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	add.rect.set_height(25);
 	add.rect.set_width(60);
 	add.caption = "Add";
+	add.on_click = [&]() {on_add(); };
 
 	home_page.add_button(add);
 
@@ -226,6 +267,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	save.rect.top = listview.rect.bottom + 15;
 	save.rect.set_height(25);
 	save.rect.set_width(80);
+	save.on_click = [&]() {on_save(); };
 
 	home_page.add_button(save);
 	return true;
@@ -233,5 +275,10 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 bool sales::saved()
 {
-	return false;
+	return saved_;
+}
+
+const ken_app_db::sales_details& sales::get_details()
+{
+	return details_;
 }

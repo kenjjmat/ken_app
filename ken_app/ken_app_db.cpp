@@ -392,7 +392,7 @@ bool ken_app_db::get_sales(const std::string& sales_id, sales_details& sales, st
 
     // reading the database 
     table table;
-    if (!d_.sqlite_query("SELECT * FROM Sales WHERE PersonID = '"
+    if (!d_.sqlite_query("SELECT * FROM Sales WHERE ID = '"
         + sales_id + "';", table, error)) return false;
 
     // now assigning values from the database table to the struct stock details
