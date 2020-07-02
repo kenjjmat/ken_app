@@ -552,7 +552,7 @@ void ken_app_main::on_sales(){
 
 		// add stock listview 
 		widgets::listview sales_list;
-		sales_list.alias = "sales_list";
+		sales_list.alias = "Sales_list_main";
 		sales_list.rect.left = image.rect.right + 50;
 		sales_list.rect.top = image.rect.top;
 		sales_list.rect.set_height(300);
@@ -565,9 +565,10 @@ void ken_app_main::on_sales(){
 		sales_list.on_resize.perc_width = 25;
 
 		sales_list.columns = {
-			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
-			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
-			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
+			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_ ),
+			app_state_.column_details("Item Name" , 110 , widgets::listview_column_type::string_),
+			app_state_.column_details("Unit Price" , 100 , widgets::listview_column_type::string_),
+			app_state_.column_details("Cost" , 100 , widgets::listview_column_type::string_),
 			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_)
 		};
 		sales_list.unique_column_name = "ID";
@@ -582,10 +583,11 @@ void ken_app_main::on_sales(){
 				for (const auto& sales_ : sales) {
 					widgets::listview_row row;
 					row.items.push_back({ "ID", sales_.id });
-					row.items.push_back({ "Name" , sales_.item_name });
+					row.items.push_back({ "Item Name" , sales_.item_name });
 					row.items.push_back({ "Quantity" , sales_.quantity });
-					row.items.push_back({ "Unit_price", sales_.Unit_price });
+					row.items.push_back({ "Unit Price", sales_.Unit_price });
 					row.items.push_back({ "Cost"	, sales_.Cost });
+					sales_list.data.push_back(row);
 				}
 			}
 		}
@@ -681,7 +683,7 @@ void ken_app_main::on_add_sales(){
 				data.push_back(row);
 			}
 		}
-		repopulate_listview("Sales/sales_list", data, error);
+		repopulate_listview("Sales/Sales_list_main", data, error);
 
 
 	}
@@ -1481,7 +1483,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	icon_sales.on_resize.perc_width = 5;
 	icon_sales.on_resize.perc_h = 50;
 	icon_sales.on_resize.perc_v = 20;
-	icon_sales.on_click = [&] { on_sales(); };
+	icon_sales.on_click = [&](){ on_sales(); };
 
 
 	home_page.add_icon(icon_sales);

@@ -174,6 +174,7 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
         if (error.find("already exists") == std::string::npos) return false;
     }
 
+   
     // sales details table
     if (!d_.sqlite_query("CREATE TABLE Sales ("
         "ID TEXT NOT NULL, "
@@ -368,9 +369,8 @@ bool ken_app_db::new_sales(const sales_details& sales_info, std::string& error)
     }
 
     table table;
-    if (!d_.sqlite_query("INSERT INTO Sales VALUES('"
-        + sales_info.item_name + "' , '" + sales_info.quantity + "' , '" + sales_info.Unit_price + "' , '" + sales_info.Cost + "','" + sales_info.id + 
-        "');", table, error)) {
+    if (!d_.sqlite_query("INSERT INTO Sales VALUES('" + sales_info.id +
+        "', '" + sales_info.item_name + "' , '" + sales_info.quantity + "' , '" + sales_info.Unit_price + "' , '" + sales_info.Cost + "');", table, error)) {
         return false;
     }
     return true;
@@ -430,7 +430,7 @@ bool ken_app_db::get_sales_all(std::vector<sales_details>& sales, std::string& e
         for (const auto& row : table) {
             sales_details sales_;
             sales_.id = row.at("ID");
-            sales_.item_name = row.at("Item_name");
+            sales_.item_name = row.at("Item_Name");
             sales_.quantity = row.at("Quantity");
             sales_.Unit_price = row.at("Unit_price");
             sales_.Cost = row.at("Cost");
