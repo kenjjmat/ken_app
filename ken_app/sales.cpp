@@ -18,13 +18,37 @@ void sales::on_shutdown()
 // adding the information on the listview 
 void sales::on_add()
 {
+	//declaring variables
 	std::string error;
+	std::string sales_id;
 	ken_app_db::sales_details sales;
 	// getting the edit box values
 	get_editbox_text(home_page_name + "/Item_name_edit", sales.item_name, error);
 	get_editbox_text(home_page_name + "/unit_price_edit", sales.Unit_price, error);
 	get_editbox_text(home_page_name + "/cost_edit", sales.Cost, error);
 	get_editbox_text(home_page_name + "/quantity_edit", sales.quantity, error);
+
+	sales.id = unique_string_short();
+	sales_id = sales.id;
+    //setting the value of the cost which is gonna be unit price times quantity
+	// find a way how to type cast strings and muliply then
+	//getting the listview 
+	std::vector<widgets::listview_column> columns;
+	std::vector<widgets::listview_row> data;
+
+	get_listview(home_page_name + "/sales_list", columns, data, error);
+
+	widgets::listview_row row = {
+		{{{"ID"} , {sales_id}},
+		{{"Item Name"} , {sales.item_name}},
+		{{ "Unit Price"}, {sales.Unit_price}},
+		{{"Cost"}, {sales.Cost}},
+		{{"Quantity"} , {sales.quantity}}}
+	};
+
+	//add the row to the listview
+	add_listview_row(home_page_name + "/sales_list", row, true, error);
+
 }
 
 // on clicking the button save
@@ -179,6 +203,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	// add a listview 
 
 	widgets::listview listview;
+	listview.alias = "sales_list";
 	listview.border = false;
 	listview.gridlines = true;
 	listview.rect.left = 10;
