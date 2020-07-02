@@ -555,7 +555,7 @@ void ken_app_main::on_sales(){
 		sales_list.alias = "Sales_list_main";
 		sales_list.rect.left = image.rect.right + 50;
 		sales_list.rect.top = image.rect.top;
-		sales_list.rect.set_height(300);
+		sales_list.rect.set_height(400);
 		sales_list.rect.set_width(400);
 		sales_list.border = true;
 		// on resize 
@@ -592,13 +592,15 @@ void ken_app_main::on_sales(){
 			}
 		}
 		page.add_listview(sales_list);
+		// adding widgets for displaying the information on the listview 
+
 
 		// adding a pie chart 
 		widgets::piechart pie;
-		pie.rect.left = sales_list.rect.right + 20 ;
-		pie.rect.top = sales_list.rect.top;
-		pie.rect.set_height(300);
-		pie.rect.set_width(400);
+		pie.rect.left = sales_list.rect.right + 50 ;
+		pie.rect.top = sales_list.rect.top + 170;
+		pie.rect.set_height(225);
+		pie.rect.set_width(300);
 		pie.alias = "piechart";
 		pie.data.caption = "Sales statistics";
 		pie.data.autocolor = false;
@@ -847,7 +849,7 @@ void ken_app_main::on_appoinment(){
 		appointment_list.alias = "Appointment_page_list";
 		appointment_list.rect.left = image.rect.right + 50;
 		appointment_list.rect.top = image.rect.top;
-		appointment_list.rect.set_height(300);
+		appointment_list.rect.set_height(400);
 		appointment_list.rect.set_width(400);
 		appointment_list.border = true;
 		// on resize 
