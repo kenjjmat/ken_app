@@ -29,6 +29,10 @@ public :
 	const int title_width = 200;
 	const int hieght_ = 600;
 	const int width_ = 1000;
+	
+	// for saving number of information
+	int count = 0;
+     std::string  quantity = 0;
 
 	// function for log on
 	bool loggedin() {return logged_in;}
