@@ -16,7 +16,7 @@ public :
 		std::string id;
 		std::string name;
 		std::string description;
-		std::string quantity;
+		 std::string quantity;
 		std::vector<stock_details>items;
 	};
 

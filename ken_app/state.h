@@ -32,7 +32,7 @@ public :
 	
 	// for saving number of information
 	int count = 0;
-     std::string  quantity = 0;
+	double quantity = 0;
 
 	// function for log on
 	bool loggedin() {return logged_in;}

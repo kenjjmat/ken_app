@@ -216,7 +216,6 @@ void ken_app_main::on_stock() {
 					row.items.push_back({ "Quantity", stock_.quantity });
 					stock_list.data.push_back(row);
 					app_state_.count++;
-					app_state_.quantity += stock_.quantity;
 				}
 			}
 		}
@@ -317,11 +316,7 @@ void ken_app_main::on_stock() {
 		bar.on_resize.perc_height = 50;
 		bar.on_resize.perc_width = 50;
 
-		std::vector<widgets::listview_column> columns;
-		std::vector<widgets::listview_row> data_;
-		std::string error;
 
-		get_listview("Stock/Stock_list", columns , data_, error);
 		// setting out the bars in the barchart
 		std::vector<widgets::chart_entry>bar_data;
 
@@ -331,8 +326,15 @@ void ken_app_main::on_stock() {
 		data.label = "Stock";
 		data.value = app_state_.count;
 		bar_data.push_back(data);
-		bar.data.bars = bar_data;
+		
 
+		//creating a new object of chart entry 
+		widgets::chart_entry data2;
+		data2.label = "Quantity";
+		data2.value = 9; // to-do this must take the information form the database and find out how to typecast from double to string 
+		data2.color = { 180, 200, 255 };
+		bar_data.push_back(data2);
+		bar.data.bars = bar_data;
 		page.add_barchart(bar);
 		// this is adding a new page to the form 
 		add_page(page);

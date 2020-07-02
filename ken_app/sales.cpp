@@ -108,6 +108,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 	// add cost textbox 
 	widgets::editbox cost;
+	cost.read_only = true;
 	cost.rect.left = cost_caption.rect.left;
 	cost.rect.top = cost_caption.rect.bottom + 3;
 	cost.rect.set_height(20);
@@ -174,13 +175,13 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	listview.rect.top = add.rect.bottom + 10;
 	listview.rect.set_height(150);
 	listview.rect.set_width(330);
-
-	//listview.columns = {
-	//	{ "Name" , 180  , widgets::listview_column_type::string_},
-	//	{"unit_price" , 200 , widgets::listview_column_type::string_},
-	//	{"Quantity" , 60 , widgets::listview_column_type::int_ }
-	//};
-
+	listview.columns = {
+		app_state_.column_details("ID", 50 , widgets::listview_column_type::int_),
+		app_state_.column_details("Item Name", 100 , widgets::listview_column_type::string_),
+		app_state_.column_details("Unit Price", 50 , widgets::listview_column_type::int_),
+		app_state_.column_details("Cost", 50 , widgets::listview_column_type::int_),
+		app_state_.column_details("Quantity", 50 , widgets::listview_column_type::int_)
+	};
 	home_page.add_listview(listview);
 
 	// add a sava button 
