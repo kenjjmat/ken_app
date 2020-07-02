@@ -18,6 +18,13 @@ void sales::on_shutdown()
 // adding the information on the listview 
 void sales::on_add()
 {
+	std::string error;
+	ken_app_db::sales_details sales;
+	// getting the edit box values
+	get_editbox_text(home_page_name + "/Item_name_edit", sales.item_name, error);
+	get_editbox_text(home_page_name + "/unit_price_edit", sales.Unit_price, error);
+	get_editbox_text(home_page_name + "/cost_edit", sales.Cost, error);
+	get_editbox_text(home_page_name + "/quantity_edit", sales.quantity, error);
 }
 
 // on clicking the button save
@@ -86,6 +93,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 	// add a unit_price textbox 
 	widgets::editbox unit_price;
+	unit_price.alias = "unit_price_edit";
 	unit_price.rect.left = unit_price_caption.rect.left;
 	unit_price.rect.top = unit_price_caption.rect.bottom + 3;
 	unit_price.rect.set_height(20);
@@ -108,6 +116,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 	// add cost textbox 
 	widgets::editbox cost;
+	cost.alias = "cost_edit";
 	cost.read_only = true;
 	cost.rect.left = cost_caption.rect.left;
 	cost.rect.top = cost_caption.rect.bottom + 3;
@@ -133,6 +142,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 
 	// add a quantity textbox 
 	widgets::editbox quantity;
+	quantity.alias = "quantity_edit";
 	quantity.rect.left = cost.rect.right + 20;
 	quantity.rect.top = cost.rect.top;
 	quantity.rect.set_height(20);
