@@ -188,8 +188,8 @@ void ken_app_main::on_stock() {
 		stock_list.on_selection = [&]() {on_stock_list(); };
 		// on resize 
 		stock_list.on_resize.perc_h = 0;
-		stock_list.on_resize.perc_v = 5;
-		stock_list.on_resize.perc_height = 120;
+		stock_list.on_resize.perc_v = 0;
+		stock_list.on_resize.perc_height = 105;
 		stock_list.on_resize.perc_width = 25;
 
 
@@ -215,6 +215,8 @@ void ken_app_main::on_stock() {
 					row.items.push_back({ "Description" , stock_.description });
 					row.items.push_back({ "Quantity", stock_.quantity });
 					stock_list.data.push_back(row);
+					app_state_.count++;
+					app_state_.quantity += stock_.quantity;
 				}
 			}
 		}
@@ -227,8 +229,10 @@ void ken_app_main::on_stock() {
 		name_caption.rect.left = stock_list.rect.right + margin + 40;
 		name_caption.rect.top = stock_list.rect.top;
 		name_caption.rect.set_height(20);
-		name_caption.rect.set_width(100);
+		name_caption.rect.set_width(300);
 		name_caption.color = { 180, 180 , 180 };
+		name_caption.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
+		name_caption.on_resize.perc_v = 0;
 
 		page.add_text(name_caption);
 
@@ -238,7 +242,9 @@ void ken_app_main::on_stock() {
 		name.rect.left = name_caption.rect.left;
 		name.rect.top = name_caption.rect.bottom + (margin / 2);
 		name.rect.set_height(20);
-		name.rect.set_width(100);
+		name.rect.set_width(300);
+		name.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
+		name.on_resize.perc_v = 0;
 
 		page.add_text(name);
 
@@ -249,8 +255,10 @@ void ken_app_main::on_stock() {
 		description_caption.rect.left = name.rect.left;
 		description_caption.rect.top = name.rect.bottom + margin;
 		description_caption.rect.set_height(20);
-		description_caption.rect.set_width(100);
+		description_caption.rect.set_width(300);
 		description_caption.color = { 180 , 180 , 180 };
+		description_caption.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
+		description_caption.on_resize.perc_v = 5;
 
 		page.add_text(description_caption);
 
@@ -260,7 +268,9 @@ void ken_app_main::on_stock() {
 		description_.rect.left = description_caption.rect.left;
 		description_.rect.top = description_caption.rect.bottom + (margin / 2);
 		description_.rect.set_height(20);
-		description_.rect.set_width(100);
+		description_.rect.set_width(300);
+		description_.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
+		description_.on_resize.perc_v = 5;
 
 		page.add_text(description_);
 
@@ -271,8 +281,10 @@ void ken_app_main::on_stock() {
 		quantity_caption.rect.left = description_.rect.left;
 		quantity_caption.rect.top = description_.rect.bottom + margin;
 		quantity_caption.rect.set_height(20);
-		quantity_caption.rect.set_width(100);
+		quantity_caption.rect.set_width(300);
 		quantity_caption.color = { 180 , 180 , 180 };
+		quantity_caption.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
+		quantity_caption.on_resize.perc_v = 5;
 
 		page.add_text(quantity_caption);
 
@@ -282,7 +294,9 @@ void ken_app_main::on_stock() {
 		quantity.rect.left = quantity_caption.rect.left;
 		quantity.rect.top = quantity_caption.rect.bottom + (margin / 2);
 		quantity.rect.set_height(20);
-		quantity.rect.set_width(100);
+		quantity.rect.set_width(300);
+		quantity.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
+		quantity.on_resize.perc_v = 5;
 
 		page.add_text(quantity);
 
@@ -299,32 +313,24 @@ void ken_app_main::on_stock() {
 		bar.rect.set_height(230);
 		bar.rect.set_width(300);
 		bar.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
-		bar.on_resize.perc_v = stock_list.on_resize.perc_height + 5;
+		bar.on_resize.perc_v = stock_list.on_resize.perc_height  - 50;
+		bar.on_resize.perc_height = 50;
+		bar.on_resize.perc_width = 50;
 
+		std::vector<widgets::listview_column> columns;
+		std::vector<widgets::listview_row> data_;
+		std::string error;
+
+		get_listview("Stock/Stock_list", columns , data_, error);
 		// setting out the bars in the barchart
 		std::vector<widgets::chart_entry>bar_data;
+
 		// creating object for the chart entry
-		widgets::chart_entry details;
-
-		// to-do::
-		// the barchart must desplay information from the database that is in the listview
-
-		// assigning the values in bar eat
-		details.label = "Eat";
-		details.color = color{ 180 , 180 , 180 };
-		details.value = 50;
-
-		// assigning the values in bar drink
-		widgets::chart_entry detail_;
-		detail_.label = "Drink";
-		detail_.value = 100;
-		detail_.color = color{ 180 , 200 , 255 };
-		bar_data.push_back(detail_);
-		bar_data.push_back(details);
-
-		// on resize 
-
-
+		widgets::chart_entry data;
+		data.color = { 180 , 180, 180 };
+		data.label = "Stock";
+		data.value = app_state_.count;
+		bar_data.push_back(data);
 		bar.data.bars = bar_data;
 
 		page.add_barchart(bar);
@@ -1621,6 +1627,8 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	time.rect.set_height(20);
 	time.rect.set_width(300);
 	time.color = color{ 65,105,225 };
+	time.on_resize.perc_h = icon_share.on_resize.perc_h + 120;
+	time.on_resize.perc_v = icon_share.on_resize.perc_v;
 
 	persistent_page.add_text(time);
 	
