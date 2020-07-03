@@ -2,6 +2,9 @@
 
 #include "state.h"
 
+//STL libraries 
+#include <sstream>
+
 
 
 // gui main class 
@@ -11,6 +14,7 @@ class ken_app_main : public gui {
 	const std::string home_page_name;
 	const int margin = 10;
 	const std::string page_name = "Appointment";
+	std::string saved;
 
 	// overriding virtual functions
 	void on_caption() override;

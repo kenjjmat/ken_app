@@ -216,6 +216,12 @@ void ken_app_main::on_stock() {
 					row.items.push_back({ "Quantity", stock_.quantity });
 					stock_list.data.push_back(row);
 					app_state_.count++;
+					// typecasting a string into a double
+					double answer;
+					std::stringstream ss;
+					ss << stock_.quantity;
+					ss >> answer;
+					app_state_.quantity += answer;
 				}
 			}
 		}
@@ -331,7 +337,7 @@ void ken_app_main::on_stock() {
 		//creating a new object of chart entry 
 		widgets::chart_entry data2;
 		data2.label = "Quantity";
-		data2.value = 9; // to-do this must take the information form the database and find out how to typecast from double to string 
+		data2.value = app_state_.quantity;
 		data2.color = { 180, 200, 255 };
 		bar_data.push_back(data2);
 		bar.data.bars = bar_data;
@@ -1512,6 +1518,61 @@ void ken_app_main::on_stock_list()
 			{
 				// showing the stock information
 				std::vector<std::string> aliases;
+				aliases.push_back("Stock/name_caption");
+				aliases.push_back("Stock/description_caption");
+				aliases.push_back("Stock/caption_quantity");
+				aliases.push_back("Stock/Name");
+				aliases.push_back("Stock/description_");
+				aliases.push_back("Stock/Quantity");
+				show_info(aliases);
+			}
+		}
+
+	}
+	else {
+		// hiding the stock information
+		std::vector<std::string> aliases;
+		aliases.push_back("Stock/name_caption");
+		aliases.push_back("Stock/description_caption");
+		aliases.push_back("Stock/caption_quantity");
+		hide_info(aliases);
+	}
+		
+}
+
+void ken_app_main::on_sales_list()
+{
+	std::vector<widgets::listview_row> rows;
+	std::string error;
+	get_listview_selected("Sales/Sales_list_main", rows, error);
+
+	if (rows.size() == 1) {
+		std::string sales_id;
+		for (auto& item : rows[0].items) {
+			if (item.column_name == "ID") {
+				sales_id = item.item_data;
+				break;
+			}
+		}
+
+		if (!sales_id.empty()) {
+			ken_app_db::sales_details sales;
+			if (!app_state_.get_db().get_sales(sales_id, sales, error)) {
+				prompt_params params;
+				params.type = gui::prompt_type::ok;
+				prompt(params, "Error", error);
+				return;
+			}
+
+			// setting the text of the widgets
+			set_text("Sales/Item Name", sales.item_name, error);
+			set_text("Sales/unit_price", sales.Unit_price, error);
+			set_text("Sales/cost", sales.Cost, error);
+			set_text("Sales/Quantity", sales.quantity, error);
+
+			{
+				// showing the stock information
+				std::vector<std::string> aliases;
 				aliases.push_back("Sales/name_caption");
 				aliases.push_back("Sales/unit_price_caption");
 				aliases.push_back("Sales/caption_quantity");
@@ -1534,56 +1595,6 @@ void ken_app_main::on_stock_list()
 		aliases.push_back("Sales/cost");
 		aliases.push_back("Sales/Quantity");
 		aliases.push_back("Sales/Item Name");
-		hide_info(aliases);
-	}
-		
-}
-
-void ken_app_main::on_sales_list()
-{
-	std::vector<widgets::listview_row> rows;
-	std::string error;
-	get_listview_selected("Sales/Sales_list", rows, error);
-
-	if (rows.size() == 1) {
-		std::string sales_id;
-		for (auto& item : rows[0].items) {
-			if (item.column_name == "ID") {
-				sales_id = item.item_data;
-				break;
-			}
-		}
-
-		if (!sales_id.empty()) {
-			ken_app_db::sales_details sales;
-			if (!app_state_.get_db().get_sales(sales_id, sales, error)) {
-				prompt_params params;
-				params.type = gui::prompt_type::ok;
-				prompt(params, "Error", error);
-				return;
-			}
-
-			// setting the text of the widgets
-			set_text("Stock/Item Name", sales.item_name, error);
-			set_text("Stock/unit_price", sales.Unit_price, error);
-			set_text("Stock/cost", sales.Cost, error);
-			set_text("Stock/Quantity", sales.quantity, error);
-
-			{
-				// showing the stock information
-				std::vector<std::string> aliases;
-				
-				show_info(aliases);
-			}
-		}
-
-	}
-	else {
-		// hiding the stock information
-		std::vector<std::string> aliases;
-		aliases.push_back("Stock/name_caption");
-		aliases.push_back("Stock/description_caption");
-		aliases.push_back("Stock/caption_quantity");
 		hide_info(aliases);
 	}
 }
