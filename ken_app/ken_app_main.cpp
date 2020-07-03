@@ -441,7 +441,9 @@ void ken_app_main::on_add_stock(){
 	
 		
 	}
-
+	//resetting variables
+	app_state_.count = 0;
+	app_state_.quantity = 0;
 	
 }
 
@@ -639,6 +641,15 @@ void ken_app_main::on_sales(){
 					row.items.push_back({ "Unit Price", sales_.Unit_price });
 					row.items.push_back({ "Cost"	, sales_.Cost });
 					sales_list.data.push_back(row);
+
+					// counting the sales and cost
+					app_state_.count++;
+					double cost;
+					std::stringstream ss;
+					ss << sales_.Cost;
+					ss >> cost;
+					app_state_.quantity += cost;
+
 				}
 			}
 		}
@@ -762,20 +773,21 @@ void ken_app_main::on_sales(){
 		pie.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
 		pie.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
 		
+		
 		// assigning values to the pie chart 
 		std::vector< widgets::chart_entry> pie_data;
-
+		
 		// creating object for chart_entry 
 		widgets::chart_entry details;
 		details.color = color { 180 , 200 , 255 }; 
-		details.label = "Eat";
-		details.value = 50;
+		details.label = "Sales";
+		details.value = app_state_.count;
 
 		// creating a second object of chart entry
 		widgets::chart_entry details_;
 		details_.color = color{ 180 , 180 , 180 };
-		details_.label = "Drinks";
-		details_.value = 50;
+		details_.label = "Total Cost";
+		details_.value = app_state_.quantity;
 
 		pie_data.push_back(details);
 		pie_data.push_back(details_);
@@ -850,15 +862,50 @@ void ken_app_main::on_add_sales(){
 				row.items.push_back({ "Unit Price", details.Unit_price });
 				row.items.push_back({ "Cost", details.Cost });
 				row.items.push_back({ "Quantity", details.quantity });
-
 				data.push_back(row);
+
+				// counting the sales and cost
+				app_state_.count++;
+				double cost;
+				std::stringstream ss;
+				ss << details.Cost;
+				ss >> cost;
+				app_state_.quantity += cost;
 			}
 		}
 		repopulate_listview("Sales/Sales_list_main", data, error);
 
+	   // reloading the piechart if new items are added into the database
+		widgets::piechart_data pie_data;
+		pie_data.autocolor = true;
+		pie_data.caption = "Sales Piechart";
+		pie_data.doughnut = true;
+
+		std::vector< widgets::chart_entry> pie_data_;
+
+		// creating object for chart_entry 
+		widgets::chart_entry details;
+		details.color = color{ 180 , 200 , 255 };
+		details.label = "Sales";
+		details.value = app_state_.count;
+
+		// creating a second object of chart entry
+		widgets::chart_entry details_;
+		details_.color = color{ 180 , 180 , 180 };
+		details_.label = "Total Cost";
+		details_.value = app_state_.quantity;
+
+		pie_data_.push_back(details);
+		pie_data_.push_back(details_);
+
+		pie_data.slices = pie_data_;
+		piechart_reload("Sales/piechart", pie_data, error);
+
 
 	}
-
+	// reseting the variables to zero
+	app_state_.count = 0;
+	app_state_.quantity = 0;
 	
 }
 
