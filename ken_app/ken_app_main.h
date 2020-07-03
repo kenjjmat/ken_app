@@ -14,7 +14,7 @@ class ken_app_main : public gui {
 	const std::string home_page_name;
 	const int margin = 10;
 	const std::string page_name = "Appointment";
-	std::string saved;
+	
 
 	// overriding virtual functions
 	void on_caption() override;
@@ -49,6 +49,7 @@ class ken_app_main : public gui {
 	// function for on_selection of the listviews
 	void on_stock_list();
 	void on_sales_list();
+
 public :
 	ken_app_main(const std::string& guid, state& app_state );
 	~ken_app_main();
@@ -56,6 +57,7 @@ public :
 	bool layout(gui::page& persistent_page,
 		gui::page& home_page,
 		std::string& error) override;
+	
 };
 
 

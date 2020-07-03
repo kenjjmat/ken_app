@@ -223,6 +223,7 @@ void ken_app_main::on_stock() {
 					ss >> answer;
 					app_state_.quantity += answer;
 				}
+				
 			}
 		}
 		page.add_listview(stock_list);
@@ -264,6 +265,7 @@ void ken_app_main::on_stock() {
 		description_caption.color = { 180 , 180 , 180 };
 		description_caption.on_resize.perc_h = stock_list.on_resize.perc_width + 10;
 		description_caption.on_resize.perc_v = 5;
+		description_caption.on_resize.perc_height = 5;
 
 		page.add_text(description_caption);
 
@@ -344,6 +346,10 @@ void ken_app_main::on_stock() {
 		page.add_barchart(bar);
 		// this is adding a new page to the form 
 		add_page(page);
+
+		//resetting the variables to zero 
+		app_state_.count = 0;
+		app_state_.quantity = 0;
 	}
 	show_page("Stock");
 	// hiding the stock information
@@ -391,14 +397,52 @@ void ken_app_main::on_add_stock(){
 				row.items.push_back({ "Name", stock_.name });
 				row.items.push_back({ "Description", stock_.description });
 				row.items.push_back({ "Quantity", stock_.quantity });
-
 				data.push_back(row);
+
+				// setting the variables back to zero 
+				
+				app_state_.count++;
+				double	quantity;
+				std::stringstream ss;
+				ss << stock_.quantity;
+				ss >> quantity;
+				app_state_.quantity += quantity;
 			}
 		}
-		repopulate_listview("Stock/Stock_list", data, error);
+	    widgets::barchart_data  bar_data;
+		bar_data.autocolor = false;
+		bar_data.autoscale = true;
+		bar_data.caption = "Stock Barchart";
+		bar_data.x_label = "Fields";
+		bar_data.y_label = "Data";
 
+
+		// setting out the bars in the barchart
+		std::vector<widgets::chart_entry>bar_data_;
+
+		// creating object for the chart entry
+		widgets::chart_entry entry;
+		entry.color = { 180 , 180, 180 };
+		entry.label = "Stock";
+		entry.value = app_state_.count;
+		bar_data_.push_back(entry);
+
+
+		//creating a new object of chart entry 
+		widgets::chart_entry entry2;
+		entry2.label = "Quantity";
+		entry2.value = app_state_.quantity;
+		entry2.color = { 180, 200, 255 };
+		bar_data_.push_back(entry2);
+		bar_data.bars = bar_data_;
+
+		repopulate_listview("Stock/Stock_list", data, error);
+		barchart_reload("Stock/barchart", bar_data, error);
+	
 		
 	}
+
+	
 }
 
 // when the sales icon is clicked
@@ -813,6 +857,8 @@ void ken_app_main::on_add_sales(){
 
 
 	}
+
+	
 }
 
 void ken_app_main::on_appoinment(){
@@ -1848,5 +1894,6 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	
 	return true;
 }
+
 
 
