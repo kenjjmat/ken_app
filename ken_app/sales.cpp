@@ -30,9 +30,17 @@ void sales::on_add()
 
 	sales.id = unique_string_short();
 	sales_id = sales.id;
-    //setting the value of the cost which is gonna be unit price times quantity
-	// find a way how to type cast strings and muliply then
-	//getting the listview 
+
+	double unit_price, quantity;
+	std::stringstream ss;
+	ss << sales.Unit_price;
+	ss >> unit_price;
+
+	ss << sales.quantity;
+	ss >> quantity;
+
+	sales.Cost = unit_price * quantity;
+
 	std::vector<widgets::listview_column> columns;
 	std::vector<widgets::listview_row> data;
 

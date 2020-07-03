@@ -1642,6 +1642,7 @@ void ken_app_main::on_sales_list()
 		aliases.push_back("Sales/cost");
 		aliases.push_back("Sales/Quantity");
 		aliases.push_back("Sales/Item Name");
+		aliases.push_back("Sales/unit_price");
 		hide_info(aliases);
 	}
 }
