@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "state.h"
+#include <sstream>
 
 
 class sales : public gui {
