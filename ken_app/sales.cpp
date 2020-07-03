@@ -25,21 +25,24 @@ void sales::on_add()
 	// getting the edit box values
 	get_editbox_text(home_page_name + "/item_name_edit", sales.item_name, error);
 	get_editbox_text(home_page_name + "/unit_price_edit", sales.Unit_price, error);
-	get_editbox_text(home_page_name + "/cost_edit", sales.Cost, error);
 	get_editbox_text(home_page_name + "/quantity_edit", sales.quantity, error);
 
 	sales.id = unique_string_short();
 	sales_id = sales.id;
 
-	double unit_price, quantity;
+	double unit_price, quantity, answer;
 	std::stringstream ss;
 	ss << sales.Unit_price;
 	ss >> unit_price;
 
-	ss << sales.quantity;
-	ss >> quantity;
+	std::stringstream ff;
+	ff << sales.quantity;
+	ff >> quantity;
 
-	sales.Cost = unit_price * quantity;
+	answer = unit_price * quantity;
+	std::stringstream zz;
+	zz << answer;
+	zz >> sales.Cost;
 
 	std::vector<widgets::listview_column> columns;
 	std::vector<widgets::listview_row> data;
@@ -173,39 +176,13 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	unit_price.allowed_set = "0123456789";
 
 	home_page.add_editbox(unit_price);
-
-	// add caption for cost 
-	widgets::text cost_caption;
-	cost_caption.alias = "cost_caption";
-	cost_caption.text_value = "Cost";
-	cost_caption.color = color{ 180 , 180 , 180 };
-	cost_caption.rect.left = unit_price_caption.rect.right + 20;
-	cost_caption.rect.top = unit_price_caption.rect.top;
-	cost_caption.rect.set_height(20);
-	cost_caption.rect.set_width(100);
-
-	home_page.add_text(cost_caption);
-
-	// add cost textbox 
-	widgets::editbox cost;
-	cost.alias = "cost_edit";
-	cost.read_only = true;
-	cost.rect.left = cost_caption.rect.left;
-	cost.rect.top = cost_caption.rect.bottom + 3;
-	cost.rect.set_height(20);
-	cost.rect.set_width(100);
-	cost.allowed_set = "0123456789";
-
-	home_page.add_editbox(cost);
-
-
 	// add caption for quantity
 	widgets::text quantity_caption;
 	quantity_caption.alias = "quantity_caption";
 	quantity_caption.text_value = "Quantity";
 	quantity_caption.color = color{ 180 , 180 , 180 };
-	quantity_caption.rect.left = cost_caption.rect.right + 20;
-	quantity_caption.rect.top = cost_caption.rect.top;
+	quantity_caption.rect.left = unit_price_caption.rect.right + 50;
+	quantity_caption.rect.top = unit_price_caption.rect.top;
 	quantity_caption.rect.set_height(20);
 	quantity_caption.rect.set_width(80);
 
@@ -215,8 +192,8 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	// add a quantity textbox 
 	widgets::editbox quantity;
 	quantity.alias = "quantity_edit";
-	quantity.rect.left = cost.rect.right + 20;
-	quantity.rect.top = cost.rect.top;
+	quantity.rect.left = unit_price.rect.right + 20;
+	quantity.rect.top = unit_price.rect.top;
 	quantity.rect.set_height(20);
 	quantity.rect.set_width(90);
 	quantity.allowed_set = "0123456789";
@@ -226,7 +203,7 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	// add a button to add the added items into a listview
 	widgets::button add;
 	add.tooltip = "Add items";
-	add.rect.left = cost.rect.left;
+	add.rect.left = unit_price.rect.left;
 	add.rect.top = quantity.rect.bottom + 20;
 	add.rect.set_height(25);
 	add.rect.set_width(60);
@@ -240,8 +217,6 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	box.rects = {
 		unit_price.rect , 
 		unit_price_caption.rect , 
-		cost.rect , 
-		cost_caption.rect , 
 		quantity.rect , 
 		quantity_caption.rect , 
 		add.rect
