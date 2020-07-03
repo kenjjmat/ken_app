@@ -608,6 +608,7 @@ void ken_app_main::on_sales(){
 		sales_list.rect.set_height(400);
 		sales_list.rect.set_width(400);
 		sales_list.border = true;
+		sales_list.on_selection = [&]() {on_sales_list(); };
 		// on resize 
 		sales_list.on_resize.perc_h = 0;
 		sales_list.on_resize.perc_v = 5;
@@ -641,7 +642,7 @@ void ken_app_main::on_sales(){
 				}
 			}
 		}
-		sales_list.on_selection = [&]() {on_sales_list(); };
+		
 		page.add_listview(sales_list);
 		// adding widgets for displaying the information on the listview
 		// name caption

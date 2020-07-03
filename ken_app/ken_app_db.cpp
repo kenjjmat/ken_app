@@ -399,7 +399,7 @@ bool ken_app_db::get_sales(const std::string& sales_id, sales_details& sales, st
     if (!table.empty()) {
         sales_details sales_;
         sales_.id = table.at(0).at("ID");
-        sales_.item_name = table.at(0).at("Item_name");
+        sales_.item_name = table.at(0).at("Item_Name");
         sales_.quantity = table.at(0).at("Quantity");
         sales_.Unit_price = table.at(0).at("Unit_price");
         sales_.Cost = table.at(0).at("Cost");
