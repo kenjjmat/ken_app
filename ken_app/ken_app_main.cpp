@@ -1470,6 +1470,14 @@ void ken_app_main::on_users(){
 		add_page(page);
 	}
 	show_page("Users");
+	// for hiding all the pop up window for showing the username and password
+	std::vector<std::string> aliases;
+	aliases.push_back("Users/username_caption");
+	aliases.push_back("Users/password_caption");
+	aliases.push_back("Users/password");
+	aliases.push_back("Users/username");
+	hide_info(aliases);
+	
 }
 
 void ken_app_main::on_share(){
