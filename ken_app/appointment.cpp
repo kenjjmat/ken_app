@@ -155,7 +155,7 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	name_caption.alias = "name_caption";
 	name_caption.text_value = "Name";
 	name_caption.color = color{ 180 , 180 , 180 };
-	name_caption.rect.left = width()- 340;
+	name_caption.rect.left = width()- 330;
 	name_caption.rect.top = height() - 390;
 	name_caption.rect.set_height(20);
 	name_caption.rect.set_width(100);

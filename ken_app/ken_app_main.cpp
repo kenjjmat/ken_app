@@ -759,23 +759,23 @@ void ken_app_main::on_sales(){
 
 		page.add_text(quantity);
 
-		// adding a pie chart 
-		widgets::piechart pie;
-		pie.rect.left = sales_list.rect.right + 50 ;
-		pie.rect.top = sales_list.rect.top + 170;
-		pie.rect.set_height(225);
-		pie.rect.set_width(300);
-		pie.alias = "piechart";
-		pie.data.caption = "Sales statistics";
-		pie.data.autocolor = false;
-		pie.data.doughnut = true;
-		pie.data.on_hover = widgets::piechart_hover_effect::glow_and_shrink_others;
-		pie.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
-		pie.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
+		// adding a bar chart 
+		widgets::barchart bar;
+		bar.rect.left = sales_list.rect.right + 50 ;
+		bar.rect.top = sales_list.rect.top + 170;
+		bar.rect.set_height(225);
+		bar.rect.set_width(300);
+		bar.alias = "barchart";
+		bar.data.caption = "Sales statistics";
+		bar.data.autocolor = true;
+		bar.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		bar.on_resize.perc_v = sales_list.on_resize.perc_height - 50;
+		bar.on_resize.perc_height = 50;
+		bar.on_resize.perc_width = 50;
 		
 		
-		// assigning values to the pie chart 
-		std::vector< widgets::chart_entry> pie_data;
+		// assigning values to the bar chart 
+		std::vector< widgets::chart_entry> bar_data;
 		
 		// creating object for chart_entry 
 		widgets::chart_entry details;
@@ -789,23 +789,12 @@ void ken_app_main::on_sales(){
 		details_.label = "Total Cost";
 		details_.value = app_state_.quantity;
 
-		pie_data.push_back(details);
-		pie_data.push_back(details_);
+		bar_data.push_back(details);
+		bar_data.push_back(details_);
 
-		pie.data.slices = pie_data;
+		bar.data.bars = bar_data;
 
-		page.add_piechart(pie);
-
-		// wrapping the pie chart in a groupbox 
-		widgets::groupbox group;
-		group.color.blue;
-		group.rects = {
-			pie.rect
-		};
-		group.on_resize.perc_h = sales_list.on_resize.perc_width + 15;
-		group.on_resize.perc_v = sales_list.on_resize.perc_height + 5;
-
-		page.add_groupbox(group);
+		page.add_barchart(bar);
 
 		// adding the page to the window
 		add_page(page);
@@ -1117,12 +1106,14 @@ void ken_app_main::on_appoinment(){
 		bar.data.x_label = "Fields";
 		bar.data.y_label = "Data";
 		bar.data.caption = " appointment BarChart";
-		bar.rect.left = appointment_list.rect.right + 20;
-		bar.rect.top = appointment_list.rect.top;
-		bar.rect.set_height(300);
-		bar.rect.set_width(400);
+		bar.rect.left = appointment_list.rect.right + 50;
+		bar.rect.top = appointment_list.rect.top + 170;
+		bar.rect.set_height(225);
+		bar.rect.set_width(300);
 		bar.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
-		bar.on_resize.perc_v = appointment_list.on_resize.perc_height + 5;
+		bar.on_resize.perc_v = appointment_list.on_resize.perc_height - 50;
+		bar.on_resize.perc_height = 50;
+		bar.on_resize.perc_width = 50;
 
 		// setting out the bars in the barchart
 		std::vector<widgets::chart_entry>bar_data;
