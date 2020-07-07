@@ -41,7 +41,9 @@ void ken_app_new_user::on_save() {
 				prompt_params params;
 				params.type = gui::prompt_type::ok;
 				prompt(params, "Username already exists", "Please enter another username");
-				
+				set_focus(home_page_name + "/username_new_user");
+				set_editbox_text(home_page_name + "/username_new_user","", error);
+				break;
 			}
 			else
 			{
@@ -49,17 +51,13 @@ void ken_app_new_user::on_save() {
 					gui::prompt_params params;
 					params.type = gui::prompt_type::ok;
 					prompt(params, "Error", error);
+				
 				}
-			
+				stop();
 			}
-			break;
 		}
 
 	}
-
-	
-
-	stop();
     
 }
 

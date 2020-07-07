@@ -1377,57 +1377,39 @@ void ken_app_main::on_users(){
 					row.items.push_back({ "ID", users_.id });
 					row.items.push_back({ "Username", users_.username });
 					users_list.data.push_back(row);
+					app_state_.count++;
 				}
 			}
 		}
 		page.add_listview(users_list);
 
-		// adding a pie chart 
-		widgets::piechart pie;
-		pie.rect.left = users_list.rect.right + 50;
-		pie.rect.top = users_list.rect.top + 170;
-		pie.rect.set_height(225);
-		pie.rect.set_width(300);
-		pie.alias = "piechart";
-		pie.data.caption = "users statistics";
-		pie.data.autocolor = false;
-		pie.data.doughnut = true;
-		pie.data.on_hover = widgets::piechart_hover_effect::glow_and_shrink_others;
-		pie.on_resize.perc_h = users_list.on_resize.perc_width + 15;
-		pie.on_resize.perc_v = users_list.on_resize.perc_height + 5;
+		// adding a bar chart 
+		widgets::barchart bar;
+		bar.rect.left = users_list.rect.right + 50;
+		bar.rect.top = users_list.rect.top + 170;
+		bar.rect.set_height(225);
+		bar.rect.set_width(300);
+		bar.alias = "barchart";
+		bar.data.caption = "users Statistics";
+		bar.data.autocolor = true;
+		bar.on_resize.perc_h = users_list.on_resize.perc_width + 15;
+		bar.on_resize.perc_v = users_list.on_resize.perc_height + 5;
 
-		// assigning values to the pie chart 
-		std::vector< widgets::chart_entry> pie_data;
+		// assigning values to the bar chart 
+		std::vector< widgets::chart_entry> bar_data;
 
 		// creating object for chart_entry 
 		widgets::chart_entry details;
 		details.color = color{ 180 , 200 , 255 };
-		details.label = "Eat";
-		details.value = 50;
+		details.label = "Users";
+		details.value = app_state_.count;
 
-		// creating a second object of chart entry
-		widgets::chart_entry details_;
-		details_.color = color{ 180 , 180 , 180 };
-		details_.label = "Drinks";
-		details_.value = 50;
+		bar_data.push_back(details);
+	
 
-		pie_data.push_back(details);
-		pie_data.push_back(details_);
+		bar.data.bars = bar_data;
 
-		pie.data.slices = pie_data;
-
-		page.add_piechart(pie);
-
-		// wrapping the pie chart in a groupbox 
-		widgets::groupbox group;
-		group.color.blue;
-		group.rects = {
-			pie.rect
-		};
-		group.on_resize.perc_h = users_list.on_resize.perc_width + 15;
-		group.on_resize.perc_v = users_list.on_resize.perc_height + 5;
-
-		page.add_groupbox(group);
+		page.add_barchart(bar);
 
 		// adding the page to the window
 		add_page(page);
