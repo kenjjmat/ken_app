@@ -1355,7 +1355,7 @@ void ken_app_main::on_users(){
 		users_list.on_resize.perc_v = 5;
 		users_list.on_resize.perc_height = 90;
 		users_list.on_resize.perc_width = 25;
-
+		users_list.on_selection = [&]() {on_users_list(); };
 		
 
 		users_list.columns = {
@@ -1736,20 +1736,20 @@ void ken_app_main::on_users_list()
 {
 	std::vector<widgets::listview_row> rows;
 	std::string error;
-	get_listview_selected("Users/Stock_list", rows, error);
+	get_listview_selected("Users/users_list", rows, error);
 
 	if (rows.size() == 1) {
-		std::string stock_id;
+		std::string user_id;
 		for (auto& item : rows[0].items) {
 			if (item.column_name == "ID") {
-				stock_id = item.item_data;
+				user_id = item.item_data;
 				break;
 			}
 		}
 
-		if (!stock_id.empty()) {
-			ken_app_db::stock_details stock;
-			if (!app_state_.get_db().get_stock(stock_id, stock, error)) {
+		if (!user_id.empty()) {
+			ken_app_db::user_credentials users;
+			if (!app_state_.get_db().get_user(user_id, users, error)) {
 				prompt_params params;
 				params.type = gui::prompt_type::ok;
 				prompt(params, "Error", error);
@@ -1757,19 +1757,17 @@ void ken_app_main::on_users_list()
 			}
 
 			// setting the text of the widgets
-			set_text("Stock/Name", stock.name, error);
-			set_text("Stock/description_", stock.description, error);
-			set_text("Stock/Quantity", stock.quantity, error);
+			set_text("Users/username", users.username, error);
+			set_text("Users/password","**********", error);
+			
 
 			{
 				// showing the stock information
 				std::vector<std::string> aliases;
-				aliases.push_back("Stock/name_caption");
-				aliases.push_back("Stock/description_caption");
-				aliases.push_back("Stock/caption_quantity");
-				aliases.push_back("Stock/Name");
-				aliases.push_back("Stock/description_");
-				aliases.push_back("Stock/Quantity");
+				aliases.push_back("Users/username_caption");
+				aliases.push_back("Users/password_caption");
+				aliases.push_back("Users/password");
+				aliases.push_back("Users/username");
 				show_info(aliases);
 			}
 		}
@@ -1778,9 +1776,10 @@ void ken_app_main::on_users_list()
 	else {
 		// hiding the stock information
 		std::vector<std::string> aliases;
-		aliases.push_back("Stock/name_caption");
-		aliases.push_back("Stock/description_caption");
-		aliases.push_back("Stock/caption_quantity");
+		aliases.push_back("Users/username_caption");
+		aliases.push_back("Users/password_caption");
+		aliases.push_back("Users/password");
+		aliases.push_back("Users/username");
 		hide_info(aliases);
 	}
 }
