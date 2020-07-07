@@ -9,6 +9,7 @@ public :
 	// username and password
 	struct user_credentials {
 		std::string username;
+		std::string id;
 	};
 
 	// stock details

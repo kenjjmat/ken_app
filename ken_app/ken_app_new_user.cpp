@@ -31,13 +31,33 @@ void ken_app_new_user::on_save() {
 
 	ken_app_db::user_credentials user;
 	user.username = username;
+	user.id = unique_string_short();
 
-	if (!app_state_.get_db().new_user(user, password, error)) {
-		gui::prompt_params params;
-		params.type = gui::prompt_type::ok;
-		prompt(params, "Error", error);
+	std::vector<ken_app_db::user_credentials> users;
+	// checking to see if the username are not the same in the database 
+	if (app_state_.get_db().get_users(users, error)) {
+		for (auto& data : users) {
+			if (data.username == username) {
+				prompt_params params;
+				params.type = gui::prompt_type::ok;
+				prompt(params, "Username already exists", "Please enter another username");
+				
+			}
+			else
+			{
+				if (!app_state_.get_db().new_user(user, password, error)) {
+					gui::prompt_params params;
+					params.type = gui::prompt_type::ok;
+					prompt(params, "Error", error);
+				}
+			
+			}
+			break;
+		}
+
 	}
 
+	
 
 	stop();
     

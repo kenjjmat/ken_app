@@ -154,9 +154,10 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
 
     // users table
     if (!d_.sqlite_query("CREATE TABLE Users ("
+        "ID TEXT NOT NULL ,"
         "Username TEXT NOT NULL , "
         "Password TEXT NOT NULL,"
-        "PRIMARY KEY (Username)"
+        "PRIMARY KEY (ID)"
         ");", table, error)) {
         if (error.find("already exists") == std::string::npos)
             return false;
@@ -215,7 +216,7 @@ bool ken_app_db::new_user(const user_credentials& user, const std::string& passw
         return false;
     }
     table table;
-    auto new_user_ = d_.sqlite_query("INSERT INTO Users VALUES('"
+    auto new_user_ = d_.sqlite_query("INSERT INTO Users VALUES('" + user.id + "', '"
         + user.username + "' , '" + password + "');", table, error);
 
     return new_user_;
@@ -235,6 +236,7 @@ bool ken_app_db::get_users(std::vector<user_credentials>& users, std::string& er
     for (const auto& it : table) {
         user_credentials user;
         user.username = it.at("Username");
+        user.id = it.at("ID");
         users.push_back(user);
     }
 
@@ -261,7 +263,7 @@ bool ken_app_db::get_user(const std::string& username, const std::string& passwo
     return true;
 }
 
-bool ken_app_db::get_user(const std::string& username, user_credentials& user, std::string& error)
+bool ken_app_db::get_user(const std::string& id, user_credentials& user, std::string& error)
 {
 
     if (!d_.connected_) {
@@ -269,8 +271,8 @@ bool ken_app_db::get_user(const std::string& username, user_credentials& user, s
     }
 
     table table;
-    if (!d_.sqlite_query("SELECT * FROM Users WHERE Username ='"
-        + username + "';", table, error)) return false;
+    if (!d_.sqlite_query("SELECT * FROM Users WHERE ID ='"
+        + id + "';", table, error)) return false;
 
     if (table.empty()) {
         error = "Incorrect Credentials(Username or Password)";
@@ -278,6 +280,7 @@ bool ken_app_db::get_user(const std::string& username, user_credentials& user, s
     }
 
     user.username = table.at(0).at("Username");
+    user.id = table.at(0).at("ID");
 
 
     return true;

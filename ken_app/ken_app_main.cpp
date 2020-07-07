@@ -1347,7 +1347,7 @@ void ken_app_main::on_users(){
 		users_list.alias = "users_list";
 		users_list.rect.left = image.rect.right + 50;
 		users_list.rect.top = image.rect.top;
-		users_list.rect.set_height(300);
+		users_list.rect.set_height(400);
 		users_list.rect.set_width(400);
 		users_list.border = true;
 		// on resize 
@@ -1359,10 +1359,8 @@ void ken_app_main::on_users(){
 		
 
 		users_list.columns = {
-			app_state_.column_details("ID", 35 , widgets::listview_column_type::int_ ),
-			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
-			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
-			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_ )
+			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_ ),
+			app_state_.column_details("Username" , 300 , widgets::listview_column_type::string_)
 		};
 		users_list.unique_column_name = "ID";
 
@@ -1376,8 +1374,9 @@ void ken_app_main::on_users(){
 
 				for (const auto& users_ : users) {
 					widgets::listview_row row;
+					row.items.push_back({ "ID", users_.id });
 					row.items.push_back({ "Username", users_.username });
-				
+					users_list.data.push_back(row);
 				}
 			}
 		}
@@ -1385,10 +1384,10 @@ void ken_app_main::on_users(){
 
 		// adding a pie chart 
 		widgets::piechart pie;
-		pie.rect.left = users_list.rect.right + 20;
-		pie.rect.top = users_list.rect.top;
-		pie.rect.set_height(300);
-		pie.rect.set_width(400);
+		pie.rect.left = users_list.rect.right + 50;
+		pie.rect.top = users_list.rect.top + 170;
+		pie.rect.set_height(225);
+		pie.rect.set_width(300);
 		pie.alias = "piechart";
 		pie.data.caption = "users statistics";
 		pie.data.autocolor = false;
