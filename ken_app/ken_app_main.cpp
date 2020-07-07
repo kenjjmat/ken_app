@@ -1206,8 +1206,8 @@ void ken_app_main::on_add_appointment(){
 // on_clicking the users icon
 void ken_app_main::on_users(){
 
-	if (!page_exists("users")) {
-		page page("users");
+	if (!page_exists("Users")) {
+		page page("Users");
 
 
 		//add back icon 
@@ -1469,7 +1469,7 @@ void ken_app_main::on_users(){
 		// adding the page to the window
 		add_page(page);
 	}
-	show_page("users");
+	show_page("Users");
 }
 
 void ken_app_main::on_share(){
@@ -1728,6 +1728,59 @@ void ken_app_main::on_sales_list()
 		aliases.push_back("Sales/Quantity");
 		aliases.push_back("Sales/Item Name");
 		aliases.push_back("Sales/unit_price");
+		hide_info(aliases);
+	}
+}
+
+void ken_app_main::on_users_list()
+{
+	std::vector<widgets::listview_row> rows;
+	std::string error;
+	get_listview_selected("Users/Stock_list", rows, error);
+
+	if (rows.size() == 1) {
+		std::string stock_id;
+		for (auto& item : rows[0].items) {
+			if (item.column_name == "ID") {
+				stock_id = item.item_data;
+				break;
+			}
+		}
+
+		if (!stock_id.empty()) {
+			ken_app_db::stock_details stock;
+			if (!app_state_.get_db().get_stock(stock_id, stock, error)) {
+				prompt_params params;
+				params.type = gui::prompt_type::ok;
+				prompt(params, "Error", error);
+				return;
+			}
+
+			// setting the text of the widgets
+			set_text("Stock/Name", stock.name, error);
+			set_text("Stock/description_", stock.description, error);
+			set_text("Stock/Quantity", stock.quantity, error);
+
+			{
+				// showing the stock information
+				std::vector<std::string> aliases;
+				aliases.push_back("Stock/name_caption");
+				aliases.push_back("Stock/description_caption");
+				aliases.push_back("Stock/caption_quantity");
+				aliases.push_back("Stock/Name");
+				aliases.push_back("Stock/description_");
+				aliases.push_back("Stock/Quantity");
+				show_info(aliases);
+			}
+		}
+
+	}
+	else {
+		// hiding the stock information
+		std::vector<std::string> aliases;
+		aliases.push_back("Stock/name_caption");
+		aliases.push_back("Stock/description_caption");
+		aliases.push_back("Stock/caption_quantity");
 		hide_info(aliases);
 	}
 }
