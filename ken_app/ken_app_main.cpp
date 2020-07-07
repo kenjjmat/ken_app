@@ -1383,6 +1383,61 @@ void ken_app_main::on_users(){
 		}
 		page.add_listview(users_list);
 
+		// adding widgets for username and password 
+
+		// username caption
+		widgets::text username_caption;
+		username_caption.alias = "username_caption";
+		username_caption.text_value = "Username";
+		username_caption.rect.left = users_list.rect.right + margin + 40;
+		username_caption.rect.top = users_list.rect.top;
+		username_caption.rect.set_height(20);
+		username_caption.rect.set_width(300);
+		username_caption.color = { 180, 180 , 180 };
+		username_caption.on_resize.perc_h = users_list.on_resize.perc_width + 10;
+		username_caption.on_resize.perc_v = 0;
+
+		page.add_text(username_caption);
+
+		// username value text 
+		widgets::text username;
+		username.alias = "username";
+		username.rect.left = username_caption.rect.left;
+		username.rect.top = username_caption.rect.bottom + (margin / 2);
+		username.rect.set_height(20);
+		username.rect.set_width(300);
+		username.on_resize.perc_h = users_list.on_resize.perc_width + 10;
+		username.on_resize.perc_v = 0;
+
+		page.add_text(username);
+
+		// descritption caption
+		widgets::text passwordcaption;
+		passwordcaption.alias = "password_caption";
+		passwordcaption.text_value = "Password";
+		passwordcaption.rect.left = username.rect.left;
+		passwordcaption.rect.top = username.rect.bottom + margin;
+		passwordcaption.rect.set_height(20);
+		passwordcaption.rect.set_width(300);
+		passwordcaption.color = { 180 , 180 , 180 };
+		passwordcaption.on_resize.perc_h = users_list.on_resize.perc_width + 10;
+		passwordcaption.on_resize.perc_v = 5;
+		passwordcaption.on_resize.perc_height = 5;
+
+		page.add_text(passwordcaption);
+
+		// password text value 
+		widgets::text password;
+		password.alias = "password";
+		password.rect.left = passwordcaption.rect.left;
+		password.rect.top = passwordcaption.rect.bottom + (margin / 2);
+		password.rect.set_height(20);
+		password.rect.set_width(300);
+		password.on_resize.perc_h = users_list.on_resize.perc_width + 10;
+		password.on_resize.perc_v = 5;
+
+		page.add_text(password);
+
 		// adding a bar chart 
 		widgets::barchart bar;
 		bar.rect.left = users_list.rect.right + 50;
