@@ -1447,8 +1447,10 @@ void ken_app_main::on_users(){
 		bar.alias = "barchart";
 		bar.data.caption = "users Statistics";
 		bar.data.autocolor = true;
-		bar.on_resize.perc_h = users_list.on_resize.perc_width + 15;
-		bar.on_resize.perc_v = users_list.on_resize.perc_height + 5;
+		bar.on_resize.perc_h = users_list.on_resize.perc_width + 10;
+		bar.on_resize.perc_v = users_list.on_resize.perc_height - 50;
+		bar.on_resize.perc_height = 50;
+		bar.on_resize.perc_width = 50;
 
 		// assigning values to the bar chart 
 		std::vector< widgets::chart_entry> bar_data;
@@ -1459,6 +1461,13 @@ void ken_app_main::on_users(){
 		details.label = "Users";
 		details.value = app_state_.count;
 
+		// adding another bar 
+		widgets::chart_entry details2;
+		details2.color = color{ 180 , 200, 255 };
+		details2.label = "Stats";
+		details2.value = 10;
+
+		bar_data.push_back(details2);
 		bar_data.push_back(details);
 	
 
