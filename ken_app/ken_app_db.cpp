@@ -189,21 +189,19 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
         if (error.find("already exists") == std::string::npos) return false;
     }
 
-    // delelete the appointemnents table 
-    d_.sqlite_query("DROP TABLE Appointments", table, error);
-    // appointment details Table
-    if (!d_.sqlite_query("CREATE TABLE Appointment ("
-        "ID INTEGER NOT NULL, "
-        "Time TIME NOT NULL, "
-        "Date DATE NOT NULL, "
+    if (!d_.sqlite_query("CREATE TABLE Appointments ("
+        "ID TEXT NOT NULL, "
         "Name TEXT NOT NULL, "
-        "Surname TEXT NOT NULL , "
+        "Surname TEXT NOT NULL, "
         "Description TEXT NOT NULL , "
+        "Time TEXT NOT NULL , "
+        "Date TEXT NOT NULL , "
         "PRIMARY KEY (ID)"
         ");",
         table, error)) {
         if (error.find("already exists") == std::string::npos) return false;
     }
+    
 
     d_.connected_ = true;
     return true;
@@ -455,9 +453,9 @@ bool ken_app_db::new_appointment(const appointments_details& appointment_info, s
     }
 
     table table;
-    if (!d_.sqlite_query("INSERT INTO Appointment VALUES('"
-        +  appointment_info.time + "','" + appointment_info.id +"','"+ appointment_info.date +"' , '" + appointment_info.name + "' , '" + appointment_info.surname + "' , '" + appointment_info.description +
-        "');", table, error)) {
+    if (!d_.sqlite_query("INSERT INTO Appointments VALUES('"+ appointment_info.id 
+        +"','"+ appointment_info.name +"' , '" + appointment_info.surname + "' , '" + appointment_info.description + "' , '" + appointment_info.time +
+        "','"  +  appointment_info.date + "');", table, error)) {
         return false;
     }
 	return true;
@@ -479,7 +477,7 @@ bool ken_app_db::get_appointment(const std::string& appointment_id, appointments
 
     // reading the database 
     table table;
-    if (!d_.sqlite_query("SELECT * FROM Appointment WHERE  ID = '"
+    if (!d_.sqlite_query("SELECT * FROM Appointments WHERE  ID = '"
         + appointment_id + "';", table, error)) return false;
 
     // now assigning values from the database table to the struct stock details
@@ -509,7 +507,7 @@ bool ken_app_db::get_appointments(std::vector<appointments_details>& appointment
 
     // read the database 
     table table;
-    if (!d_.sqlite_query("SELECT * FROM Appointment;", table, error)) return false;
+    if (!d_.sqlite_query("SELECT * FROM Appointments;", table, error)) return false;
 
     if (!table.empty()) {
 

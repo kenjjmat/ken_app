@@ -36,7 +36,9 @@ void appointment::on_add()
 
     // converting time to string 
 	details.time = time_convert(time);
-      
+
+	// converting date to string 
+	details.date = date_convert(date);
 	
 	// assingning the id to be a unique number and assinging it to appointment id
 	details.id = unique_string_short();
@@ -340,12 +342,10 @@ std::string appointment::time_convert(time time)
 	min = std::to_string(time.minute);
 	sec = std::to_string(time.second);
 
-	if (time.hour < 10) {
-		hr += "0";
-	}
-	if (time.minute < 10) {
-		min += "0";
-	}
+	time.hour < 10 ? hr = "0" + hr : hr;
+
+	time.minute < 10 ? min = "0" + min : min;
+	
 
 	return hr + ":" + min;
 }
@@ -356,6 +356,8 @@ std::string appointment::date_convert(date date)
 	day = std::to_string(date.day);
 	yr = std::to_string(date.year);
 	
+	date.day < 10 ?  day = "0" + day : day;
+
 	switch (date.month)
 	{
 	case month::january :
