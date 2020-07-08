@@ -48,6 +48,7 @@ class ken_app_main : public gui {
 
 	// function for on_selection of the listviews
 	void on_stock_list();
+	void on_appointment_list();
 	void on_sales_list();
 	void on_users_list();
 

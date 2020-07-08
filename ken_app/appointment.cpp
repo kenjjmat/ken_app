@@ -297,12 +297,12 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	appointment_list.alias = "appointment_list";
 
 	appointment_list.columns = {
-		app_state_.column_details("ID", 60 , widgets::listview_column_type::int_),
+		app_state_.column_details("ID", 100 , widgets::listview_column_type::int_),
 		app_state_.column_details("Time", 80 , widgets::listview_column_type::string_),
 		app_state_.column_details("Date", 80 , widgets::listview_column_type::string_),
-		app_state_.column_details( "Name" , 180  , widgets::listview_column_type::string_),
+		app_state_.column_details( "Name" , 100  , widgets::listview_column_type::string_),
 		app_state_.column_details("Surname" , 100 , widgets::listview_column_type::string_),
-		app_state_.column_details("Description", 200 , widgets::listview_column_type::string_)
+		app_state_.column_details("Description", 100 , widgets::listview_column_type::string_)
 	};
 
 	appointment_list.unique_column_name = "ID";
