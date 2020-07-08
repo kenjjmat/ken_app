@@ -235,11 +235,11 @@ bool sales::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	listview.rect.set_height(150);
 	listview.rect.set_width(330);
 	listview.columns = {
-		app_state_.column_details("ID", 50 , widgets::listview_column_type::int_),
-		app_state_.column_details("Item Name", 100 , widgets::listview_column_type::string_),
-		app_state_.column_details("Unit Price", 50 , widgets::listview_column_type::int_),
-		app_state_.column_details("Cost", 50 , widgets::listview_column_type::int_),
-		app_state_.column_details("Quantity", 50 , widgets::listview_column_type::int_)
+		app_state_.column_details("ID", 50 , widgets::listview_column_type::int_, color { 0, 0, 0}),
+		app_state_.column_details("Item Name", 100 , widgets::listview_column_type::string_, color { 0, 0, 0}),
+		app_state_.column_details("Unit Price", 50 , widgets::listview_column_type::int_, color { 0, 0, 0}),
+		app_state_.column_details("Cost", 50 , widgets::listview_column_type::int_, color { 0, 0, 0}),
+		app_state_.column_details("Quantity", 50 , widgets::listview_column_type::int_,color { 0, 0, 0})
 	};
 	home_page.add_listview(listview);
 

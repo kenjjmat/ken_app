@@ -217,10 +217,10 @@ bool stock::layout(gui::page& persistent_page, gui::page& home_page, std::string
 	listview.rect.set_width(330);
 
 	listview.columns = {
-	app_state_.column_details("ID", 100 , widgets::listview_column_type::string_),
-	app_state_.column_details("Name", 100 , widgets::listview_column_type::string_),
-	app_state_.column_details("Description", 100 , widgets::listview_column_type::string_),
-	app_state_.column_details("Quantity", 80 , widgets::listview_column_type::int_)
+	app_state_.column_details("ID", 100 , widgets::listview_column_type::string_, color { 0, 0, 0}),
+	app_state_.column_details("Name", 100 , widgets::listview_column_type::string_, color { 0, 0, 0}),
+	app_state_.column_details("Description", 100 , widgets::listview_column_type::string_, color { 0, 0, 0}),
+	app_state_.column_details("Quantity", 80 , widgets::listview_column_type::int_,color { 0, 0, 0})
 	};
 
 	home_page.add_listview(listview);

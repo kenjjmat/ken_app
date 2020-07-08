@@ -1649,7 +1649,7 @@ void ken_app_main::on_users(){
 	aliases.push_back("Users/password");
 	aliases.push_back("Users/username");
 	hide_info(aliases);
-	
+	app_state_.count = 0;
 }
 
 void ken_app_main::on_share(){
@@ -2159,11 +2159,30 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.gridlines= true;
  
 	list_appointments.columns = {
-	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_, color {236 ,28, 36}),
-	   app_state_.column_details("Date", 100 , widgets::listview_column_type::string_, color {236 ,28, 36} ),
-	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_, color {236 ,28, 36}),
-	   app_state_.column_details("Description", 400, widgets::listview_column_type::string_, color {236 ,28, 36})
+	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_,  {236 ,28, 36}),
+	   app_state_.column_details("Date", 100 , widgets::listview_column_type::string_,  {236 ,28, 36} ),
+	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_, {236 ,28, 36}),
+	   app_state_.column_details("Description", 400, widgets::listview_column_type::string_, {236 ,28, 36})
 	};
+
+
+	std::vector<ken_app_db::appointments_details> appointment;
+
+	if (app_state_.get_db().get_appointments(appointment, error)) {
+
+
+		for (const auto& appointment_ : appointment) {
+			widgets::listview_row row;
+			row.items.push_back({ "ID", appointment_.id });
+			row.items.push_back({ "Time", appointment_.time });
+			row.items.push_back({ "Date", appointment_.date });
+			row.items.push_back({ "Name" , appointment_.name });
+			row.items.push_back({ "Surname", appointment_.surname });
+			row.items.push_back({ "Description" , appointment_.description });
+			list_appointments.data.push_back(row);
+		
+		}
+	}
 
 	list_appointments.on_resize.perc_height = 80;
 	list_appointments.on_resize.perc_width = 25;
