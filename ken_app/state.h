@@ -50,11 +50,12 @@ public :
 	}
 
 	// for assigning values to the listview columns
-	auto column_details(std::string name, int width, widgets::listview_column_type type) {
+	auto column_details(std::string name, int width, widgets::listview_column_type type, color color) {
 		widgets::listview_column col;
 		col.name = name;
 		col.width = width;
 		col.type = type;
+		col.color_text = color;
 
 		return col;
 	}

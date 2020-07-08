@@ -194,10 +194,10 @@ void ken_app_main::on_stock() {
 
 
 		stock_list.columns = {
-			app_state_.column_details("ID", 80 , widgets::listview_column_type::int_),
-			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_),
-			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_),
-			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_)
+			app_state_.column_details("ID", 80 , widgets::listview_column_type::int_,color {0, 0 , 0}),
+			app_state_.column_details("Name" , 170 , widgets::listview_column_type::string_, color {0, 0 , 0}),
+			app_state_.column_details("Description" , 200 , widgets::listview_column_type::string_, color {0, 0 , 0}),
+			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_, color {0, 0 , 0})
 		};
 		stock_list.unique_column_name = "ID";
 
@@ -618,11 +618,11 @@ void ken_app_main::on_sales(){
 		appointment_list.on_resize.perc_width = 25;
 
 		appointment_list.columns = {
-			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_ ),
-			app_state_.column_details("Item Name" , 110 , widgets::listview_column_type::string_),
-			app_state_.column_details("Unit Price" , 100 , widgets::listview_column_type::string_),
-			app_state_.column_details("Cost" , 100 , widgets::listview_column_type::string_),
-			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_)
+			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_ , color {0, 0 , 0}),
+			app_state_.column_details("Item Name" , 110 , widgets::listview_column_type::string_, color {0, 0 , 0}),
+			app_state_.column_details("Unit Price" , 100 , widgets::listview_column_type::string_, color {0, 0 , 0}),
+			app_state_.column_details("Cost" , 100 , widgets::listview_column_type::string_,color {0, 0 , 0}),
+			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_, color {0, 0 , 0})
 		};
 		appointment_list.unique_column_name = "ID";
 
@@ -1069,12 +1069,12 @@ void ken_app_main::on_appoinment(){
 
 
 		appointment_list.columns = {
-			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_ ),
-			app_state_.column_details("Name" , 100 , widgets::listview_column_type::string_),
-			app_state_.column_details("Surname" , 100  , widgets::listview_column_type::string_),
-			app_state_.column_details("Time" , 100 , widgets::listview_column_type::string_),
-			app_state_.column_details("Date" , 100 , widgets::listview_column_type::string_),
-			app_state_.column_details("Description" , 150 , widgets::listview_column_type::string_),
+			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_,color {0, 0 , 0}),
+			app_state_.column_details("Name" , 100 , widgets::listview_column_type::string_,color {0, 0 , 0}),
+			app_state_.column_details("Surname" , 100  , widgets::listview_column_type::string_,color {0, 0 , 0}),
+			app_state_.column_details("Time" , 100 , widgets::listview_column_type::string_,color {0, 0 , 0}),
+			app_state_.column_details("Date" , 100 , widgets::listview_column_type::string_,color {0, 0 , 0}),
+			app_state_.column_details("Description" , 150 , widgets::listview_column_type::string_,color {0, 0 , 0}),
 		};
 		appointment_list.unique_column_name = "ID";
 
@@ -1124,7 +1124,7 @@ void ken_app_main::on_appoinment(){
 		time_caption.rect.set_height(20);
 		time_caption.rect.set_width(100);
 		time_caption.color = { 180, 180 , 180 };
-		time_caption.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		time_caption.on_resize.perc_h = appointment_list.on_resize.perc_width + 25;
 		time_caption.on_resize.perc_v = 0;
 		page.add_text(time_caption);
 
@@ -1136,7 +1136,7 @@ void ken_app_main::on_appoinment(){
 		name.rect.top = name_caption.rect.bottom + (margin / 2);
 		name.rect.set_height(20);
 		name.rect.set_width(100);
-		name.on_resize.perc_h = appointment_list.on_resize.perc_width + 25;
+		name.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
 		name.on_resize.perc_v = 0;
 
 		page.add_text(name);
@@ -1522,8 +1522,8 @@ void ken_app_main::on_users(){
 		
 
 		users_list.columns = {
-			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_ ),
-			app_state_.column_details("Username" , 300 , widgets::listview_column_type::string_)
+			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_, color {0, 0 , 0}),
+			app_state_.column_details("Username" , 300 , widgets::listview_column_type::string_, color {0, 0 , 0})
 		};
 		users_list.unique_column_name = "ID";
 
@@ -2159,9 +2159,10 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.gridlines= true;
  
 	list_appointments.columns = {
-	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_),
-	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_),
-	   app_state_.column_details("Description", 400, widgets::listview_column_type::string_)
+	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_, color {236 ,28, 36}),
+	   app_state_.column_details("Date", 100 , widgets::listview_column_type::string_, color {236 ,28, 36} ),
+	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_, color {236 ,28, 36}),
+	   app_state_.column_details("Description", 400, widgets::listview_column_type::string_, color {236 ,28, 36})
 	};
 
 	list_appointments.on_resize.perc_height = 80;
