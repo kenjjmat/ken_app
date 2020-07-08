@@ -25,14 +25,18 @@ void appointment::on_add()
 	// declaring the values that we gonna get form the textbox
 	ken_app_db::appointments_details details;
 	std::string appointment_id , error;
+	time time;
+	date date;
 	
 	get_editbox_text(home_page_name + "/name_edit", details.name, error);
 	get_editbox_text(home_page_name + "/surname_edit", details.surname, error);
 	get_editbox_text(home_page_name + "/description_edit", details.description, error);
-	get_editbox_text(home_page_name + "/time_edit",details.time, error);
-	get_editbox_text(home_page_name + "/date_edit", details.date, error);
+	get_time(home_page_name + "/time_edit", time, error);
+	get_date(home_page_name + "/date_edit", date, error);
 
-	
+    // converting time to string 
+	details.time = time_convert(time);
+      
 	
 	// assingning the id to be a unique number and assinging it to appointment id
 	details.id = unique_string_short();
@@ -155,8 +159,8 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 	name_caption.alias = "name_caption";
 	name_caption.text_value = "Name";
 	name_caption.color = color{ 180 , 180 , 180 };
-	name_caption.rect.left = width()- 330;
-	name_caption.rect.top = height() - 390;
+	name_caption.rect.left = margin;
+	name_caption.rect.top = margin;
 	name_caption.rect.set_height(20);
 	name_caption.rect.set_width(100);
 
@@ -234,24 +238,24 @@ bool appointment::layout(gui::page& persistent_page, gui::page& home_page, std::
 
 
 	// add a quantity textbox 
-	widgets::editbox date;
+	widgets::date date;
 	date.alias = "date_edit";
 	date.rect.left = description.rect.right + 40;
 	date.rect.top = description.rect.top;
 	date.rect.set_height(20);
 	date.rect.set_width(80);
 
-	home_page.add_editbox(date);
+	home_page.add_date(date);
 
 	// add a time textbox for selecting 
-	widgets::editbox time;
+	widgets::time time;
 	time.alias = "time_edit";
 	time.rect.left = date.rect.left;
 	time.rect.top = date.rect.bottom + 6;
 	time.rect.set_height(20);
 	time.rect.set_width(80);
 
-	home_page.add_editbox(time);
+	home_page.add_time(time);
 
 	// add a button to add the added items into a listview
 	widgets::button add;
@@ -328,3 +332,85 @@ const ken_app_db::appointments_details& appointment::get_details()
 {
 	return details_;
 }
+
+std::string appointment::time_convert(time time)
+{
+	std::string hr, min, sec;
+	hr = std::to_string(time.hour);
+	min = std::to_string(time.minute);
+	sec = std::to_string(time.second);
+
+	if (time.hour < 10) {
+		hr += "0";
+	}
+	if (time.minute < 10) {
+		min += "0";
+	}
+
+	return hr + ":" + min;
+}
+
+std::string appointment::date_convert(date date)
+{
+	std::string day, yr, mt;
+	day = std::to_string(date.day);
+	yr = std::to_string(date.year);
+	
+	switch (date.month)
+	{
+	case month::january :
+		mt = "01";
+		break;
+
+	case month::february:
+		mt = "02";
+		break;
+	
+	case month::march:
+		mt = "03";
+		break;
+
+	case month::april:
+		mt = "04";
+		break;
+
+	case month::may:
+		mt = "05";
+		break;
+
+	case month::june:
+		mt = "06";
+		break;
+
+	case month::july:
+		mt = "07";
+		break;
+
+	case month::august:
+		mt = "08";
+		break;
+
+	case month::september:
+		mt = "09";
+		break;
+
+	case month::october:
+		mt = "10";
+		break;
+
+	case month::november:
+		mt = "11";
+		break;
+
+	case month::december:
+		mt = "12";
+		break;
+	default:
+		break;
+	}
+
+	return day + "/" + mt + "/" + yr;
+    
+}
+
+

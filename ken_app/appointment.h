@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "state.h"
+#include <sstream>
 
 
 class appointment : public gui {
@@ -33,6 +34,10 @@ public:
 		std::string& error)override;
 	bool saved();
 	const ken_app_db::appointments_details& get_details();
+     
+   // function for converting time and date to string 
+	std::string time_convert(time time);
+	std::string date_convert(date date);
 
 private:
 	 ken_app_db::appointments_details details_;

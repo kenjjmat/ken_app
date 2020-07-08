@@ -189,6 +189,8 @@ bool ken_app_db::connect(const std::string& file_name, const std::string& passwo
         if (error.find("already exists") == std::string::npos) return false;
     }
 
+    // delelete the appointemnents table 
+    d_.sqlite_query("DROP TABLE Appointments", table, error);
     // appointment details Table
     if (!d_.sqlite_query("CREATE TABLE Appointment ("
         "ID INTEGER NOT NULL, "
