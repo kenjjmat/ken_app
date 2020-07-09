@@ -599,32 +599,32 @@ void ken_app_main::on_sales(){
 		image_delete.color.color_border_hot = image_delete.color.color_border;
 		image_delete.color_background_hot = image_delete.color_background_hot;
 		image_delete.tight_fit = true;
-
+		image_delete.on_click = [&]() {on_delete_sales(); };
 		page.add_image(image_delete);
 
-		// add stock listview 
-		widgets::listview appointment_list;
-		appointment_list.alias = "appointment_list_main";
-		appointment_list.rect.left = image.rect.right + 50;
-		appointment_list.rect.top = image.rect.top;
-		appointment_list.rect.set_height(400);
-		appointment_list.rect.set_width(400);
-		appointment_list.border = true;
-		appointment_list.on_selection = [&]() {on_appointment_list(); };
+		// add sales listview 
+		widgets::listview sales_list;
+		sales_list.alias = "sales_list_main";
+		sales_list.rect.left = image.rect.right + 50;
+		sales_list.rect.top = image.rect.top;
+		sales_list.rect.set_height(400);
+		sales_list.rect.set_width(400);
+		sales_list.border = true;
+		sales_list.on_selection = [&]() {on_sales_list(); };
 		// on resize 
-		appointment_list.on_resize.perc_h = 0;
-		appointment_list.on_resize.perc_v = 5;
-		appointment_list.on_resize.perc_height = 90;
-		appointment_list.on_resize.perc_width = 25;
+		sales_list.on_resize.perc_h = 0;
+		sales_list.on_resize.perc_v = 5;
+		sales_list.on_resize.perc_height = 90;
+		sales_list.on_resize.perc_width = 25;
 
-		appointment_list.columns = {
+		sales_list.columns = {
 			app_state_.column_details("ID", 100 , widgets::listview_column_type::int_ , color {0, 0 , 0}),
 			app_state_.column_details("Item Name" , 110 , widgets::listview_column_type::string_, color {0, 0 , 0}),
 			app_state_.column_details("Unit Price" , 100 , widgets::listview_column_type::string_, color {0, 0 , 0}),
 			app_state_.column_details("Cost" , 100 , widgets::listview_column_type::string_,color {0, 0 , 0}),
 			app_state_.column_details("Quantity" , 100  , widgets::listview_column_type::int_, color {0, 0 , 0})
 		};
-		appointment_list.unique_column_name = "ID";
+		sales_list.unique_column_name = "ID";
 
 		{
 			std::vector<ken_app_db::sales_details> sales;
@@ -635,12 +635,12 @@ void ken_app_main::on_sales(){
 
 				for (const auto& sales_ : sales) {
 					widgets::listview_row row;
-					row.items.push_back({ "ID", sales_.id });
+					row.items.push_back({ "ID", sales_.id , true , color {255, 0, 0} });
 					row.items.push_back({ "Item Name" , sales_.item_name });
 					row.items.push_back({ "Quantity" , sales_.quantity });
 					row.items.push_back({ "Unit Price", sales_.Unit_price });
 					row.items.push_back({ "Cost"	, sales_.Cost });
-					appointment_list.data.push_back(row);
+					sales_list.data.push_back(row);
 
 					// counting the sales and cost
 					app_state_.count++;
@@ -654,18 +654,18 @@ void ken_app_main::on_sales(){
 			}
 		}
 		
-		page.add_listview(appointment_list);
+		page.add_listview(sales_list);
 		// adding widgets for displaying the information on the listview
 		// name caption
 		widgets::text name_caption;
 		name_caption.alias = "name_caption";
 		name_caption.text_value = "Item Name";
-		name_caption.rect.left = appointment_list.rect.right + margin + 40;
-		name_caption.rect.top = appointment_list.rect.top;
+		name_caption.rect.left = sales_list.rect.right + margin + 40;
+		name_caption.rect.top = sales_list.rect.top;
 		name_caption.rect.set_height(20);
 		name_caption.rect.set_width(100);
 		name_caption.color = { 180, 180 , 180 };
-		name_caption.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		name_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		name_caption.on_resize.perc_v = 0;
 		page.add_text(name_caption);
 
@@ -678,7 +678,7 @@ void ken_app_main::on_sales(){
 		cost_caption.rect.set_height(20);
 		cost_caption.rect.set_width(100);
 		cost_caption.color = { 180, 180 , 180 };
-		cost_caption.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		cost_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		cost_caption.on_resize.perc_v = 0;
 		page.add_text(cost_caption);
 	
@@ -690,7 +690,7 @@ void ken_app_main::on_sales(){
 		name.rect.top = name_caption.rect.bottom + (margin / 2);
 		name.rect.set_height(20);
 		name.rect.set_width(300);
-		name.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		name.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		name.on_resize.perc_v = 0;
 
 		page.add_text(name);
@@ -702,7 +702,7 @@ void ken_app_main::on_sales(){
 		cost.rect.top = cost_caption.rect.bottom + (margin / 2);
 		cost.rect.set_height(20);
 		cost.rect.set_width(300);
-		cost.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		cost.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		cost.on_resize.perc_v = 0;
 
 		page.add_text(cost);
@@ -716,7 +716,7 @@ void ken_app_main::on_sales(){
 		unit_price_caption.rect.set_height(20);
 		unit_price_caption.rect.set_width(300);
 		unit_price_caption.color = { 180 , 180 , 180 };
-		unit_price_caption.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		unit_price_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		unit_price_caption.on_resize.perc_v = 5;
 
 		page.add_text(unit_price_caption);
@@ -728,7 +728,7 @@ void ken_app_main::on_sales(){
 		unit_price_.rect.top = unit_price_caption.rect.bottom + (margin / 2);
 		unit_price_.rect.set_height(20);
 		unit_price_.rect.set_width(300);
-		unit_price_.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		unit_price_.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		unit_price_.on_resize.perc_v = 5;
 
 		page.add_text(unit_price_);
@@ -742,7 +742,7 @@ void ken_app_main::on_sales(){
 		quantity_caption.rect.set_height(20);
 		quantity_caption.rect.set_width(300);
 		quantity_caption.color = { 180 , 180 , 180 };
-		quantity_caption.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		quantity_caption.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		quantity_caption.on_resize.perc_v = 5;
 
 		page.add_text(quantity_caption);
@@ -754,22 +754,22 @@ void ken_app_main::on_sales(){
 		quantity.rect.top = quantity_caption.rect.bottom + (margin / 2);
 		quantity.rect.set_height(20);
 		quantity.rect.set_width(300);
-		quantity.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
+		quantity.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
 		quantity.on_resize.perc_v = 5;
 
 		page.add_text(quantity);
 
 		// adding a bar chart 
 		widgets::barchart bar;
-		bar.rect.left = appointment_list.rect.right + 50 ;
-		bar.rect.top = appointment_list.rect.top + 170;
+		bar.rect.left = sales_list.rect.right + 50 ;
+		bar.rect.top = sales_list.rect.top + 170;
 		bar.rect.set_height(225);
 		bar.rect.set_width(300);
 		bar.alias = "barchart";
 		bar.data.caption = "Sales statistics";
 		bar.data.autocolor = true;
-		bar.on_resize.perc_h = appointment_list.on_resize.perc_width + 10;
-		bar.on_resize.perc_v = appointment_list.on_resize.perc_height - 50;
+		bar.on_resize.perc_h = sales_list.on_resize.perc_width + 10;
+		bar.on_resize.perc_v = sales_list.on_resize.perc_height - 50;
 		bar.on_resize.perc_height = 50;
 		bar.on_resize.perc_width = 50;
 		
@@ -847,7 +847,7 @@ void ken_app_main::on_add_sales(){
 		if (app_state_.get_db().get_sales_all(sales_, error)) {
 			for (const auto& details : sales_) {
 
-				row.items.push_back({ "ID", details.id });
+				row.items.push_back({ "ID", details.id, true , color {255, 0, 0} });
 				row.items.push_back({ "Item Name", details.item_name });
 				row.items.push_back({ "Unit Price", details.Unit_price });
 				row.items.push_back({ "Cost", details.Cost });
@@ -865,34 +865,39 @@ void ken_app_main::on_add_sales(){
 		}
 		repopulate_listview("Sales/appointment_list_main", data, error);
 
-	   // reloading the piechart if new items are added into the database
-		widgets::piechart_data pie_data;
-		pie_data.autocolor = true;
-		pie_data.caption = "Sales Piechart";
-		pie_data.doughnut = true;
+		widgets::barchart_data  bar_data;
+		bar_data.autocolor = false;
+		bar_data.autoscale = true;
+		bar_data.caption = "Sales Barchart";
+		bar_data.x_label = "Fields";
+		bar_data.y_label = "Data";
 
-		std::vector< widgets::chart_entry> pie_data_;
 
-		// creating object for chart_entry 
-		widgets::chart_entry details;
-		details.color = color{ 180 , 200 , 255 };
-		details.label = "Sales";
-		details.value = app_state_.count;
+		// setting out the bars in the barchart
+		std::vector<widgets::chart_entry>bar_data_;
 
-		// creating a second object of chart entry
-		widgets::chart_entry details_;
-		details_.color = color{ 180 , 180 , 180 };
-		details_.label = "Total Cost";
-		details_.value = app_state_.quantity;
+		// creating object for the chart entry
+		widgets::chart_entry entry;
+		entry.color = { 180 , 180, 180 };
+		entry.label = "Sales";
+		entry.value = app_state_.count;
+		bar_data_.push_back(entry);
 
-		pie_data_.push_back(details);
-		pie_data_.push_back(details_);
 
-		pie_data.slices = pie_data_;
-		piechart_reload("Sales/piechart", pie_data, error);
+		//creating a new object of chart entry 
+		widgets::chart_entry entry2;
+		entry2.label = "Stats";
+		entry2.value = app_state_.quantity;
+		entry2.color = { 180, 200, 255 };
+		bar_data_.push_back(entry2);
+		bar_data.bars = bar_data_;
+
+		
+		barchart_reload("Sales/barchart", bar_data, error);
 
 
 	}
+	
 	// reseting the variables to zero
 	app_state_.count = 0;
 	app_state_.quantity = 0;
@@ -1918,8 +1923,65 @@ void ken_app_main::on_appointment_list()
 	}
 }
 
-void ken_app_main::on_sales_list()
-{
+void ken_app_main::on_sales_list(){
+	std::vector<widgets::listview_row> rows;
+	std::string error;
+	get_listview_selected("Sales/sales_list_main", rows, error);
+
+	if (rows.size() == 1) {
+		std::string id;
+		for (auto& item : rows[0].items) {
+			if (item.column_name == "ID") {
+				id = item.item_data;
+				break;
+			}
+		}
+
+		if (!id.empty()) {
+			ken_app_db::sales_details sales;
+			if (!app_state_.get_db().get_sales(id, sales, error)) {
+				prompt_params params;
+				params.type = gui::prompt_type::ok;
+				prompt(params, "Error", error);
+				return;
+			}
+
+			// setting the text of the widgets
+			set_text("Sales/Item Name", sales.item_name, error);
+			set_text("Sales/Item Name", sales.item_name, error);
+			set_text("Sales/unit_price", sales.Unit_price, error);
+			set_text("Sales/Quantity", sales.quantity, error);
+			set_text("Sales/cost", sales.Cost, error);
+
+			{
+				// showing the stock information
+				std::vector<std::string> aliases;
+				aliases.push_back("Sales/name_caption");
+				aliases.push_back("Sales/unit_price_caption");
+				aliases.push_back("Sales/caption_quantity");
+				aliases.push_back("Sales/caption_cost");
+				aliases.push_back("Sales/cost");
+				aliases.push_back("Sales/Quantity");
+				aliases.push_back("Sales/Item Name");
+				aliases.push_back("Sales/unit_price");
+				show_info(aliases);
+			}
+		}
+
+	}
+	else {
+		// hiding the stock information
+		std::vector<std::string> aliases;
+		aliases.push_back("Sales/name_caption");
+		aliases.push_back("Sales/unit_price_caption");
+		aliases.push_back("Sales/caption_quantity");
+		aliases.push_back("Sales/caption_cost");
+		aliases.push_back("Sales/cost");
+		aliases.push_back("Sales/Quantity");
+		aliases.push_back("Sales/Item Name");
+		aliases.push_back("Sales/unit_price");
+		hide_info(aliases);
+	}
 }
 
 void ken_app_main::on_users_list()
@@ -2035,6 +2097,91 @@ void ken_app_main::update_homepage(){
 
 	//adding the data to the listview
 	repopulate_listview(home_page_name + "/list_appointments", data, error);
+}
+
+void ken_app_main::on_delete_sales(){
+	// function for deleting information from the database
+	std::string error, sales_id;
+	std::vector< widgets::listview_row> rows;
+	get_listview_selected("Sales/appointment_list_main", rows, error);
+
+	// getting the information from the database	
+	for (const auto& row : rows) {
+		ken_app_db::sales_details details;
+		widgets::listview_item items;
+
+		for (const auto& item_ : row.items) {
+			if (item_.column_name == "ID")
+				sales_id = item_.item_data;
+		}
+		std::string name = "Sales";
+		{
+			prompt_params params;
+			params.type = gui::prompt_type::yes_no;
+			if (prompt(params, "DELETE", "Do you want to delete")) {
+				if (!app_state_.get_db().delete_item(sales_id, name, error)) {
+					prompt_params params;
+					params.type = gui::prompt_type::ok;
+					prompt(params, "Error", error);
+				}
+
+			}
+		}
+	
+	}
+
+	//getting the data from the database 
+	std::vector<widgets::listview_row> data;
+	std::vector<ken_app_db::sales_details> sales_;
+	widgets::listview_row row;
+	if (app_state_.get_db().get_sales_all(sales_, error)) {
+		for (const auto& details : sales_) {
+
+			row.items.push_back({ "ID", details.id , true , color {255, 0, 0} });
+			row.items.push_back({ "Item Name", details.item_name });
+			row.items.push_back({ "Unit Price", details.Unit_price });
+			row.items.push_back({ "Cost", details.Cost });
+			row.items.push_back({ "Quantity", details.quantity });
+			data.push_back(row);
+			// counting the sales and cost
+			app_state_.count++;
+			double cost;
+			std::stringstream ss;
+			ss << details.Cost;
+			ss >> cost;
+			app_state_.quantity += cost;
+		}
+	}
+	repopulate_listview("Sales/appointment_list_main", data, error);
+	widgets::barchart_data  bar_data;
+	bar_data.autocolor = false;
+	bar_data.autoscale = true;
+	bar_data.caption = "Sales Barchart";
+	bar_data.x_label = "Fields";
+	bar_data.y_label = "Data";
+
+
+	// setting out the bars in the barchart
+	std::vector<widgets::chart_entry>bar_data_;
+
+	// creating object for the chart entry
+	widgets::chart_entry entry;
+	entry.color = { 180 , 180, 180 };
+	entry.label = "Sales";
+	entry.value = app_state_.count;
+	bar_data_.push_back(entry);
+
+
+	//creating a new object of chart entry 
+	widgets::chart_entry entry2;
+	entry2.label = "Stats";
+	entry2.value = app_state_.quantity;
+	entry2.color = { 180, 200, 255 };
+	bar_data_.push_back(entry2);
+	bar_data.bars = bar_data_;
+
+
+	barchart_reload("Sales/barchart", bar_data, error);
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
