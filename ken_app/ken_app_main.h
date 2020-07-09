@@ -52,6 +52,7 @@ class ken_app_main : public gui {
 	void on_sales_list();
 	void on_users_list();
 	void on_appointment_completed();
+	void update_homepage();
 
 public :
 	ken_app_main(const std::string& guid, state& app_state );

@@ -915,8 +915,7 @@ void ken_app_main::on_appoinment(){
 		back.rect.set_width(40);
 		back.on_click = [&]() {
 			show_previous_page();
-			// to-do::
-			// this is where you put the code for updating the home page when there are new appointments to be put on the home page
+			update_homepage();
 		};
 
 		page.add_image(back);
@@ -1332,7 +1331,7 @@ void ken_app_main::on_add_appointment(){
 		}
 
 		//adding the data to the listview
-		repopulate_listview("Appointment/Appointment_page_list", data, error);
+		repopulate_listview("Appointment/appointment_page_list", data, error);
 		widgets::barchart_data  bar_data;
 		bar_data.autocolor = false;
 		bar_data.autoscale = true;
@@ -1977,12 +1976,14 @@ void ken_app_main::on_users_list()
 
 // it changes the color of the appointment item after the appointment is done
 void ken_app_main::on_appointment_completed(){
-	std::string error;
+	std::string error, app_id;
 	std::vector< widgets::listview_row> rows;
+	std::vector<ken_app_db::appointments_details> appointment;
+	ken_app_db::appointments_details app;
 	get_listview_selected(home_page_name + "/list_appointments", rows, error);
 
+	// getting the information from the database	
 	for (const auto& row : rows) {
-		std::string app_id;
 		ken_app_db::appointments_details details;
 		widgets::listview_item items;
 
@@ -1994,6 +1995,7 @@ void ken_app_main::on_appointment_completed(){
 			items.item_data = item_.item_data;
 			items.custom_text_color = true;
 			items.color_text = color{ 0,255 , 0 };
+			items.row_number = item_.row_number;
 			update_listview_item(home_page_name + "/list_appointments", items, row, error);
 		}
 		std::string name = "Appointments";
@@ -2006,6 +2008,33 @@ void ken_app_main::on_appointment_completed(){
 	}
 
 
+}
+// for updating the home page after adding a new item into the database
+void ken_app_main::update_homepage(){
+	std::vector<ken_app_db::appointments_details> appointments;
+	std::string error;
+
+	// getting the data from the database
+	std::vector<widgets::listview_column> columns;
+	std::vector<widgets::listview_row> data;
+	if (app_state_.get_db().get_appointments(appointments, error)) {
+		for (const auto& app : appointments) {
+			widgets::listview_row row;
+
+			row.items.push_back({ "ID", app.id , true, color {255, 0, 0 } });
+			row.items.push_back({ "Name", app.name, true, color {255, 0, 0 } });
+			row.items.push_back({ "Surname", app.surname , true, color {255, 0, 0 } });
+			row.items.push_back({ "Description", app.description , true, color {255, 0, 0 }});
+			row.items.push_back({ "Date", app.date, true, color {255, 0, 0 }});
+			row.items.push_back({ "Time", app.time, true, color {255, 0, 0 }});
+
+			data.push_back(row);
+			app_state_.count++;
+		}
+	}
+
+	//adding the data to the listview
+	repopulate_listview(home_page_name + "/list_appointments", data, error);
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
@@ -2197,6 +2226,7 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	};
  
 	list_appointments.columns = {
+	   app_state_.column_details("ID", 50 , widgets::listview_column_type::string_, color {236 ,28, 36}),
 	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_, color {236 ,28, 36}),
 	   app_state_.column_details("Date", 100 , widgets::listview_column_type::string_, color {236 ,28, 36} ),
 	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_,color {236 ,28, 36}),
