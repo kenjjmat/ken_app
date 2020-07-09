@@ -1101,6 +1101,8 @@ void ken_app_main::on_appoinment(){
 		
 		page.add_listview(appointment_list);
 
+	  
+
 		// adding widgets for displaying the information on the listview
 		// name caption
 		widgets::text name_caption;
@@ -1973,6 +1975,39 @@ void ken_app_main::on_users_list()
 	}
 }
 
+// it changes the color of the appointment item after the appointment is done
+void ken_app_main::on_appointment_completed(){
+	std::string error;
+	std::vector< widgets::listview_row> rows;
+	get_listview_selected(home_page_name + "/list_appointments", rows, error);
+
+	for (const auto& row : rows) {
+		std::string app_id;
+		ken_app_db::appointments_details details;
+		widgets::listview_item items;
+
+		for (const auto& item_ : row.items) {
+			if (item_.column_name == "ID")
+				app_id = item_.item_data;
+
+			items.column_name = item_.column_name;
+			items.item_data = item_.item_data;
+			items.custom_text_color = true;
+			items.color_text = color{ 0,255 , 0 };
+			update_listview_item(home_page_name + "/list_appointments", items, row, error);
+		}
+		std::string name = "Appointments";
+		if (!app_state_.get_db().delete_item(app_id, name, error)) {
+			prompt_params params;
+			params.type = gui::prompt_type::ok;
+			prompt(params, "Error", error);
+		}
+
+	}
+
+
+}
+
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
 	home_page_name("KEN_APP"),
 	app_state_(app_state),
@@ -2157,28 +2192,31 @@ bool ken_app_main::layout(gui::page& persistent_page,
 	list_appointments.alias = "list_appointments";
 	list_appointments.border = true;
 	list_appointments.gridlines= true;
+	list_appointments.context_menu = {
+		{"Mark Completed", false ,[&]() {on_appointment_completed(); }}
+	};
  
 	list_appointments.columns = {
-	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_,  {236 ,28, 36}),
-	   app_state_.column_details("Date", 100 , widgets::listview_column_type::string_,  {236 ,28, 36} ),
-	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_, {236 ,28, 36}),
-	   app_state_.column_details("Description", 400, widgets::listview_column_type::string_, {236 ,28, 36})
+	   app_state_.column_details("Time", 100 , widgets::listview_column_type::string_, color {236 ,28, 36}),
+	   app_state_.column_details("Date", 100 , widgets::listview_column_type::string_, color {236 ,28, 36} ),
+	   app_state_.column_details("Name", 100, widgets::listview_column_type::string_,color {236 ,28, 36}),
+	   app_state_.column_details("Description", 400, widgets::listview_column_type::string_, color {236 ,28, 36})
 	};
 
 
 	std::vector<ken_app_db::appointments_details> appointment;
-
+	widgets::listview_row row;
 	if (app_state_.get_db().get_appointments(appointment, error)) {
 
 
 		for (const auto& appointment_ : appointment) {
-			widgets::listview_row row;
-			row.items.push_back({ "ID", appointment_.id });
-			row.items.push_back({ "Time", appointment_.time });
-			row.items.push_back({ "Date", appointment_.date });
-			row.items.push_back({ "Name" , appointment_.name });
-			row.items.push_back({ "Surname", appointment_.surname });
-			row.items.push_back({ "Description" , appointment_.description });
+			
+			row.items.push_back({ "ID", appointment_.id, true , color {255, 0, 0 } });
+			row.items.push_back({ "Time", appointment_.time , true , color {255, 0, 0 } });
+			row.items.push_back({ "Date", appointment_.date, true , color {255, 0, 0 } });
+			row.items.push_back({ "Name" , appointment_.name , true , color {255, 0, 0 } });
+			row.items.push_back({ "Surname", appointment_.surname, true , color {255, 0, 0 } });
+			row.items.push_back({ "Description" , appointment_.description, true , color {255, 0, 0 } });
 			list_appointments.data.push_back(row);
 		
 		}
