@@ -73,6 +73,8 @@ public :
 	bool get_appointment(const std::string& appointment_id, appointments_details& appointment, std::string& error);
 	bool get_appointments(std::vector<appointments_details>& appointment, std::string& error);
 
+	// delete operation 
+	bool delete_item(const std::string& id,std::string& database_name,  std::string& error);
 
 private :
 	//hiding the implementation of the database by only showing the essentials

@@ -527,6 +527,26 @@ bool ken_app_db::get_appointments(std::vector<appointments_details>& appointment
     return true;
 }
 
+bool ken_app_db::delete_item(const std::string& id,std::string& database_name ,  std::string& error)
+{
+    if (!d_.connected_) {
+        error = "Not connected to database"; return false;
+   }
+
+    if (id.empty()) {
+        error = "The ID not specified";
+        return false;
+    }
+
+    // delete from the database 
+    table table;
+    if (!d_.sqlite_query("DELETE FROM  '" + database_name 
+        + "' WHERE ID = '" + id + "';", table, error)) return false;
+
+
+    return true;
+}
+
 
 
 
