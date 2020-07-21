@@ -173,6 +173,7 @@ void ken_app_main::on_stock() {
 		image_delete.color.color_border_hot = image_delete.color.color_border;
 		image_delete.color_background_hot = image_delete.color_background_hot;
 		image_delete.tight_fit = true;
+		image_delete.on_click = [&]() {on_delete_stock(); };
 
 		page.add_image(image_delete);
 
@@ -2026,18 +2027,18 @@ void ken_app_main::on_users_list()
 
 	}
 	else {
-		// hiding the stock information
-		std::vector<std::string> aliases;
-		aliases.push_back("Users/username_caption");
-		aliases.push_back("Users/password_caption");
-		aliases.push_back("Users/password");
-		aliases.push_back("Users/username");
-		hide_info(aliases);
+// hiding the stock information
+std::vector<std::string> aliases;
+aliases.push_back("Users/username_caption");
+aliases.push_back("Users/password_caption");
+aliases.push_back("Users/password");
+aliases.push_back("Users/username");
+hide_info(aliases);
 	}
 }
 
 // it changes the color of the appointment item after the appointment is done
-void ken_app_main::on_appointment_completed(){
+void ken_app_main::on_appointment_completed() {
 	std::string error, app_id;
 	std::vector< widgets::listview_row> rows;
 	std::vector<ken_app_db::appointments_details> appointment;
@@ -2072,7 +2073,7 @@ void ken_app_main::on_appointment_completed(){
 
 }
 // for updating the home page after adding a new item into the database
-void ken_app_main::update_homepage(){
+void ken_app_main::update_homepage() {
 	std::vector<ken_app_db::appointments_details> appointments;
 	std::string error;
 
@@ -2086,9 +2087,9 @@ void ken_app_main::update_homepage(){
 			row.items.push_back({ "ID", app.id , true, color {255, 0, 0 } });
 			row.items.push_back({ "Name", app.name, true, color {255, 0, 0 } });
 			row.items.push_back({ "Surname", app.surname , true, color {255, 0, 0 } });
-			row.items.push_back({ "Description", app.description , true, color {255, 0, 0 }});
-			row.items.push_back({ "Date", app.date, true, color {255, 0, 0 }});
-			row.items.push_back({ "Time", app.time, true, color {255, 0, 0 }});
+			row.items.push_back({ "Description", app.description , true, color {255, 0, 0 } });
+			row.items.push_back({ "Date", app.date, true, color {255, 0, 0 } });
+			row.items.push_back({ "Time", app.time, true, color {255, 0, 0 } });
 
 			data.push_back(row);
 			app_state_.count++;
@@ -2097,19 +2098,31 @@ void ken_app_main::update_homepage(){
 
 	//adding the data to the listview
 	repopulate_listview(home_page_name + "/list_appointments", data, error);
+	app_state_.count = 0;
 }
 
-void ken_app_main::on_delete_sales(){
+void ken_app_main::on_delete_sales() {
 	// function for deleting information from the database
 	std::string error, sales_id;
 	std::vector< widgets::listview_row> rows;
-	get_listview_selected("Sales/appointment_list_main", rows, error);
+	get_listview_selected("Sales/sales_list_main", rows, error);
 
+	// resetting the variables 
+	app_state_.count = 0;
+	app_state_.quantity = 0;
+
+	// checking to see user has selected a row
+	if (rows.empty()) {
+		prompt_params params;
+		params.type = prompt_type::ok;
+		prompt(params, "Error", "Please select the item to delete");
+	}
 	// getting the information from the database	
 	for (const auto& row : rows) {
 		ken_app_db::sales_details details;
 		widgets::listview_item items;
 
+		widgets::listview_row this_row = row;
 		for (const auto& item_ : row.items) {
 			if (item_.column_name == "ID")
 				sales_id = item_.item_data;
@@ -2121,8 +2134,59 @@ void ken_app_main::on_delete_sales(){
 			if (prompt(params, "DELETE", "Do you want to delete")) {
 				if (!app_state_.get_db().delete_item(sales_id, name, error)) {
 					prompt_params params;
-					params.type = gui::prompt_type::ok;
-					prompt(params, "Error", error);
+					params.type = gui::prompt_type::yes_no;
+					if ((prompt(params, "Error", error))){
+						//getting the data from the database 
+						std::vector<widgets::listview_row> data;
+						std::vector<ken_app_db::sales_details> sales_;
+						widgets::listview_row row_;
+						if (app_state_.get_db().get_sales_all(sales_, error)) {
+							for (const auto& details : sales_) {
+
+								row_.items.push_back({ "ID", details.id , true , color {255, 0, 0} });
+								row_.items.push_back({ "Item Name", details.item_name });
+								row_.items.push_back({ "Unit Price", details.Unit_price });
+								row_.items.push_back({ "Cost", details.Cost });
+								row_.items.push_back({ "Quantity", details.quantity });
+								data.push_back(row_);
+								// counting the sales and cost
+								app_state_.count++;
+								double cost;
+								std::stringstream ss;
+								ss << details.Cost;
+								ss >> cost;
+								app_state_.quantity += cost;
+							}
+						}
+						repopulate_listview("Sales/appointment_list_main", data, error);
+						widgets::barchart_data  bar_data;
+						bar_data.autocolor = false;
+						bar_data.autoscale = true;
+						bar_data.caption = "Sales Barchart";
+						bar_data.x_label = "Fields";
+						bar_data.y_label = "Data";
+
+
+						// setting out the bars in the barchart
+						std::vector<widgets::chart_entry>bar_data_;
+
+						// creating object for the chart entry
+						widgets::chart_entry entry;
+						entry.color = { 180 , 180, 180 };
+						entry.label = "Sales";
+						entry.value = app_state_.count;
+						bar_data_.push_back(entry);
+
+
+						//creating a new object of chart entry 
+						widgets::chart_entry entry2;
+						entry2.label = "Stats";
+						entry2.value = app_state_.quantity;
+						entry2.color = { 180, 200, 255 };
+						bar_data_.push_back(entry2);
+						bar_data.bars = bar_data_;
+						barchart_reload("Sales/barchart", bar_data, error);
+}
 				}
 
 			}
@@ -2130,58 +2194,102 @@ void ken_app_main::on_delete_sales(){
 	
 	}
 
-	//getting the data from the database 
-	std::vector<widgets::listview_row> data;
-	std::vector<ken_app_db::sales_details> sales_;
-	widgets::listview_row row;
-	if (app_state_.get_db().get_sales_all(sales_, error)) {
-		for (const auto& details : sales_) {
+	
 
-			row.items.push_back({ "ID", details.id , true , color {255, 0, 0} });
-			row.items.push_back({ "Item Name", details.item_name });
-			row.items.push_back({ "Unit Price", details.Unit_price });
-			row.items.push_back({ "Cost", details.Cost });
-			row.items.push_back({ "Quantity", details.quantity });
-			data.push_back(row);
-			// counting the sales and cost
-			app_state_.count++;
-			double cost;
-			std::stringstream ss;
-			ss << details.Cost;
-			ss >> cost;
-			app_state_.quantity += cost;
+	
+}
+
+
+void ken_app_main::on_delete_stock(){
+	// function for deleting information from the database
+	std::string error, stock_id;
+	std::vector< widgets::listview_row> rows;
+	get_listview_selected("Stock/Stock_list", rows, error);
+
+	// resetting the variables 
+	app_state_.count = 0;
+	app_state_.quantity = 0;
+	// getting the information from the database	
+	for (const auto& row : rows) {
+		ken_app_db::sales_details details;
+		widgets::listview_item items;
+
+		for (const auto& item_ : row.items) {
+			if (item_.column_name == "ID")
+				stock_id = item_.item_data;
 		}
+		std::string name = "Stock";
+		{
+			prompt_params params;
+			params.type = gui::prompt_type::yes_no;
+			if (prompt(params, "DELETE", "Do you want to delete")) {
+				if (!app_state_.get_db().delete_item(stock_id, name, error)) {
+					prompt_params params;
+					params.type = gui::prompt_type::yes_no;
+					if ((prompt(params, "Error", error))) {
+						//getting the data from the database 
+						std::vector<widgets::listview_row> data;
+						std::vector<ken_app_db::stock_details> stocks;
+						widgets::listview_row row;
+						if (app_state_.get_db().get_stock_all(stocks, error)) {
+							for (const auto& stock_ : stocks) {
+
+								row.items.push_back({ "ID", stock_.id });
+								row.items.push_back({ "Name", stock_.name });
+								row.items.push_back({ "Description", stock_.description });
+								row.items.push_back({ "Quantity", stock_.quantity });
+								data.push_back(row);
+
+								// setting the variables back to zero 
+
+								app_state_.count++;
+								double	quantity;
+								std::stringstream ss;
+								ss << stock_.quantity;
+								ss >> quantity;
+								app_state_.quantity += quantity;
+							}
+						}
+						widgets::barchart_data  bar_data;
+						bar_data.autocolor = false;
+						bar_data.autoscale = true;
+						bar_data.caption = "Stock Barchart";
+						bar_data.x_label = "Fields";
+						bar_data.y_label = "Data";
+
+
+						// setting out the bars in the barchart
+						std::vector<widgets::chart_entry>bar_data_;
+
+						// creating object for the chart entry
+						widgets::chart_entry entry;
+						entry.color = { 180 , 180, 180 };
+						entry.label = "Stock";
+						entry.value = app_state_.count;
+						bar_data_.push_back(entry);
+
+
+						//creating a new object of chart entry 
+						widgets::chart_entry entry2;
+						entry2.label = "Quantity";
+						entry2.value = app_state_.quantity;
+						entry2.color = { 180, 200, 255 };
+						bar_data_.push_back(entry2);
+						bar_data.bars = bar_data_;
+
+						barchart_reload("Stock/barchart", bar_data, error);
+					}
+				}
+
+			}
+		}
+
 	}
-	repopulate_listview("Sales/appointment_list_main", data, error);
-	widgets::barchart_data  bar_data;
-	bar_data.autocolor = false;
-	bar_data.autoscale = true;
-	bar_data.caption = "Sales Barchart";
-	bar_data.x_label = "Fields";
-	bar_data.y_label = "Data";
 
-
-	// setting out the bars in the barchart
-	std::vector<widgets::chart_entry>bar_data_;
-
-	// creating object for the chart entry
-	widgets::chart_entry entry;
-	entry.color = { 180 , 180, 180 };
-	entry.label = "Sales";
-	entry.value = app_state_.count;
-	bar_data_.push_back(entry);
-
-
-	//creating a new object of chart entry 
-	widgets::chart_entry entry2;
-	entry2.label = "Stats";
-	entry2.value = app_state_.quantity;
-	entry2.color = { 180, 200, 255 };
-	bar_data_.push_back(entry2);
-	bar_data.bars = bar_data_;
-
-
-	barchart_reload("Sales/barchart", bar_data, error);
+	
+//resetting variables
+app_state_.count = 0;
+app_state_.quantity = 0;
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
