@@ -55,6 +55,8 @@ class ken_app_main : public gui {
 	void update_homepage();
 	void on_delete_sales();
 	void on_delete_stock();
+	void on_delete_appointment();
+	void on_delete_user();
 
 public :
 	ken_app_main(const std::string& guid, state& app_state );

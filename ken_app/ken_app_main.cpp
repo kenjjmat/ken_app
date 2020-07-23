@@ -1054,6 +1054,7 @@ void ken_app_main::on_appoinment(){
 		image_delete.color.color_border_hot = image_delete.color.color_border;
 		image_delete.color_background_hot = image_delete.color_background_hot;
 		image_delete.tight_fit = true;
+		image_delete.on_click = [&]() {on_delete_appointment(); };
 
 		page.add_image(image_delete);
 
@@ -2209,6 +2210,12 @@ void ken_app_main::on_delete_stock(){
 	// resetting the variables 
 	app_state_.count = 0;
 	app_state_.quantity = 0;
+
+	if (rows.empty()) {
+		prompt_params params;
+		params.type = prompt_type::ok;
+		prompt(params, "Error", "Please select the item to delete");
+	}
 	// getting the information from the database	
 	for (const auto& row : rows) {
 		ken_app_db::sales_details details;
@@ -2290,6 +2297,113 @@ void ken_app_main::on_delete_stock(){
 //resetting variables
 app_state_.count = 0;
 app_state_.quantity = 0;
+}
+
+void ken_app_main::on_delete_appointment() {
+	// function for deleting information from the database
+	std::string error, app_id;
+	std::vector< widgets::listview_row> rows;
+	get_listview_selected("Appointment/appointment_page_list", rows, error);
+
+	// resetting the variables 
+	app_state_.count = 0;
+	app_state_.quantity = 0;
+
+	if (rows.empty()) {
+		prompt_params params;
+		params.type = prompt_type::ok;
+		prompt(params, "Error", "Please select the item to delete");
+	}
+	// getting the information from the database	
+	for (const auto& row : rows) {
+		ken_app_db::appointments_details details;
+		widgets::listview_item items;
+
+		for (const auto& item_ : row.items) {
+			if (item_.column_name == "ID")
+				app_id = item_.item_data;
+		}
+		std::string name = "Appointments";
+		{
+			prompt_params params;
+			params.type = gui::prompt_type::yes_no;
+			if (prompt(params, "DELETE", "Do you want to delete")) {
+				if (!app_state_.get_db().delete_item(app_id, name, error)) {
+					prompt_params params;
+					params.type = gui::prompt_type::yes_no;
+					if ((prompt(params, "Error", error))) {
+						//getting the data from the database 
+						std::vector<ken_app_db::appointments_details> appointments;
+						std::string error;
+
+						// getting the data from the database
+						std::vector<widgets::listview_column> columns;
+						std::vector<widgets::listview_row> data;
+						if (app_state_.get_db().get_appointments(appointments, error)) {
+							for (const auto& app : appointments) {
+								widgets::listview_row row;
+
+								row.items.push_back({ "ID", app.id });
+								row.items.push_back({ "Name", app.name });
+								row.items.push_back({ "Surname", app.surname });
+								row.items.push_back({ "Description", app.description });
+								row.items.push_back({ "Date", app.date });
+								row.items.push_back({ "Time", app.time });
+
+								data.push_back(row);
+								app_state_.count++;
+							}
+						}
+
+						//adding the data to the listview
+						repopulate_listview("Appointment/appointment_page_list", data, error);
+						widgets::barchart_data  bar_data;
+						bar_data.autocolor = false;
+						bar_data.autoscale = true;
+						bar_data.caption = "Stock Barchart";
+						bar_data.x_label = "Fields";
+						bar_data.y_label = "Data";
+
+
+						// setting out the bars in the barchart
+						std::vector<widgets::chart_entry>bar_data_;
+
+						// creating object for the chart entry
+						widgets::chart_entry entry;
+						entry.color = { 180 , 180, 180 };
+						entry.label = "Appointments";
+						entry.value = app_state_.count;
+						bar_data_.push_back(entry);
+
+
+						//creating a new object of chart entry 
+						widgets::chart_entry entry2;
+						entry2.label = "Stats";
+						entry2.value = 50;
+						entry2.color = { 180, 200, 255 };
+						bar_data_.push_back(entry2);
+						bar_data.bars = bar_data_;
+
+						barchart_reload("Appointment/barchart", bar_data, error);
+					}
+					//restting the counting values
+					app_state_.count = 0;
+				}
+			}
+		}
+
+	}
+
+
+
+
+	//resetting variables
+	app_state_.count = 0;
+	app_state_.quantity = 0;
+
+}
+
+void ken_app_main::on_delete_user(){
 }
 
 ken_app_main::ken_app_main(const std::string& guid, state& app_state) :
